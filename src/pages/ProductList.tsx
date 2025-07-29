@@ -10,9 +10,16 @@ function ProductList() {
   } = useQuery({
     queryKey: ["products"],
     queryFn: fetchProducts,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchOnMount: false,
+    retry: 1, // Retry once on failure
+    retryDelay: 1000, // Wait 1 second before retrying
+    refetchInterval: 1000 * 60, // Refetch every minute
+    gcTime: 1000 * 60 * 5, // Garbage collect after 5 minutes
   });
 
   if (isLoading) return <div className="text-center">Loading...</div>;
+
   if (error)
     return (
       <div className="text-center text-red-500">Error loading products</div>

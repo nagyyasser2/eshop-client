@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import CheckoutForm from "../components/CheckoutForm";
@@ -19,7 +19,13 @@ function Checkout() {
     return (
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4">Checkout</h1>
-        <p className="text-center">Please log in to proceed with checkout.</p>
+        <p className="text-center">
+          Please
+          <Link to="/login" className="text-blue-500 underline">
+            log in
+          </Link>
+          to proceed with checkout.
+        </p>
       </div>
     );
   }

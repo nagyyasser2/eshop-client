@@ -1,4 +1,10 @@
-import type { Product } from "../types";
+import type {
+  AddToCartResponse,
+  AddToCartInput,
+  Product,
+  ProductListResponse,
+} from "../types";
+import api from "./api";
 
 export const fetchProducts = async (): Promise<Product[]> => {
   // Simulated API call
@@ -35,4 +41,26 @@ export const fetchProductById = async (id: number): Promise<Product> => {
     throw new Error("Product not found");
   }
   return product;
+};
+
+// Fetch all products
+// export const fetchProducts = async () => {
+//   const response = await api.get('/products');
+//   return response.data as Product[];
+// };
+
+// Fetch paginated products
+export const fetchPaginatedProducts = async ({
+  pageParam = 1,
+}: {
+  pageParam?: number;
+}) => {
+  const response = await api.get(`/products?page=${pageParam}`);
+  return response.data as ProductListResponse;
+};
+
+// Add product to cart
+export const addToCart = async (input: AddToCartInput) => {
+  const response = await api.post("/cart", input);
+  return response.data as AddToCartResponse;
 };

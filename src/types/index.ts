@@ -15,3 +15,26 @@ export interface User {
   email: string;
   name: string;
 }
+
+export interface Order {
+  id: string;
+  status: "Processing" | "Shipped" | "Delivered" | "Cancelled";
+  items: CartItem[];
+  total: number;
+  date: string;
+  estimatedDelivery: string;
+  userId: number;
+}
+
+export interface ProductListResponse {
+  products: Product[];
+  nextPage: number | null;
+}
+
+export interface AddToCartInput {
+  productId: number;
+}
+
+export interface AddToCartResponse {
+  cartId: number;
+}

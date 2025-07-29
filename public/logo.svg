@@ -1,0 +1,46 @@
+<svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="shopGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="cartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f093fb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f5576c;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="40" cy="40" r="35" fill="url(#shopGradient)" opacity="0.1"/>
+  
+  <!-- Shopping bag -->
+  <path d="M20 28 L60 28 L58 55 C58 58 55 60 52 60 L28 60 C25 60 22 58 22 55 Z" 
+        fill="url(#shopGradient)" stroke="none"/>
+  
+  <!-- Bag handles -->
+  <path d="M30 28 L30 22 C30 18 33 15 37 15 L43 15 C47 15 50 18 50 22 L50 28" 
+        fill="none" stroke="url(#shopGradient)" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Shopping cart icon (small) -->
+  <g transform="translate(45, 20) scale(0.8)">
+    <path d="M2 2 L6 2 L8 12 L18 12 L20 6 L8 6" 
+          fill="none" stroke="url(#cartGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="9" cy="16" r="1.5" fill="url(#cartGradient)"/>
+    <circle cx="15" cy="16" r="1.5" fill="url(#cartGradient)"/>
+  </g>
+  
+  <!-- Company name -->
+  <text x="90" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#2d3748">
+    ShopHub
+  </text>
+  
+  <!-- Tagline -->
+  <text x="90" y="52" font-family="Arial, sans-serif" font-size="12" fill="#718096">
+    Your Shopping Destination
+  </text>
+  
+  <!-- Decorative elements -->
+  <circle cx="170" cy="25" r="3" fill="url(#cartGradient)" opacity="0.7"/>
+  <circle cx="180" cy="35" r="2" fill="url(#shopGradient)" opacity="0.6"/>
+  <circle cx="175" cy="45" r="2.5" fill="url(#cartGradient)" opacity="0.5"/>
+</svg>
