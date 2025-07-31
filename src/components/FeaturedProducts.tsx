@@ -1,8 +1,8 @@
-// ProductList.tsx
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import type { Product } from "../types";
+import { FaArrowRight } from "react-icons/fa";
 
 // Mock data for demonstration (replace with your actual API call)
 const products = [
@@ -98,17 +98,11 @@ const products = [
   },
 ];
 
-function ProductList() {
+function FeaturedProducts() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState("name");
   const { addToCart } = useCart();
   const [isAddingToCart, setIsAddingToCart] = useState(false);
-
-  // Get unique categories
-  const categories = [
-    "All",
-    ...new Set(products.map((product) => product.category)),
-  ];
 
   // Filter and sort products
   const filteredProducts = products
@@ -133,7 +127,7 @@ function ProductList() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white py-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white py-8 mb-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
@@ -146,42 +140,6 @@ function ProductList() {
             Discover our carefully curated selection of premium tech products
           </p>
         </div>
-
-        {/* Filters */}
-        {/* <div className="flex flex-col sm:flex-row gap-4 mb-8 p-6 bg-white rounded-2xl shadow-lg">
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Category
-            </label>
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Sort By
-            </label>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="name">Name (A-Z)</option>
-              <option value="price-low">Price (Low to High)</option>
-              <option value="price-high">Price (High to Low)</option>
-            </select>
-          </div>
-        </div> */}
-
         {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
           {filteredProducts.map((product) => (
@@ -229,9 +187,20 @@ function ProductList() {
             </div>
           ))}
         </div>
+        <p className="text-center mt-8">
+          <Link
+            to="/products"
+            className="inline-flex items-center text-gray-600 hover:text-gray-800 transition-colors text-xl mt-10 font-semibold group"
+          >
+            <span className="relative transition-all duration-300 ease-in-out group-hover:underline group-hover:underline-offset-4">
+              View All Products
+            </span>
+            <FaArrowRight className="ml-2 transition-transform duration-300 ease-in-out group-hover:translate-x-2 text-gray-600 hover:text-gray-800 transition-colors" />
+          </Link>
+        </p>
       </div>
     </div>
   );
 }
 
-export default ProductList;
+export default FeaturedProducts;

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { useQuery } from "@tanstack/react-query";
@@ -11,9 +11,9 @@ function Navbar() {
   const { cart } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, logout } = useAuth();
+  const location = useLocation();
   const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-  // Fetch category tree using React Query
   const { data: categories = [], isLoading } = useQuery({
     queryKey: ["categoriesTree"],
     queryFn: catalogService.getCategoriesTree,
@@ -24,22 +24,22 @@ function Navbar() {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const showCategoryDropdown = location.pathname !== "/";
+
   return (
-    <nav className="text-slate-700 p-4 relative">
+    <nav className="text-slate-700 p-4 sticky top-0 z-50 bg-white">
       <div className="container mx-auto">
-        {/* Desktop Navigation */}
         <div className="flex justify-between items-center">
-          {/* Left: E-Shop Logo */}
           <Link to="/" className="text-xl font-bold z-10">
             <img src="/logo.svg" alt="E-Shop Logo" className="h-12 md:h-15" />
           </Link>
 
-          {/* Center: Categories - Hidden on mobile */}
-          <div className="hidden lg:flex flex-1 justify-center">
-            <CategoryDropdown categories={categories} />
-          </div>
+          {showCategoryDropdown && (
+            <div className="hidden lg:flex flex-1 justify-center">
+              <CategoryDropdown categories={categories} />
+            </div>
+          )}
 
-          {/* Right: Cart & Mobile Menu Toggle */}
           <div className="flex items-center space-x-4">
             <Link to="/cart" className="relative">
               <img src="/cart.svg" alt="Cart" className="h-8 md:h-10" />
@@ -50,7 +50,6 @@ function Navbar() {
               )}
             </Link>
 
-            {/* Mobile Menu Toggle Button */}
             <button
               onClick={toggleMobileMenu}
               className="lg:hidden p-2 hover:bg-gray-100 rounded-md transition-colors"
@@ -63,7 +62,6 @@ function Navbar() {
               )}
             </button>
 
-            {/* Auth buttons - Hidden on mobile, shown in mobile menu */}
             <div className="hidden lg:flex items-center space-x-3">
               {user ? (
                 <div className="flex items-center space-x-3">
@@ -73,13 +71,6 @@ function Navbar() {
                       {user.name}
                     </span>
                   </div>
-                  {/* <button
-                    onClick={logout}
-                    className="flex items-center space-x-1 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-2 rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 text-sm font-medium shadow-sm hover:shadow-md"
-                  >
-                    <FaSignOutAlt className="h-3 w-3" />
-                    <span>Logout</span>
-                  </button> */}
                 </div>
               ) : (
                 <div className="flex items-center space-x-2">
@@ -101,7 +92,6 @@ function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Navigation Menu */}
         <div
           className={`lg:hidden transition-all duration-300 ease-in-out ${
             isMobileMenuOpen
@@ -110,12 +100,12 @@ function Navbar() {
           }`}
         >
           <div className="pt-4 pb-2 border-t border-gray-200 mt-4">
-            {/* Mobile Categories */}
-            <div className="mb-4">
-              <CategoryDropdown categories={categories} isMobile={true} />
-            </div>
+            {showCategoryDropdown && (
+              <div className="mb-4">
+                <CategoryDropdown categories={categories} isMobile={true} />
+              </div>
+            )}
 
-            {/* Mobile Auth */}
             <div className="pt-4 border-t border-gray-200">
               {user ? (
                 <div className="space-y-3">
@@ -125,16 +115,6 @@ function Navbar() {
                       Welcome, {user.name}
                     </span>
                   </div>
-                  {/* <button
-                    onClick={() => {
-                      logout();
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="flex items-center justify-center space-x-2 w-full bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-3 rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 text-sm font-medium mx-2 shadow-sm"
-                  >
-                    <FaSignOutAlt className="h-4 w-4" />
-                    <span>Logout</span>
-                  </button> */}
                 </div>
               ) : (
                 <div className="space-y-3 px-2">

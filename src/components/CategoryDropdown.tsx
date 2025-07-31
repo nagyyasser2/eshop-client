@@ -13,6 +13,9 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   isMobile = false,
 }) => {
   const [hoveredCategory, setHoveredCategory] = useState<number | null>(null);
+  const [hoveredSubCategory, setHoveredSubCategory] = useState<number | null>(
+    null
+  );
   const [expandedMobileCategory, setExpandedMobileCategory] = useState<
     number | null
   >(null);
@@ -64,13 +67,31 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
               expandedMobileCategory === category.id && (
                 <div className="pl-4 pb-2 bg-gray-50">
                   {category.childCategories.map((subCategory) => (
-                    <Link
-                      key={subCategory.id}
-                      to={`/category/${subCategory.id}`}
-                      className="block px-2 py-1 hover:text-gray-900 transition-colors text-sm text-gray-600"
-                    >
-                      {subCategory.name}
-                    </Link>
+                    <div key={subCategory.id}>
+                      <Link
+                        to={`/category/${subCategory.id}`}
+                        className="block px-2 py-1 hover:text-gray-900 transition-colors text-sm text-gray-600"
+                      >
+                        {subCategory.name}
+                      </Link>
+                      {/* Mobile Nested Subcategories */}
+                      {subCategory.childCategories &&
+                        subCategory.childCategories.length > 0 && (
+                          <div className="pl-4">
+                            {subCategory.childCategories.map(
+                              (nestedCategory) => (
+                                <Link
+                                  key={nestedCategory.id}
+                                  to={`/category/${nestedCategory.id}`}
+                                  className="block px-2 py-1 hover:text-gray-900 transition-colors text-sm text-gray-600"
+                                >
+                                  {nestedCategory.name}
+                                </Link>
+                              )
+                            )}
+                          </div>
+                        )}
+                    </div>
                   ))}
                 </div>
               )}
@@ -88,7 +109,10 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
           key={category.id}
           className="relative group"
           onMouseEnter={() => setHoveredCategory(category.id)}
-          onMouseLeave={() => setHoveredCategory(null)}
+          onMouseLeave={() => {
+            setHoveredCategory(null);
+            setHoveredSubCategory(null); // Reset subcategory hover when leaving category
+          }}
         >
           <Link
             to={`/category/${category.id}`}
@@ -101,7 +125,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
               )}
           </Link>
 
-          {/* Desktop Dropdown */}
+          {/* Desktop Subcategory Dropdown */}
           {category.childCategories && category.childCategories.length > 0 && (
             <div
               className={`absolute left-0 top-full mt-1 w-64 bg-white border border-gray-200 rounded-md shadow-lg z-50 transition-all duration-200 ${
@@ -112,13 +136,49 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
             >
               <div className="py-2">
                 {category.childCategories.map((subCategory) => (
-                  <Link
+                  <div
                     key={subCategory.id}
-                    to={`/category/${subCategory.id}`}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                    className="relative group"
+                    onMouseEnter={() => setHoveredSubCategory(subCategory.id)}
+                    onMouseLeave={() => setHoveredSubCategory(null)}
                   >
-                    {subCategory.name}
-                  </Link>
+                    <Link
+                      to={`/category/${subCategory.id}`}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors flex items-center"
+                    >
+                      {subCategory.name}
+                      {subCategory.childCategories &&
+                        subCategory.childCategories.length > 0 && (
+                          <FaChevronRight className="ml-auto text-xs" />
+                        )}
+                    </Link>
+
+                    {/* Nested Subcategory Dropdown */}
+                    {subCategory.childCategories &&
+                      subCategory.childCategories.length > 0 && (
+                        <div
+                          className={`absolute left-full top-0 ml-1 w-64 bg-white border border-gray-200 rounded-md shadow-lg z-50 transition-all duration-200 ${
+                            hoveredSubCategory === subCategory.id
+                              ? "opacity-100 visible transform translate-x-0"
+                              : "opacity-0 invisible transform translate-x-2"
+                          }`}
+                        >
+                          <div className="py-2">
+                            {subCategory.childCategories.map(
+                              (nestedCategory) => (
+                                <Link
+                                  key={nestedCategory.id}
+                                  to={`/category/${nestedCategory.id}`}
+                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                                >
+                                  {nestedCategory.name}
+                                </Link>
+                              )
+                            )}
+                          </div>
+                        </div>
+                      )}
+                  </div>
                 ))}
               </div>
             </div>

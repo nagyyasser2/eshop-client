@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import ProductList from "./pages/ProductList";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
@@ -10,6 +9,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Footer from "./components/Footer";
 import OrderTracking from "./pages/OrderTracking";
+import Layout from "./components/Layout";
+import ProductsPage from "./pages/ProductsPage";
 
 function App() {
   return (
@@ -20,7 +21,8 @@ function App() {
             <Navbar />
             <main className="flex-grow">
               <Routes>
-                <Route path="/" element={<ProductList />} />
+                <Route path="/" element={<Layout />} />
+                <Route path="/products" element={<ProductsPage />} />
                 <Route path="/product/:id" element={<ProductDetails />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
