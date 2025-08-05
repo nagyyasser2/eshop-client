@@ -1,7 +1,7 @@
 import Home from "../pages/Home";
 import FeaturedProducts from "./FeaturedProducts";
 
-function Layout() {
+function HomeLayout() {
   return (
     <div className="layout">
       <Home />
@@ -10,4 +10,4 @@ function Layout() {
   );
 }
 
-export default Layout;
+export default HomeLayout;

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { formatCurrency } from "../utils/formatCurrency";
+import { SERVER_URL } from "../api/api";
 
 function Cart() {
   const { cart, removeFromCart, updateQuantity, clearCart } = useCart();
@@ -55,7 +56,7 @@ function Cart() {
 
   if (cart.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white py-12">
+      <div className="bg-gradient-to-br from-gray-50 to-white py-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center">
             <div className="mb-8">
@@ -155,7 +156,7 @@ function Cart() {
                       <div className="flex-shrink-0">
                         <img
                           src={
-                            item.image ||
+                            SERVER_URL + item.image ||
                             `https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=150&h=150&fit=crop`
                           }
                           alt={item.name}
@@ -172,7 +173,7 @@ function Cart() {
                           {formatCurrency(item.price)} each
                         </p>
                         <p className="text-sm text-gray-500 mt-1">
-                          {item.category || "Electronics"}
+                          {item?.category.name || "Electronics"}
                         </p>
                       </div>
 

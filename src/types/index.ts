@@ -1,10 +1,12 @@
+import type { Category } from "../api/catalog";
+
 export interface Product {
   id: number;
   name: string;
   price: number;
   image: string;
   description: string;
-  category: string;
+  category: Category;
 }
 
 export interface CartItem extends Product {

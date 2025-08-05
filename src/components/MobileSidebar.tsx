@@ -44,7 +44,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
     <>
       {/* Overlay */}
       <div
-        className={`fixed inset-0 bg-white bg-opacity-50 z-40 transition-opacity duration-300 lg:hidden ${
+        className={`fixed inset-0 bg-white bg-opacity-50 z-4000 transition-opacity duration-300 lg:hidden ${
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={handleOverlayClick}

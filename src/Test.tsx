@@ -1,36 +1,28 @@
-import { useCallback, useState } from "react";
+import * as React from "react";
 
-function sum(a: number, b: number): number {
-  console.log("sum() ran");
-  return a + b;
-}
+const Test = () => {
+  return (
+    <div>
+      <h1>Test Component</h1>
+    </div>
+  );
+};
 
-export default function Test() {
-  const [val1, setVal1] = useState(0);
-  const [val2, setVal2] = useState(0);
-  const [name, setName] = useState("Jim");
+export default function Counter() {
+  const [count, setCount] = React.useState(0);
 
-  // Correct use of useCallback: memoize the sum function
-  const computeSum = useCallback(() => {
-    return sum(val1, val2);
-  }, [val1, val2]);
+  const handleClick = () => {
+    setCount((prev) => prev + 1);
+    setCount((prev) => prev + 1);
+    setCount((prev) => prev + 1);
+  };
+
+  console.log(Test());
 
   return (
-    <div className="App">
-      <input
-        value={val1}
-        onChange={({ target }) => setVal1(parseInt(target.value || "0", 10))}
-      />
-      <input
-        value={val2}
-        onChange={({ target }) => setVal2(parseInt(target.value || "0", 10))}
-      />
-      <input
-        placeholder="Name"
-        value={name}
-        onChange={({ target }) => setName(target.value)}
-      />
-      <p>{computeSum()}</p>
-    </div>
+    <main>
+      <h1>{count}</h1>
+      <button onClick={handleClick}>+</button>
+    </main>
   );
 }

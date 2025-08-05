@@ -31,11 +31,11 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  to="/track-order"
+                  to="/orders"
                   className="text-slate-300 hover:text-pink-400 transition-colors duration-200 flex items-center group"
                 >
                   <span className="w-1 h-1 bg-pink-400 rounded-full mr-3 group-hover:w-2 transition-all duration-200"></span>
-                  Track Order
+                  Orders
                 </Link>
               </li>
             </ul>

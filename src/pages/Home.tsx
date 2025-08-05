@@ -1,51 +1,25 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-
-// Banner data array
-const banners = [
-  {
-    id: 1,
-    title: "Latest Smartphones",
-    description:
-      "Discover the newest flagship phones with cutting-edge technology and premium features.",
-    image:
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=400&fit=crop&crop=center",
-    link: "/products",
-    gradient: "from-blue-400 to-purple-400",
-  },
-  {
-    id: 2,
-    title: "Premium Laptops",
-    description:
-      "High-performance laptops for work, gaming, and creative projects. Unleash your potential.",
-    image:
-      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&h=400&fit=crop&crop=center",
-    link: "/products",
-    gradient: "from-purple-400 to-pink-400",
-  },
-  {
-    id: 3,
-    title: "Smart Accessories",
-    description:
-      "Complete your tech setup with wireless headphones, smartwatches, and more.",
-    image:
-      "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=600&h=400&fit=crop&crop=center",
-    link: "/products",
-    gradient: "from-pink-400 to-blue-400",
-  },
-];
+import { useQueryClient } from "@tanstack/react-query";
+import { type Banner } from "../api/banners"; // Adjust the import path
+import { SERVER_URL } from "../api/api";
 
 function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const queryClient = useQueryClient();
+
+  // Access cached banners data
+  const banners: Banner[] = queryClient.getQueryData(["banners"]) || [];
 
   // Auto-advance slides every 5 seconds
   useEffect(() => {
+    if (banners.length === 0) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % banners.length);
     }, 5000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [banners]);
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
@@ -60,15 +34,15 @@ function Home() {
   };
 
   return (
-    <div className="bg-white  py-1">
+    <div className="bg-white py-1">
       {/* Hero Section */}
       <div className="text-center mb-16">
-        <h1 className="text-5xl font-bold mb-6">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
           <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
             Welcome to ShopHub
           </span>
         </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
           Your one-stop shop for the latest electronics and gadgets. Experience
           the future of technology today.
         </p>
@@ -94,7 +68,7 @@ function Home() {
                       className={`absolute -inset-1 bg-gradient-to-r ${banner.gradient} rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-300`}
                     ></div>
                     <img
-                      src={banner.image}
+                      src={SERVER_URL + "/" + banner.image}
                       alt={banner.title}
                       className="relative w-full max-w-lg h-80 object-cover rounded-3xl shadow-2xl transform group-hover:scale-105 transition-all duration-300"
                     />
@@ -104,11 +78,11 @@ function Home() {
                 {/* Content Section */}
                 <div className="flex-1 text-center lg:text-left">
                   <h2
-                    className={`text-4xl font-bold mb-6 bg-gradient-to-r ${banner.gradient} bg-clip-text text-transparent`}
+                    className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r ${banner.gradient} bg-clip-text text-transparent`}
                   >
                     {banner.title}
                   </h2>
-                  <p className="text-gray-600 text-lg leading-relaxed mb-8 max-w-md mx-auto lg:mx-0">
+                  <p className="text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed mb-8 max-w-md mx-auto lg:mx-0">
                     {banner.description}
                   </p>
                   <Link

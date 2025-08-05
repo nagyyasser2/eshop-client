@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
-import CheckoutForm from "../components/CheckoutForm";
+import CheckoutForm from "../components/checkout/CheckoutForm";
 
 function Checkout() {
   const { user } = useAuth();
@@ -17,7 +17,7 @@ function Checkout() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white py-12">
+      <div className="bg-gradient-to-br from-gray-50 to-white py-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center">
             <div className="mb-8">
@@ -96,7 +96,7 @@ function Checkout() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white py-12">
+    <div className="bg-gradient-to-br from-gray-50 to-white py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">

@@ -1,5 +1,20 @@
 import api from "./api";
 
+export interface Category {
+  id: number;
+  name: string;
+  description?: string | null;
+  parentCategoryId?: number | null;
+  parentCategory?: Category | null;
+  childCategories?: Category[];
+  products?: any[]; // Adjust type if you have a specific ProductDto
+  imageUrls?: string[];
+  isActive: boolean;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface CategoryTreeDto {
   id: number;
   name: string;

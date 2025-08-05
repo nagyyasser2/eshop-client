@@ -6,11 +6,12 @@ export const useAuth = () => {
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
+
   return {
     user: context.user,
+    token: context.token,
     isAuthenticated: !!context.user,
-    login: context.login,
-    register: context.register,
+    setCredentials: context.setCredentials,
     logout: context.logout,
   };
 };

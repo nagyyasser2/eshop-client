@@ -9,7 +9,7 @@ function Login() {
 
   useEffect(() => {
     if (user) {
-      navigate("/");
+      navigate(-1);
     }
   }, [user, navigate]);
 
@@ -18,7 +18,7 @@ function Login() {
   }
 
   return (
-    <div className=" bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center p-4 py-4">
+    <div className="py-5 bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center p-4 py-4">
       <div className="w-full max-w-md">
         {/* Login Card */}
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
