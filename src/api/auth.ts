@@ -1,5 +1,29 @@
 import api from "./api";
 import { API_URL } from "./api";
+import type { Order } from "./orders";
+
+export interface ApplicationUser {
+  id: string;
+  userName: string;
+  email: string;
+  phoneNumber?: string;
+
+  firstName: string;
+  lastName: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  country?: string;
+  dateOfBirth: Date;
+  createdDate: Date;
+  isActive: boolean;
+  isGoogleUser: boolean;
+  profilePictureUrl?: string;
+  googleId?: string;
+
+  orders?: Order[];
+}
 
 export interface User {
   id: number;

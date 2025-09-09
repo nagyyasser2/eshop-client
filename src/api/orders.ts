@@ -1,72 +1,201 @@
-import type { Order } from "../types";
+import api from "./api";
+import type { ApplicationUser } from "./auth";
+import type { Product, Variant } from "./products";
 
-export const fetchUserOrders = async (userId: number): Promise<Order[]> => {
-  // Simulated API call
-  const mockOrders: Order[] = [
-    {
-      id: "12345",
-      status: "Shipped",
-      items: [
-        {
-          id: 1,
-          name: "Laptop",
-          price: 999.99,
-          quantity: 1,
-          image: "laptop.jpg",
-          description: "High-performance laptop",
-        },
-        {
-          id: 2,
-          name: "Headphones",
-          price: 89.99,
-          quantity: 2,
-          image: "headphones.jpg",
-          description: "Wireless headphones",
-        },
-      ],
-      total: 1179.97,
-      date: "2025-07-28",
-      estimatedDelivery: "2025-08-02",
-      userId,
-    },
-    {
-      id: "67890",
-      status: "Processing",
-      items: [
-        {
-          id: 2,
-          name: "Smartphone",
-          price: 499.99,
-          quantity: 1,
-          image: "smartphone.jpg",
-          description: "Latest model smartphone",
-        },
-      ],
-      total: 499.99,
-      date: "2025-07-29",
-      estimatedDelivery: "2025-08-05",
-      userId,
-    },
-    {
-      id: "98765",
-      status: "Delivered",
-      items: [
-        {
-          id: 3,
-          name: "Tablet",
-          price: 299.99,
-          quantity: 1,
-          image: "tablet.jpg",
-          description: "Portable tablet",
-        },
-      ],
-      total: 299.99,
-      date: "2025-07-20",
-      estimatedDelivery: "2025-07-25",
-      userId,
-    },
-  ];
+export const PaymentStatusEnum = {
+  Pending: 0,
+  Paid: 1,
+  Failed: 2,
+  Processing: 3,
+  CashOnDelivery: 4,
+  Refunded: 5,
+  Cancelled: 6,
+  Disputed: 7,
+  Completed: 8,
+} as const;
+export type PaymentStatusEnum =
+  (typeof PaymentStatusEnum)[keyof typeof PaymentStatusEnum];
 
-  // Return orders filtered by userId (in a real app, this would be an API call)
-  return mockOrders.filter((order) => order.userId === userId);
+export type ShippingStatus = {
+  Pending: "Pending";
+  Processing: "Processing";
+  Shipped: "Shipped";
+  Delivered: "Delivered";
+  Cancelled: "Cancelled";
+  Refunded: "Refunded";
+};
+
+export interface Category {
+  id: number;
+  name: string;
+  description?: string;
+  imageUrls: string[];
+  isActive: boolean;
+  sortOrder: number;
+  createdAt: Date;
+  parentCategoryId?: number | null;
+
+  parentCategory?: Category | null;
+  childCategories?: Category[];
+  products?: Product[];
+}
+
+export interface OrderItem {
+  id: number;
+  quantity: number;
+  unitPrice: number;
+  totalPrice: number;
+  productName: string;
+  productSKU?: string;
+
+  orderId: number;
+  productId: number;
+  productVariantId?: number | null;
+
+  order?: Order;
+  product?: Product;
+  productVariant?: Variant | null;
+}
+
+export interface Order {
+  id: number;
+  orderNumber: string;
+  taxAmount: number;
+  shippingAmount: number;
+  discountAmount: number;
+  notes?: string;
+  subTotal: number;
+  totalAmount: number;
+
+  // Shipping Address
+  shippingFirstName: string;
+  shippingLastName: string;
+  shippingAddress: string;
+  shippingCity: string;
+  shippingState: string;
+  shippingZipCode: string;
+  shippingCountry: string;
+  shippingPhone?: string;
+
+  createdAt: Date;
+  updatedAt?: Date | null;
+  shippedAt?: Date | null;
+  deliveredAt?: Date | null;
+
+  shippingStatus: ShippingStatus;
+  paymentStatus: PaymentStatusEnum;
+
+  userId: string;
+
+  user?: ApplicationUser;
+  orderItems?: OrderItem[];
+  payments?: Payment[];
+}
+
+export interface PaymentMethod {
+  id: number;
+  name: string;
+  provider?: string;
+}
+
+export interface Payment {
+  id: number;
+  transactionId: string;
+  amount: number;
+  status: PaymentStatusEnum;
+  gateway?: string;
+  gatewayTransactionId?: string;
+  notes?: string;
+  createdAt: Date;
+  processedAt?: Date | null;
+
+  orderId: number;
+  paymentMethodId: number;
+
+  order?: Order;
+  paymentMethod?: PaymentMethod;
+}
+
+export interface PaymentMethod {
+  id: number;
+  name: string;
+  provider?: string;
+}
+
+export interface CreateOrderDto {
+  userId?: string;
+  orderItems: Array<{
+    productId: number;
+    productVariantId?: number | null;
+    quantity: number;
+    unitPrice: number;
+    productName: string;
+    productSKU?: string;
+  }>;
+  shippingFirstName: string;
+  shippingLastName: string;
+  shippingAddress: string;
+  shippingCity: string;
+  shippingState: string;
+  shippingZipCode: string;
+  shippingCountry: string;
+  shippingPhone?: string;
+  notes?: string;
+  paymentMethodId: number;
+  discountAmount?: number;
+  shippingAmount: number;
+}
+
+export interface OrderDto {
+  id: number;
+  orderNumber: string;
+  taxAmount: number;
+  shippingAmount: number;
+  discountAmount: number;
+  notes?: string;
+  subTotal: number;
+  totalAmount: number;
+  shippingFirstName: string;
+  shippingLastName: string;
+  shippingAddress: string;
+  shippingCity: string;
+  shippingState: string;
+  shippingZipCode: string;
+  shippingCountry: string;
+  shippingPhone?: string;
+  createdAt: string; // ISO string for Date
+  updatedAt?: string | null;
+  shippedAt?: string | null;
+  deliveredAt?: string | null;
+  shippingStatus: keyof ShippingStatus;
+  paymentStatus: PaymentStatusEnum;
+  userId: string;
+  orderItems: OrderItem[];
+}
+
+export const placeOrder = async (order: CreateOrderDto): Promise<Order> => {
+  try {
+    const response = await api.post<Order>("/orders", order);
+    return response.data;
+  } catch (error) {
+    throw new Error(`Failed to place order: ${error}`);
+  }
+};
+
+export const getMyOrders = async (): Promise<OrderDto[]> => {
+  try {
+    const response = await api.get<OrderDto[]>(`/orders/myorders`);
+    return response.data;
+  } catch (error) {
+    throw new Error(`Failed to fetch user orders: ${error}`);
+  }
+};
+
+export const getOneOrder = async (orderId: number): Promise<OrderDto> => {
+  try {
+    const response = await api.get<OrderDto>(`/orders/${orderId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(`Failed to fetch order: ${error}`);
+  }
 };

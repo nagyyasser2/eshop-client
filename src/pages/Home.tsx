@@ -35,21 +35,8 @@ function Home() {
 
   return (
     <div className="bg-white py-1">
-      {/* Hero Section */}
-      <div className="text-center mb-16">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-          <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-            Welcome to ShopHub
-          </span>
-        </h1>
-        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-          Your one-stop shop for the latest electronics and gadgets. Experience
-          the future of technology today.
-        </p>
-      </div>
-
       {/* Slider Section */}
-      <div className="container mx-auto px-6 mb-16">
+      <div className="container mx-auto px-6 mb-16 mt-8">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-gray-50 to-gray-100 shadow-2xl">
           {/* Slides Container */}
           <div

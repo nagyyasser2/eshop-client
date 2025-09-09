@@ -2,6 +2,55 @@ import api from "./api";
 import { type QueryFunctionContext } from "@tanstack/react-query";
 import type { Category } from "./catalog";
 
+export interface Product {
+  id: number;
+  name: string;
+  description?: string;
+  shortDescription?: string;
+  sku: string;
+  price: number;
+  comparePrice?: number | null;
+  stockQuantity: number;
+  trackQuantity: boolean;
+  isActive: boolean;
+  isFeatured: boolean;
+  weight: number;
+  dimensions?: string;
+  tags?: string;
+  createdAt: Date;
+
+  categoryId?: number | null;
+  category?: Category | null;
+  images?: Image[];
+  variants?: Variant[];
+}
+
+export interface Variant {
+  id: number;
+  sku: string;
+  price?: number | null;
+  stockQuantity: number;
+  isActive: boolean;
+  color: string;
+  size: string;
+  createdAt: Date;
+
+  productId: number;
+  product?: Product;
+}
+
+export interface Image {
+  id: number;
+  url: string;
+  altText?: string;
+  isPrimary: boolean;
+  sortOrder: number;
+  createdAt: Date;
+
+  productId: number;
+  product?: Product;
+}
+
 // Define the ProductDTO interface to match the API response
 export interface ProductDTO {
   id: number;

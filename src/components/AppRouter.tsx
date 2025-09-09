@@ -1,18 +1,21 @@
 import { Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import { useQuery } from "@tanstack/react-query";
-import Navbar from "./Navbar";
+import Navbar from "./layout/Navbar";
 import ProductDetails from "../pages/ProductDetails";
 import Cart from "../pages/Cart";
-import Checkout from "../pages/Checkout";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-import Footer from "./Footer";
-import NotFound from "./NotFound";
-import Loading from "./Loading";
+import Footer from "./layout/Footer";
+import NotFound from "./common/NotFound";
+import Loading from "./common/Loading";
 import { getBanners } from "../api/banners";
-import HomeLayout from "./HomeLayout";
+import HomeLayout from "./layout/HomeLayout";
 import OrderTracking from "../pages/OrderTracking";
+import OrderSuccess from "./cart/OrderSuccess";
+import PaymentFailed from "./payment/PaymentFailed";
+import PaymentSuccess from "./payment/PaymentSuccess";
+import Support from "../pages/Support";
 
 const ProductsPage = lazy(() => import("../pages/ProductsPage"));
 
@@ -47,10 +50,13 @@ function AppRouter() {
           />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
           <Route path="/orders" element={<OrderTracking />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/order-success" element={<OrderSuccess />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-failed" element={<PaymentFailed />} />
+          <Route path="/support" element={<Support />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

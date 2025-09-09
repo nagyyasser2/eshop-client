@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
-import MobileSidebar from "../components/MobileSidebar";
-import CategorySidebar from "../components/CategorySidebar";
-import FiltersSection from "../components/FiltersSection";
-import ProductsGrid from "../components/ProductsGrid";
+import MobileSidebar from "../components/products/MobileSidebar";
+import CategorySidebar from "../components/category/CategorySidebar";
+import ProductsGrid from "../components/products/ProductsGrid";
 import {
   fetchProductsForUseQuery,
   type PaginatedProductsResponse,
@@ -128,15 +127,6 @@ function ProductsPage() {
 
           {/* Main Content */}
           <div className="flex-1">
-            {/* Filters Section */}
-            <FiltersSection
-              searchQuery={searchQuery}
-              sortBy={sortBy}
-              onSearch={handleSearch}
-              onSortChange={setSortBy}
-              onMobileFiltersOpen={() => setIsMobileSidebarOpen(true)}
-            />
-
             {/* Products Grid - Skeleton only shows here */}
             <ProductsGrid
               products={filteredProducts}
