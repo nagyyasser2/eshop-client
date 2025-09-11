@@ -8,21 +8,18 @@ import {
   FaCog,
   FaHeart,
   FaJediOrder,
-  FaSearch,
-  FaTimes,
 } from "react-icons/fa";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
+import Search from "../utils/Search";
 
 function Navbar() {
   const { cart } = useCart();
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const { user, logout } = useAuth();
   const { clearCart } = useCart();
   const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const searchRef = useRef<HTMLInputElement>(null);
 
   const toggleUserDropdown = () => {
     setIsUserDropdownOpen(!isUserDropdownOpen);
@@ -32,20 +29,6 @@ function Navbar() {
     logout();
     clearCart();
     setIsUserDropdownOpen(false);
-  };
-
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      // Handle search logic here
-      console.log("Searching for:", searchQuery);
-      // You can navigate to search results page or trigger search
-    }
-  };
-
-  const clearSearch = () => {
-    setSearchQuery("");
-    searchRef.current?.focus();
   };
 
   // Close dropdown when clicking outside
@@ -69,48 +52,7 @@ function Navbar() {
           <Link to="/" className="text-xl font-bold z-10">
             <img src="/logo.svg" alt="E-Shop Logo" className="h-15" />
           </Link>
-
-          {/* Search Input */}
-          <div className="flex-1 max-w-lg mx-8">
-            <form onSubmit={handleSearchSubmit} className="relative">
-              <div
-                className={`relative flex items-center transition-all duration-300 ease-in-out ${"hover:transform hover:scale-102"}`}
-              >
-                <div className="absolute left-3 z-10">
-                  <FaSearch
-                    className={`h-4 w-4 transition-colors duration-200 ${"text-slate-400"}`}
-                  />
-                </div>
-                <input
-                  ref={searchRef}
-                  type="text"
-                  placeholder="Search products..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className={`w-full pl-10 pr-10 py-3 rounded-full border-2 transition-all duration-300 ease-in-out bg-slate-50 text-slate-700 placeholder-slate-400 focus:outline-none focus:bg-white 
-                    ${"border-slate-200 hover:border-slate-300"}
-                  `}
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={clearSearch}
-                    className="absolute right-3 z-10 p-1 rounded-full hover:bg-slate-200 transition-colors duration-200"
-                  >
-                    <FaTimes className="h-3 w-3 text-slate-400 hover:text-slate-600" />
-                  </button>
-                )}
-                {/* Animated border glow effect */}
-                <div
-                  className={`absolute inset-0 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 opacity-0 transition-opacity duration-300 -z-10 
-                    
-                  `}
-                  style={{ transform: "scale(1.02)" }}
-                />
-              </div>
-            </form>
-          </div>
-
+          <Search />
           <div className="flex items-center space-x-1">
             <Link to="/cart" className="relative">
               <img src="/cart.svg" alt="Cart" className="h-12" />

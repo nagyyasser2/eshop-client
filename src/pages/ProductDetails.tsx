@@ -5,6 +5,7 @@ import { useCart } from "../context/CartContext";
 import { fetchProductById } from "../api/products";
 import { formatCurrency } from "../utils/formatCurrency";
 import { SERVER_URL } from "../api/api";
+import ProductDetailsSkeleton from "../components/utils/ProductDetailsSkeleton";
 
 function ProductDetails() {
   const { id } = useParams<{ id: string }>();
@@ -48,19 +49,12 @@ function ProductDetails() {
   };
 
   if (isLoading) {
-    return (
-      <div className="bg-gradient-to-br from-gray-50 to-white flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading product details...</p>
-        </div>
-      </div>
-    );
+    return <ProductDetailsSkeleton />;
   }
 
   if (error || !product) {
     return (
-      <div className="bg-gradient-to-br from-gray-50 to-white flex items-center justify-center min-h-screen">
+      <div className="bg-gradient-to-br from-gray-50 to-white flex items-center justify-center">
         <div className="text-center">
           <div className="text-red-500 text-6xl mb-4">⚠️</div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">

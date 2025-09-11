@@ -89,7 +89,7 @@ function Footer() {
               strive to provide quality products and excellent customer service
               with a modern shopping experience.
             </p>
-            <div className="mt-6">
+            <div className="flex justify-center sm:justify-end mt-6">
               <div className="flex space-x-4">
                 <a
                   href="https://www.facebook.com/nagy.yasser.7/"

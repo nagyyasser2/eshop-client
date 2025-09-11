@@ -1,4 +1,4 @@
-import api from "./api";
+import { authAPI } from "./api";
 import { API_URL } from "./api";
 import type { Order } from "./orders";
 
@@ -26,7 +26,7 @@ export interface ApplicationUser {
 }
 
 export interface User {
-  id: number;
+  id: string;
   firstName?: string;
   lastName?: string;
   address?: string;
@@ -45,23 +45,30 @@ export interface User {
   roles?: string[];
 }
 
-export const login = async (email: string, password: string): Promise<User> => {
-  const response = await api.post("/auth/login", { email, password });
-  if (response.data) {
-    return response.data as User;
-  }
-  throw new Error("Invalid credentials");
+export interface AuthResult {
+  success: boolean;
+  message: string;
+  data?: {
+    token: string;
+    refreshToken: string;
+    user: User;
+  };
+  errors?: string[];
+}
+
+export const login = async (
+  email: string,
+  password: string
+): Promise<AuthResult> => {
+  const response = await authAPI.login(email, password);
+  return response;
 };
 
-export const loginWithGoogle = async () => {
-  const response = await api.get(
-    `${API_URL}/auth/google-auth-url?RedirectUri=${encodeURIComponent(
-      window.location.origin
-    )}`
-  );
-  if (response.data) {
-    return response.data as User;
-  }
+export const loginWithGoogle = async (
+  credential: string
+): Promise<AuthResult> => {
+  const response = await authAPI.googleLogin(credential);
+  return response;
 };
 
 export const register = async (
@@ -71,8 +78,8 @@ export const register = async (
   password: string,
   confirmPassword: string,
   dateOfBirth: string
-): Promise<{ token: string; user: User }> => {
-  const response = await api.post("/auth/register", {
+): Promise<AuthResult> => {
+  const response = await authAPI.register({
     firstName,
     lastName,
     email,
@@ -80,14 +87,9 @@ export const register = async (
     confirmPassword,
     dateOfBirth,
   });
-  if (response.data) {
-    return response.data as { token: string; user: User };
-  }
-  throw new Error("Registration failed");
+  return response;
 };
 
-export const registerWithGoogle = async () => {
-  // Your Google OAuth registration implementation
-  // This could redirect to Google or use a popup
-  // Similar to loginWithGoogle but for registration
+export const logout = async (): Promise<void> => {
+  await authAPI.logout();
 };

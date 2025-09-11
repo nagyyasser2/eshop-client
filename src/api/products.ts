@@ -51,7 +51,6 @@ export interface Image {
   product?: Product;
 }
 
-// Define the ProductDTO interface to match the API response
 export interface ProductDTO {
   id: number;
   name: string;
@@ -68,25 +67,28 @@ export interface ProductDTO {
   variants?: { id: number; name: string }[];
 }
 
-// Define the response shape for paginated products
 export interface PaginatedProductsResponse {
   data: ProductDTO[];
   count: number;
   page: number;
   pageSize: number;
-  pages: [number, number, number, number]; // Array of page numbers
+  pages: [number, number, number, number];
 }
 
-// Define query parameters for fetching products (exclude page)
 export interface ProductQueryParams {
   pageSize: number;
   featured?: boolean;
   active?: boolean;
   categoryId?: number;
   sortBy?: string;
+  searchQuery?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  color?: string;
+  tags?: string;
+  category?: string;
 }
 
-// Base function to fetch products with filters and pagination
 export const fetchProducts = async ({
   queryKey,
   pageParam = 1,
@@ -103,6 +105,7 @@ export const fetchProducts = async ({
       page: pageParam,
       pageSize: params.pageSize ?? 10,
       sortBy: params.sortBy,
+      searchQuery: params.searchQuery,
     },
   });
   return response.data;
@@ -112,7 +115,7 @@ export const fetchProductsForUseQuery = async ({
   queryKey,
   pageParam = 1,
 }: {
-  queryKey: [string, ProductQueryParams];
+  queryKey: [string, ProductQueryParams & { searchQuery?: string }];
   pageParam?: number;
 }): Promise<PaginatedProductsResponse> => {
   const [, params] = queryKey;
@@ -124,12 +127,36 @@ export const fetchProductsForUseQuery = async ({
       page: pageParam,
       pageSize: params.pageSize ?? 10,
       sortBy: params.sortBy,
+      searchQuery: params.searchQuery, // This should now work correctly
+      // Also include filter parameters if needed
+      minPrice: params.minPrice,
+      maxPrice: params.maxPrice,
+      color: params.color,
+      tags: params.tags,
+      category: params.category,
     },
   });
   return response.data;
 };
-
 export const fetchProductById = async (id: number): Promise<ProductDTO> => {
   const response = await api.get<ProductDTO>(`/products/${id}`);
+  return response.data;
+};
+
+// New function specifically for search
+export const searchProducts = async (
+  searchQuery: string,
+  options: Omit<ProductQueryParams, "searchQuery"> = {
+    pageSize: 0,
+  }
+): Promise<PaginatedProductsResponse> => {
+  const response = await api.get<PaginatedProductsResponse>("/products", {
+    params: {
+      searchQuery,
+      active: options.active ?? true,
+      sortBy: options.sortBy ?? "relevance",
+      ...options,
+    },
+  });
   return response.data;
 };

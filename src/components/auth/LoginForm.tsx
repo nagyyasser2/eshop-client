@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa";
 import { useMutation } from "@tanstack/react-query";
 import { login, loginWithGoogle } from "../../api/auth";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../context/AuthContext";
 import GoogleSignIn from "./GoogleSignIn";
 
 interface LoginFormData {
@@ -37,9 +37,21 @@ function LoginForm() {
     mutationFn: async (data: LoginFormData) => {
       return await login(data.email, data.password);
     },
-    onSuccess: ({ data }: any) => {
-      console.log("Login successful:", data);
-      setCredentials({ user: data.user, token: data.token });
+    onSuccess: (response: any) => {
+      if (response.success && response.data) {
+        console.log("Login successful:", response.message);
+        // Updated to handle both access and refresh tokens
+        setCredentials({
+          user: response.data.user,
+          token: response.data.token,
+          refreshToken: response.data.refreshToken,
+        });
+      } else {
+        setError("root", {
+          type: "manual",
+          message: response.message || "Login failed",
+        });
+      }
     },
     onError: (error: any) => {
       setError("root", {
@@ -52,22 +64,6 @@ function LoginForm() {
     retry: false,
   });
 
-  // Google login mutation
-  const googleLoginMutation = useMutation({
-    mutationFn: async () => {
-      return await loginWithGoogle();
-    },
-    onSuccess: (data) => {
-      console.log("Google login successful:", data);
-    },
-    onError: (error: any) => {
-      setError("root", {
-        type: "manual",
-        message: error.message || "Google login failed. Please try again.",
-      });
-    },
-  });
-
   const onSubmit = async (data: LoginFormData) => {
     clearErrors();
     loginMutation.mutate(data);
@@ -77,7 +73,7 @@ function LoginForm() {
     setShowPassword(!showPassword);
   };
 
-  const isLoading = loginMutation.isPending || googleLoginMutation.isPending;
+  const isLoading = loginMutation.isPending;
 
   return (
     <div className="space-y-4">

@@ -1,0 +1,30 @@
+<svg viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="productGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="productGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f093fb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f5576c;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background circle behind icon -->
+  <circle cx="40" cy="40" r="35" fill="url(#productGradient1)" opacity="0.1"/>
+
+  <!-- Abstract product box icon -->
+  <rect x="20" y="25" width="40" height="30" fill="url(#productGradient1)" rx="5" ry="5"/>
+  <path d="M20 25 L40 10 L60 25 Z" fill="url(#productGradient2)" />
+  <path d="M20 55 L40 40 L60 55 Z" fill="url(#productGradient2)" />
+
+  <!-- Decorative dots -->
+  <circle cx="170" cy="25" r="3" fill="url(#productGradient2)" opacity="0.7"/>
+  <circle cx="180" cy="35" r="2" fill="url(#productGradient1)" opacity="0.6"/>
+  <circle cx="175" cy="45" r="2.5" fill="url(#productGradient2)" opacity="0.5"/>
+
+  <!-- Header Text "Products" -->
+  <text x="90" y="45" font-family="Arial, sans-serif" font-size="30" font-weight="bold" fill="url(#productGradient1)">
+    Products
+  </text>
+</svg>

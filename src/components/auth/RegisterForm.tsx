@@ -9,7 +9,7 @@ import {
   FaUser,
   FaCalendarAlt,
 } from "react-icons/fa";
-import { register as registerUser, registerWithGoogle } from "../../api/auth";
+import { register as registerUser } from "../../api/auth";
 import { useNavigate } from "react-router-dom";
 import GoogleSignIn from "./GoogleSignIn";
 
@@ -50,39 +50,29 @@ function RegisterForm() {
         data.dateOfBirth
       );
     },
-    onSuccess: (data) => {
-      // Handle successful registration
-      console.log("Registration successful:", data);
-      // Example: localStorage.setItem('token', data.token);
-      navigate("/login");
-      // Example: showSuccessToast('Account created successfully!');
+    onSuccess: (response) => {
+      if (response.success) {
+        console.log("Registration successful:", response.message);
+        // Navigate to login since registration doesn't return tokens
+        navigate("/login");
+        // You could show a success message here
+      } else {
+        setError("root", {
+          type: "manual",
+          message: response.message || "Registration failed",
+        });
+        if (response.errors?.length) {
+          setError("root", {
+            type: "manual",
+            message: response.errors.join(", "),
+          });
+        }
+      }
     },
     onError: (error: any) => {
-      // Handle registration error
       setError("root", {
         type: "manual",
         message: error.message || "Registration failed. Please try again.",
-      });
-    },
-  });
-
-  // Google registration mutation
-  const googleRegisterMutation = useMutation({
-    mutationFn: async () => {
-      return await registerWithGoogle();
-    },
-    onSuccess: (data) => {
-      // Handle successful Google registration
-      console.log("Google registration successful:", data);
-      // Example: localStorage.setItem('token', data.token);
-      // Example: navigate('/dashboard');
-    },
-    onError: (error: any) => {
-      // Handle Google registration error
-      setError("root", {
-        type: "manual",
-        message:
-          error.message || "Google registration failed. Please try again.",
       });
     },
   });
@@ -98,11 +88,6 @@ function RegisterForm() {
 
     clearErrors();
     registerMutation.mutate(data);
-  };
-
-  const handleGoogleRegister = () => {
-    clearErrors();
-    googleRegisterMutation.mutate();
   };
 
   const togglePasswordVisibility = () => {
@@ -134,8 +119,7 @@ function RegisterForm() {
   };
 
   const passwordStrength = getPasswordStrength(watchPassword || "");
-  const isLoading =
-    registerMutation.isPending || googleRegisterMutation.isPending;
+  const isLoading = registerMutation.isPending;
 
   return (
     <div className="space-y-4">

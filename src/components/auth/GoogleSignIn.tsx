@@ -1,10 +1,8 @@
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import axios from "axios";
 import { useState } from "react";
-
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { API_URL } from "../../api/api";
+import { authAPI } from "../../api/api";
 
 const GoogleSignIn = () => {
   const { setCredentials } = useAuth();
@@ -14,44 +12,35 @@ const GoogleSignIn = () => {
   const handleSuccess = async (credentialResponse: any) => {
     setIsLoading(true);
     try {
-      // Send the Google JWT token to your backend
-      const response: any = await axios.post(
-        `${API_URL}/auth/google-jwt`,
-        {
-          credential: credentialResponse.credential,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      // Use the authAPI from the updated api.ts
+      const response = await authAPI.googleLogin(credentialResponse.credential);
 
-      if (response.data.success) {
-        // Use the response data to set credentials
-        const { token, user } = response.data.data;
-
-        // Store the JWT token and user info using your auth context
-        setCredentials({
-          token: token,
+      if (response.success && response.data) {
+        // Updated to handle both access and refresh tokens
+        await setCredentials({
+          token: response.data.token,
+          refreshToken: response.data.refreshToken,
           user: {
-            id: user.id,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            dateOfBirth: user.dateOfBirth,
-            profilePictureUrl: user.profilePictureUrl,
-            roles: user.roles,
+            id: response.data.user.id,
+            email: response.data.user.email,
+            firstName: response.data.user.firstName,
+            lastName: response.data.user.lastName,
+            dateOfBirth: response.data.user.dateOfBirth,
+            profilePictureUrl: response.data.user.profilePictureUrl,
+            roles: response.data.user.roles,
           },
         });
 
-        console.log("Login successful:", response.data);
+        console.log("Google login successful:", response.message);
         navigate("/", { replace: true });
       } else {
-        console.error("Login failed:", response.data.message);
+        console.error("Google login failed:", response.message);
       }
     } catch (error: any) {
-      console.error("Login failed:", error.response?.data || error.message);
+      console.error(
+        "Google login failed:",
+        error.response?.data || error.message
+      );
     } finally {
       setIsLoading(false);
     }

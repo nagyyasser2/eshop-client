@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../context/AuthContext";
 import { getMyOrders, type OrderDto } from "../api/orders";
 import OrderNotRegistered from "../components/orders/OrderNotRegisterd";
 import OrdersList from "../components/orders/OrdersList";
@@ -9,7 +9,7 @@ import OrdersHeader from "../components/orders/OrdersHeader";
 import OrdersContainer from "../components/orders/OrdersContainer";
 
 function OrderTracking() {
-  const { user, isAuthenticated } = useAuth();
+  const { user } = useAuth();
 
   const {
     data: orders,
@@ -25,7 +25,7 @@ function OrderTracking() {
     refetchOnMount: true,
   });
 
-  if (!isAuthenticated) {
+  if (!user) {
     return <OrderNotRegistered />;
   }
 
