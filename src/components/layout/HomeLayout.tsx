@@ -1,11 +1,11 @@
 import Home from "../../pages/Home";
-import FeaturedProducts from "../products/FeaturedProducts";
+import SalesProducts from "../products/SalesProducts";
 
 function HomeLayout() {
   return (
     <div className="layout">
       <Home />
-      <FeaturedProducts />
+      <SalesProducts />
     </div>
   );
 }

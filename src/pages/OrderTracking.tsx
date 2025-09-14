@@ -4,9 +4,9 @@ import { getMyOrders, type OrderDto } from "../api/orders";
 import OrderNotRegistered from "../components/orders/OrderNotRegisterd";
 import OrdersList from "../components/orders/OrdersList";
 import EmptyState from "../components/orders/EmptyState";
-import LoadingOrders from "../components/orders/LoadingOrders";
 import OrdersHeader from "../components/orders/OrdersHeader";
 import OrdersContainer from "../components/orders/OrdersContainer";
+import OrderSkeleton from "../components/sceletons/OrderSkeleton";
 
 function OrderTracking() {
   const { user } = useAuth();
@@ -33,7 +33,7 @@ function OrderTracking() {
   return (
     <OrdersContainer>
       <OrdersHeader />
-      {isLoading && <LoadingOrders />}
+      {isLoading && <OrderSkeleton />}
       {error && <OrderNotRegistered />}
       {orders?.length === 0 && <EmptyState />}
       {orders && orders.length > 0 && (

@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-
 import {
   FaUser,
   FaSignOutAlt,
@@ -8,6 +7,7 @@ import {
   FaCog,
   FaHeart,
   FaJediOrder,
+  FaSearch,
 } from "react-icons/fa";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
@@ -16,13 +16,19 @@ import Search from "../utils/Search";
 function Navbar() {
   const { cart } = useCart();
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
   const { user, logout } = useAuth();
   const { clearCart } = useCart();
   const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   const toggleUserDropdown = () => {
     setIsUserDropdownOpen(!isUserDropdownOpen);
+  };
+
+  const toggleSearchVisibility = () => {
+    setIsSearchVisible(!isSearchVisible);
   };
 
   const handleLogout = () => {
@@ -37,23 +43,48 @@ function Navbar() {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsUserDropdownOpen(false);
       }
+
+      // Close search if clicking outside on mobile
+      if (
+        isSearchVisible &&
+        searchRef.current &&
+        !searchRef.current.contains(event.target)
+      ) {
+        // Only close if we're on a small screen
+        if (window.innerWidth < 768) {
+          // setIsSearchVisible(false);
+        }
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [isSearchVisible]);
 
   return (
-    <nav className="text-slate-700 p-4 sticky top-0 z-1000 bg-white">
+    <nav className="text-slate-700 p-4 pb-2 sticky top-0 z-9 bg-white">
       <div className="container mx-auto">
         <div className="flex justify-between items-center">
           <Link to="/" className="text-xl font-bold z-10">
             <img src="/logo.svg" alt="E-Shop Logo" className="h-15" />
           </Link>
-          <Search />
+
+          {/* Desktop Search - hidden on mobile */}
+          <div className="hidden md:flex flex-1 max-w-lg mx-8">
+            <Search />
+          </div>
+
           <div className="flex items-center space-x-1">
+            {/* Mobile Search Toggle Button */}
+            <button
+              onClick={toggleSearchVisibility}
+              className="md:hidden p-2 text-slate-700 hover:text-slate-900"
+            >
+              <FaSearch className="h-5 w-5" />
+            </button>
+
             <Link to="/cart" className="relative">
               <img src="/cart.svg" alt="Cart" className="h-12" />
               {itemCount > 0 && (
@@ -71,8 +102,8 @@ function Navbar() {
                     className="flex items-center space-x-3 px-4 py-2 hover:from-purple-100 hover:to-pink-100 rounded-xl hover:border-purple-300 transition-all duration-200  group"
                   >
                     <div className="flex items-center space-x-2">
-                      <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-sm">
-                        <FaUser className="h-4 text-white" />
+                      <div className="w-9 h-9 sm:h-10 sm:w-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-sm">
+                        <FaUser className=" text-white" />
                       </div>
                     </div>
                     <FaChevronDown
@@ -161,6 +192,18 @@ function Navbar() {
               )}
             </div>
           </div>
+        </div>
+
+        {/* Mobile Search - appears below navbar when toggled */}
+        <div
+          ref={searchRef}
+          className={`md:hidden mt-4 transition-all duration-300 ease-in-out ${
+            isSearchVisible
+              ? "opacity-100 max-h-20"
+              : "opacity-0 max-h-0 overflow-hidden"
+          }`}
+        >
+          <Search onSearchSubmit={() => setIsSearchVisible(false)} />
         </div>
       </div>
     </nav>

@@ -9,6 +9,7 @@ import {
 import Product from "./Product";
 import Filters from "../utils/Filters";
 import MobileFilterButton from "../utils/MobileFilterButton";
+import ProductGridSkeleton from "../sceletons/ProductGridSceleton";
 
 const Products: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -108,88 +109,56 @@ const Products: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-4">
-      {/* Mobile filter toggle button */}
-
+    <div className="container mx-auto px-2 py-2">
       <div className="flex flex-col lg:flex-row gap-8 relative">
-        {/* Overlay for mobile */}
-        {isFiltersOpen && (
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-            onClick={toggleFilters}
-          ></div>
-        )}
+        <Filters
+          onFilterChange={handleFilterChange}
+          isFiltersOpen={isFiltersOpen}
+          toggleFilters={toggleFilters}
+        />
 
-        {/* Filters sidebar */}
-        <div
-          className={`fixed lg:sticky top-25 left-0 bottom-25 h-full lg:h-auto w-3/4 max-w-sm lg:w-64 bg-white border-r lg:border border-gray-200 rounded-md z-50 md:z-auto transform transition-transform duration-300 ease-in-out md:transform-none ${
-            isFiltersOpen ? "translate-x-0" : "-translate-x-full"
-          } lg:translate-x-0 lg:self-start`}
-        >
-          <div className="p-4 h-full overflow-y-auto">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold">Filters</h2>
-              <button
-                onClick={toggleFilters}
-                className="md:hidden text-gray-500 hover:text-gray-700"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-            <Filters onFilterChange={handleFilterChange} />
-          </div>
-        </div>
-
-        {/* Main content */}
         <main className="flex-1">
-          <div className="mb-2 flex items-center justify-between">
-            <img src="/public/products.svg" alt="Products" width={200} />
-            <MobileFilterButton toggleFilters={toggleFilters} />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-            {products.map((product) => (
-              <Product key={product.id} product={product} />
-            ))}
-          </div>
-          {hasNextPage && (
-            <div className="flex justify-center">
-              <button
-                onClick={loadMore}
-                disabled={isFetchingNextPage}
-                className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors"
-              >
-                {isFetchingNextPage ? "Loading..." : "Load More"}
-              </button>
-            </div>
-          )}
-          {isFetching && !isFetchingNextPage && (
-            <div className="flex justify-center mt-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                <p>Loading...</p>
+          <MobileFilterButton
+            toggleFilters={toggleFilters}
+            productsLength={products.length}
+          />
+          {isFetching && products.length === 0 ? (
+            <ProductGridSkeleton />
+          ) : (
+            <>
+              <div className="mb-4 hidden lg:block">
+                <p className="text-slate-500">
+                  ( {products.length} ) - products
+                </p>
               </div>
-            </div>
-          )}
-          {products.length === 0 && !isFetching && (
-            <div className="text-center text-gray-500 mt-8">
-              <p>No products found.</p>
-              {searchQuery && (
-                <p className="mt-2">Try adjusting your search terms.</p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+                {products.map((product) => (
+                  <Product key={product.id} product={product} />
+                ))}
+              </div>
+              {hasNextPage && (
+                <div className="flex justify-center">
+                  <button
+                    onClick={loadMore}
+                    disabled={isFetchingNextPage}
+                    className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors"
+                  >
+                    {isFetchingNextPage ? "Loading..." : "Load More"}
+                  </button>
+                </div>
               )}
-            </div>
+              {isFetching && !isFetchingNextPage && <></>}
+
+              {products.length === 0 && !isFetching && (
+                <div className="text-center text-gray-500 mt-8">
+                  <p>No products found.</p>
+                  {searchQuery && (
+                    <p className="mt-2">Try adjusting your search terms.</p>
+                  )}
+                </div>
+              )}
+            </>
           )}
         </main>
       </div>

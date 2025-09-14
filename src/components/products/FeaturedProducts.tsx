@@ -105,6 +105,7 @@ function FeaturedProducts() {
                       }
                       alt={product.name}
                       className="w-full h-48 sm:h-56 object-cover group-hover:scale-110 transition-transform duration-500"
+                      loading="lazy"
                     />
                     <div className="absolute top-4 right-4">
                       <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
