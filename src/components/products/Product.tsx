@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import type { ProductDTO } from "../../api/products";
 import { SERVER_URL } from "../../api/api";
+import { useCart } from "../../context/CartContext";
+import { useState } from "react";
+import { FaShoppingCart, FaSpinner } from "react-icons/fa";
 
 type Product = ProductDTO;
 
@@ -9,10 +12,30 @@ interface ProductProps {
 }
 
 function Product({ product }: ProductProps) {
+  const { addToCart } = useCart();
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+
+  const handleAddToCart = async (product: Product, quantity: number) => {
+    setIsAddingToCart(true);
+    try {
+      await addToCart({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        sku: product.sku,
+        quantity,
+        category: product.category,
+        image: product.images?.[0]?.url || "/placeholder.png",
+      });
+    } finally {
+      setIsAddingToCart(false);
+    }
+  };
+
   return (
     <div
       key={product.id}
-      className=" group bg-white rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
+      className=" group bg-white rounded-lg shadow-[0_0_5px_rgba(0,0,0,0.3)]  hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
     >
       {/* Product Image */}
       <div className="relative overflow-hidden">
@@ -44,8 +67,17 @@ function Product({ product }: ProductProps) {
           <span className="text-2xl font-bold text-blue-600">
             ${product.price.toLocaleString()}
           </span>
-          <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-200 text-sm font-medium">
-            {"Add to Cart"}
+          <button
+            onClick={() => handleAddToCart(product, 1)}
+            disabled={isAddingToCart}
+            className={`cursor-pointer bg-gradient-to-r from-pink-400 to-blue-400 p-3 text-white font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300 group`}
+            title="Add to Cart"
+          >
+            {isAddingToCart ? (
+              <FaSpinner className="w-5 h-5 animate-spin" />
+            ) : (
+              <FaShoppingCart className="w-5 h-5" />
+            )}
           </button>
         </div>
       </div>

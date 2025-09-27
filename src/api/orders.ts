@@ -13,6 +13,7 @@ export const PaymentStatusEnum = {
   Disputed: 7,
   Completed: 8,
 } as const;
+
 export type PaymentStatusEnum =
   (typeof PaymentStatusEnum)[keyof typeof PaymentStatusEnum];
 

@@ -17,3 +17,11 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #d1d1d1; /* Slightly darker on hover */
 }
+
+:root {
+--text: #d3fafc;
+--background: #02181a;
+--primary: #7eecf7;
+--secondary: #093392;
+--accent: #1728f0;
+}

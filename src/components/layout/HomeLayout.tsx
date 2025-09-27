@@ -1,11 +1,17 @@
 import Home from "../../pages/Home";
-import SalesProducts from "../products/SalesProducts";
+import FeaturedProducts from "../products/FeaturedProducts";
+import TestimonialsSection from "../testimonial/TestimonialsSection";
+import FAQSection from "./FAQSection";
+import WhyChooseUs from "./WhyChooseUs";
 
 function HomeLayout() {
   return (
     <div className="layout">
       <Home />
-      <SalesProducts />
+      <WhyChooseUs />
+      <FeaturedProducts />
+      <TestimonialsSection />
+      <FAQSection />
     </div>
   );
 }

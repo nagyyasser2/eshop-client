@@ -111,7 +111,7 @@ function ProductsPage() {
 
   return (
     <div className="bg-gradient-to-br from-gray-50 to-white min-h-screen">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="container mx-auto ">
         <div className="flex gap-8">
           {/* Desktop Sidebar - Always visible, no skeleton here */}
           <div className="hidden lg:block w-64 flex-shrink-0">

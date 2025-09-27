@@ -36,8 +36,8 @@ function Home() {
   return (
     <div className="bg-white py-1">
       {/* Slider Section */}
-      <div className="container mx-auto px-6 mb-16 mt-8">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-gray-50 to-gray-100 shadow-2xl">
+      <div className="container mx-auto  mb-16 mt-8">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-gray-50 to-gray-100 shadow-1xl py-15">
           {/* Slides Container */}
           <div
             className="flex transition-transform duration-700 ease-in-out"
@@ -76,7 +76,7 @@ function Home() {
                     to={banner.link}
                     className={`inline-flex items-center px-8 py-4 bg-gradient-to-r ${banner.gradient} text-white font-semibold rounded-2xl hover:shadow-lg transform hover:scale-105 transition-all duration-300 group`}
                   >
-                    <span>Explore Collection</span>
+                    <span>Shop Now</span>
                     <svg
                       className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200"
                       fill="none"

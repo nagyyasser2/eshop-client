@@ -7,7 +7,7 @@ export interface Category {
   parentCategoryId?: number | null;
   parentCategory?: Category | null;
   childCategories?: Category[];
-  products?: any[]; // Adjust type if you have a specific ProductDto
+  products?: any[];
   imageUrls?: string[];
   isActive: boolean;
   sortOrder: number;
@@ -16,14 +16,12 @@ export interface Category {
 }
 
 export interface CategoryTreeDto {
-  id: number;
+  id: any;
   name: string;
   description?: string | null;
   parentCategoryId?: number | null;
   parentCategory?: CategoryTreeDto | null;
   childCategories?: CategoryTreeDto[];
-  products?: any[]; // Adjust type if you have a specific ProductDto
-  imageUrls?: string[];
   isActive: boolean;
   sortOrder: number;
   createdAt: string;
@@ -31,16 +29,14 @@ export interface CategoryTreeDto {
 }
 
 // Service to handle catalog-related API calls
-const catalogService = {
-  getCategoriesTree: async (): Promise<CategoryTreeDto[]> => {
-    try {
-      const response = await api.get<CategoryTreeDto[]>("/Categories/tree");
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching categories tree:", error);
-      throw error;
-    }
-  },
+const getCategoriesTree = async (): Promise<CategoryTreeDto[]> => {
+  try {
+    const response = await api.get<CategoryTreeDto[]>("/Categories/tree");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching categories tree:", error);
+    throw error;
+  }
 };
 
-export default catalogService;
+export default getCategoriesTree;

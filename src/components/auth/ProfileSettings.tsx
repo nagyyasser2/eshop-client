@@ -10,6 +10,8 @@ import {
   FaEdit,
   FaSave,
   FaTimes,
+  FaBirthdayCake,
+  FaUserTag,
 } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../api/api";
@@ -49,8 +51,13 @@ const ProfileSettings = () => {
   const [isEditing, setIsEditing] = useState(false);
   const queryClient = useQueryClient();
 
-  const { register, handleSubmit, reset, setValue } =
-    useForm<UpdateAddressData>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<UpdateAddressData>();
 
   // Fetch user profile
   const {
@@ -149,71 +156,86 @@ const ProfileSettings = () => {
   }
 
   return (
-    <div className="container mx-auto">
-      <div className="bg-white rounded-lg  overflow-hidden">
+    <div className="max-w-4xl mx-auto p-4 shadow-[0_0_5px_rgba(0,0,0,0.3)] my-8 rounded-md">
+      <div className="bg-white overflow-hidden">
         {/* Header */}
-        <div className="text-slate-700 p-2">
-          <div className="flex items-center space-x-4">
-            <div className="w-15 h-15 bg-white/20 rounded-full flex items-center justify-center">
-              {profileData.profilePictureUrl ? (
-                <img
-                  src={profileData.profilePictureUrl}
-                  alt="Profile"
-                  className="w-full h-full rounded-full object-cover"
-                />
-              ) : (
-                <FaUser className="w-8 h-8 " />
-              )}
-            </div>
-            <div>
-              <div className="flex flex-wrap gap-2 mt-2">
-                {profileData.roles.map((role) => (
-                  <span
-                    key={role}
-                    className="px-2 py-1 bg-white/20 rounded-full text-xs font-medium"
-                  >
-                    {role}
-                  </span>
-                ))}
+        <div className="bg-white overflow-hidden">
+          {/* Header */}
+          <div className="flex justify-center text-slate-500 p-6">
+            <div className="flex flex-col items-center justify-center space-y-2">
+              <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center shadow-lg overflow-hidden">
+                {profileData.profilePictureUrl ? (
+                  <img
+                    src={profileData.profilePictureUrl}
+                    alt="Profile"
+                    className="w-20 h-20 rounded-full object-cover"
+                  />
+                ) : (
+                  <FaUser className="w-10 h-10" />
+                )}
+              </div>
+
+              <div className="text-center">
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {profileData.roles.map((role) => (
+                    <span
+                      key={role}
+                      className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium backdrop-blur-sm"
+                    >
+                      {role}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
-
         {/* Content */}
-        <div className="p-6 pl-2">
+        <div className="p-6">
           {/* Personal Information */}
           <div className="mb-8">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <FaUserTag className="mr-2 text-purple-600" />
+              Personal Information
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                <FaUser className="text-gray-400" />
+              <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                <div className="p-2 bg-purple-100 rounded-full">
+                  <FaUser className="text-purple-600" />
+                </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">
                     Full Name
                   </label>
-                  <p className="text-gray-800">
+                  <p className="text-gray-800 font-medium">
                     {profileData.firstName} {profileData.lastName}
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                <FaEnvelope className="text-gray-400" />
+              <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                <div className="p-2 bg-purple-100 rounded-full">
+                  <FaEnvelope className="text-purple-600" />
+                </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">
                     Email
                   </label>
-                  <p className="text-gray-800">{profileData.email}</p>
+                  <p className="text-gray-800 font-medium">
+                    {profileData.email}
+                  </p>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg md:col-span-2">
-                <FaUser className="text-gray-400" />
+              <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg border border-gray-100 md:col-span-2">
+                <div className="p-2 bg-purple-100 rounded-full">
+                  <FaBirthdayCake className="text-purple-600" />
+                </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">
                     Date of Birth
                   </label>
-                  <p className="text-gray-800">
+                  <p className="text-gray-800 font-medium">
                     {formatDate(profileData.dateOfBirth)}
                   </p>
                 </div>
@@ -223,11 +245,15 @@ const ProfileSettings = () => {
 
           {/* Address Information */}
           <div>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-semibold text-gray-800 flex items-center">
+                <FaMapMarkerAlt className="mr-2 text-purple-600" />
+                Address Information
+              </h2>
               {!isEditing && (
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="flex items-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                  className="flex items-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors shadow-md"
                 >
                   <FaEdit className="w-4 h-4" />
                   <span>Edit Address</span>
@@ -236,7 +262,7 @@ const ProfileSettings = () => {
             </div>
 
             {isEditing ? (
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -249,7 +275,7 @@ const ProfileSettings = () => {
                       <input
                         type="text"
                         {...register("address")}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
                         placeholder="Enter your street address"
                       />
                     </div>
@@ -266,7 +292,7 @@ const ProfileSettings = () => {
                       <input
                         type="text"
                         {...register("city")}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
                         placeholder="Enter your city"
                       />
                     </div>
@@ -279,7 +305,7 @@ const ProfileSettings = () => {
                     <input
                       type="text"
                       {...register("state")}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
                       placeholder="Enter your state/province"
                     />
                   </div>
@@ -291,7 +317,7 @@ const ProfileSettings = () => {
                     <input
                       type="text"
                       {...register("zipCode")}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
                       placeholder="Enter your ZIP/postal code"
                     />
                   </div>
@@ -307,7 +333,7 @@ const ProfileSettings = () => {
                       <input
                         type="text"
                         {...register("country")}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
                         placeholder="Enter your country"
                       />
                     </div>
@@ -315,7 +341,7 @@ const ProfileSettings = () => {
                 </div>
 
                 {updateProfileMutation.error && (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                     <p className="text-sm text-red-600">
                       {updateProfileMutation.error.message ||
                         "Failed to update profile"}
@@ -323,11 +349,11 @@ const ProfileSettings = () => {
                   </div>
                 )}
 
-                <div className="flex space-x-3 pt-4">
+                <div className="flex space-x-3 pt-2">
                   <button
                     type="submit"
                     disabled={updateProfileMutation.isPending}
-                    className="flex items-center space-x-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                    className="flex items-center space-x-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors shadow-md"
                   >
                     <FaSave className="w-4 h-4" />
                     <span>
@@ -341,7 +367,7 @@ const ProfileSettings = () => {
                     type="button"
                     onClick={handleCancel}
                     disabled={updateProfileMutation.isPending}
-                    className="flex items-center space-x-2 px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 disabled:opacity-50 transition-colors"
+                    className="flex items-center space-x-2 px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 disabled:opacity-50 transition-colors shadow-md"
                   >
                     <FaTimes className="w-4 h-4" />
                     <span>Cancel</span>
@@ -350,59 +376,71 @@ const ProfileSettings = () => {
               </form>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg md:col-span-2">
-                  <FaMapMarkerAlt className="text-gray-400" />
+                <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg border border-gray-100 md:col-span-2">
+                  <div className="p-2 bg-purple-100 rounded-full">
+                    <FaMapMarkerAlt className="text-purple-600" />
+                  </div>
                   <div>
                     <label className="text-sm font-medium text-gray-600">
                       Street Address
                     </label>
-                    <p className="text-gray-800">
+                    <p className="text-gray-800 font-medium">
                       {profileData.address || "Not provided"}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                  <FaCity className="text-gray-400" />
+                <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                  <div className="p-2 bg-purple-100 rounded-full">
+                    <FaCity className="text-purple-600" />
+                  </div>
                   <div>
                     <label className="text-sm font-medium text-gray-600">
                       City
                     </label>
-                    <p className="text-gray-800">
+                    <p className="text-gray-800 font-medium">
                       {profileData.city || "Not provided"}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                  <div className="p-2 bg-purple-100 rounded-full">
+                    <FaMapMarkerAlt className="text-purple-600" />
+                  </div>
                   <div>
                     <label className="text-sm font-medium text-gray-600">
                       State/Province
                     </label>
-                    <p className="text-gray-800">
+                    <p className="text-gray-800 font-medium">
                       {profileData.state || "Not provided"}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                  <div className="p-2 bg-purple-100 rounded-full">
+                    <FaMapMarkerAlt className="text-purple-600" />
+                  </div>
                   <div>
                     <label className="text-sm font-medium text-gray-600">
                       ZIP/Postal Code
                     </label>
-                    <p className="text-gray-800">
+                    <p className="text-gray-800 font-medium">
                       {profileData.zipCode || "Not provided"}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                  <FaGlobeAmericas className="text-gray-400" />
+                <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                  <div className="p-2 bg-purple-100 rounded-full">
+                    <FaGlobeAmericas className="text-purple-600" />
+                  </div>
                   <div>
                     <label className="text-sm font-medium text-gray-600">
                       Country
                     </label>
-                    <p className="text-gray-800">
+                    <p className="text-gray-800 font-medium">
                       {profileData.country || "Not provided"}
                     </p>
                   </div>

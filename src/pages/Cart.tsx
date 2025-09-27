@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import EmptyCart from "../components/cart/EmptyCart";
-import CartHeader from "../components/cart/CartHeader";
 import CartItems from "../components/cart/CartItems";
 import OrderSummary from "../components/cart/OrderSummary";
 import OrderConfirmationModal from "../components/cart/OrderConfirmationModal";
@@ -105,8 +104,7 @@ function Cart() {
 
   return (
     <div className="bg-gradient-to-br from-gray-50 to-white py-8">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <CartHeader cart={cart} />
+      <div className="container mx-auto ">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left section: Cart items */}
           <CartItems

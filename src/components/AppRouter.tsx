@@ -72,7 +72,7 @@ function AppRouter() {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <main className="flex-grow">
+      <main className="flex-grow ">
         <Routes>
           <Route path="/" element={<HomeLayout />} />
           <Route

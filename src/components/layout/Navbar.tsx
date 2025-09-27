@@ -64,9 +64,12 @@ function Navbar() {
   }, [isSearchVisible]);
 
   return (
-    <nav className="text-slate-700 p-4 pb-2 sticky top-0 z-9 bg-white">
+    <nav className="backdrop-blur-md bg-white/70 p-4 pb-2 sticky top-0 z-10 text-slate-700  blur-[0.1px]">
       <div className="container mx-auto">
-        <div className="flex justify-between items-center">
+        <div
+          className="flex justify-between items-center border border-gray-50 rounded-2xl px-2 py-1"
+          style={{ boxShadow: "0 0 3px rgba(0, 0, 0, 0.2)" }}
+        >
           <Link to="/" className="text-xl font-bold z-10">
             <img src="/logo.svg" alt="E-Shop Logo" className="h-15" />
           </Link>
@@ -197,7 +200,7 @@ function Navbar() {
         {/* Mobile Search - appears below navbar when toggled */}
         <div
           ref={searchRef}
-          className={`md:hidden mt-4 transition-all duration-300 ease-in-out ${
+          className={`md:hidden  transition-all duration-300 ease-in-out ${
             isSearchVisible
               ? "opacity-100 max-h-20"
               : "opacity-0 max-h-0 overflow-hidden"

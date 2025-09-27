@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import {
@@ -10,18 +10,21 @@ import Product from "./Product";
 import Filters from "../utils/Filters";
 import MobileFilterButton from "../utils/MobileFilterButton";
 import ProductGridSkeleton from "../sceletons/ProductGridSceleton";
+import ErrorMessage from "./ErrorMessage";
 
 const Products: React.FC = () => {
   const [searchParams] = useSearchParams();
+  const [isFiltersOpen, setIsFiltersOpen] = React.useState(true);
   const searchQuery = searchParams.get("search") || "";
-  const [isFiltersOpen, setIsFiltersOpen] = React.useState(false);
+  const observer = useRef<IntersectionObserver | null>(null);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
 
   const [filterParams, setFilterParams] = React.useState<{
     minPrice?: number;
     maxPrice?: number;
     color?: string;
-    tags?: string[];
-    category?: string;
+    tags?: string;
+    categoryId?: string;
   }>({});
 
   // Use useMemo to create a stable query key tuple
@@ -35,7 +38,7 @@ const Products: React.FC = () => {
           maxPrice: filterParams.maxPrice,
           color: filterParams.color,
           tags: filterParams.tags,
-          category: filterParams.category,
+          categoryId: filterParams.categoryId,
           searchQuery: searchQuery,
         },
       ] as [string, ProductQueryParams & { searchQuery?: string }],
@@ -44,7 +47,7 @@ const Products: React.FC = () => {
       filterParams.maxPrice,
       filterParams.color,
       filterParams.tags,
-      filterParams.category,
+      filterParams.categoryId,
       searchQuery,
     ]
   );
@@ -77,17 +80,44 @@ const Products: React.FC = () => {
     [data]
   );
 
-  const loadMore = () => {
-    if (hasNextPage) fetchNextPage();
-  };
+  // Set up intersection observer for infinite scroll
+  useEffect(() => {
+    if (!hasNextPage || isFetchingNextPage) return;
+
+    if (observer.current) {
+      observer.current.disconnect();
+    }
+
+    const handleObserver = (entries: IntersectionObserverEntry[]) => {
+      if (entries[0].isIntersecting) {
+        fetchNextPage();
+      }
+    };
+
+    observer.current = new IntersectionObserver(handleObserver, {
+      root: null,
+      rootMargin: "100px", // Load more when 100px from bottom
+      threshold: 0.1,
+    });
+
+    if (loadMoreRef.current) {
+      observer.current.observe(loadMoreRef.current);
+    }
+
+    return () => {
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+    };
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const handleFilterChange = React.useCallback(
     (filters: {
       minPrice?: number;
       maxPrice?: number;
       color?: string;
-      tags?: string[];
-      category?: string;
+      tags?: string;
+      categoryId?: string;
     }) => {
       setFilterParams(filters);
     },
@@ -99,18 +129,12 @@ const Products: React.FC = () => {
   };
 
   if (error) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <p className="text-red-500">
-          Error loading products: {(error as Error).message}
-        </p>
-      </div>
-    );
+    return <ErrorMessage error={error} />;
   }
 
   return (
-    <div className="container mx-auto px-2 py-2">
-      <div className="flex flex-col lg:flex-row gap-8 relative">
+    <div className="container mx-auto py-4 mb-8 ">
+      <div className="flex flex-col lg:flex-row gap-6 relative">
         <Filters
           onFilterChange={handleFilterChange}
           isFiltersOpen={isFiltersOpen}
@@ -137,24 +161,20 @@ const Products: React.FC = () => {
                   <Product key={product.id} product={product} />
                 ))}
               </div>
-              {hasNextPage && (
-                <div className="flex justify-center">
-                  <button
-                    onClick={loadMore}
-                    disabled={isFetchingNextPage}
-                    className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors"
-                  >
-                    {isFetchingNextPage ? "Loading..." : "Load More"}
-                  </button>
-                </div>
-              )}
-              {isFetching && !isFetchingNextPage && <></>}
 
+              {isFetchingNextPage && <ProductGridSkeleton />}
+
+              <div ref={loadMoreRef} className="h-10" />
+
+              {/* No products found message */}
               {products.length === 0 && !isFetching && (
                 <div className="text-center text-gray-500 mt-8">
                   <p>No products found.</p>
                   {searchQuery && (
-                    <p className="mt-2">Try adjusting your search terms.</p>
+                    <>
+                      <p className="mt-2">Try adjusting your search terms.</p>
+                      <p className="mt-2">Or adjusting your filters.</p>
+                    </>
                   )}
                 </div>
               )}
