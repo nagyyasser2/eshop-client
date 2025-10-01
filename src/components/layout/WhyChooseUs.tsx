@@ -48,7 +48,7 @@ function WhyChooseUs() {
   ];
 
   return (
-    <div className="bg-gradient-to-br from-gray-100 to-gray-200 py-10 ">
+    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 py-10 ">
       <div className="container mx-auto  ">
         <div className="flex flex-col lg:flex-row items-center gap-12">
           {/* Text Content */}

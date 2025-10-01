@@ -73,7 +73,7 @@ function FeaturedProducts() {
         )}
         {/* CTA Button */}
         <div className="text-center mt-12">
-          <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-3 rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-200 font-medium">
+          <button className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-8 py-3 rounded-full transition-colors duration-300">
             <Link to={"/products"}>Explore Our Products</Link>
           </button>
         </div>

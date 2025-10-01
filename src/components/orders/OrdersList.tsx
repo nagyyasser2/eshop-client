@@ -12,7 +12,7 @@ export default function OrdersList({ orders }: { orders: OrderDto[] }) {
   };
 
   return (
-    <div className="rounded-1xl bg-white overflow-hidden">
+    <div className="rounded-1xl bg-gradient-to-br from-indigo-50 to-purple-50 overflow-hidden">
       <div className="p-0 space-y-2">
         {orders.map((order: OrderDto) => {
           const paymentStatus = mapPaymentStatus(order.paymentStatus);

@@ -30,11 +30,6 @@ function Search({ onSearchSubmit }: SearchProps) {
     navigate(`/products?search=${encodeURIComponent(trimmedQuery)}`, {
       replace: true,
     });
-
-    // Call callback if provided (to close mobile search)
-    if (onSearchSubmit) {
-      // onSearchSubmit();
-    }
   };
 
   return (
@@ -47,10 +42,10 @@ function Search({ onSearchSubmit }: SearchProps) {
           <input
             ref={searchRef}
             type="text"
-            placeholder="Search products..."
+            placeholder="Search..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-10 py-3 rounded-full border-2 border-slate-200 bg-slate-50 text-slate-700 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-slate-300 transition-all duration-300 ease-in-out"
+            className="w-full pl-10 pr-10 py-3 rounded-full border-2 border-slate-200 bg-white text-slate-700 focus:outline-none focus:bg-white focus:border-slate-300 transition-all duration-300 ease-in-out"
           />
           {searchQuery && (
             <button

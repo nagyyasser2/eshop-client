@@ -15,8 +15,8 @@ const OrderSummary = ({
   total: number;
 }) => {
   return (
-    <div className="lg:col-span-1">
-      <div className="bg-white rounded-3xl shadow-lg p-6 sticky top-8">
+    <div className="lg:col-span-1 ">
+      <div className="bg-white rounded-2xl  p-4 sticky top-8 ">
         <h2 className="text-xl font-semibold text-gray-900 mb-6">
           Order Summary
         </h2>

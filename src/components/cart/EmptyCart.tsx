@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function EmptyCart() {
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-white py-12">
+    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto text-center">
           <div className="mb-8">

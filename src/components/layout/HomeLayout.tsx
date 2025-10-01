@@ -6,13 +6,13 @@ import WhyChooseUs from "./WhyChooseUs";
 
 function HomeLayout() {
   return (
-    <div className="layout">
+    <>
       <Home />
       <WhyChooseUs />
       <FeaturedProducts />
       <TestimonialsSection />
       <FAQSection />
-    </div>
+    </>
   );
 }
 

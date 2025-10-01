@@ -7,10 +7,9 @@ const CartItems = ({
   handleRemoveItem,
   removingItems,
 }: any) => (
-  <div className="lg:col-span-2">
-    <div className="bg-white rounded-3xl shadow-lg overflow-hidden">
-      <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-        <h2 className="text-xl font-semibold text-gray-900">Cart Items</h2>
+  <div className="lg:col-span-2 ">
+    <div className=" rounded-2xl overflow-hidden bg-white">
+      <div className="p-4 border-b border-gray-100 flex justify-between items-center">
         <button
           onClick={clearCart}
           className="text-red-600 hover:text-red-700 text-sm font-medium transition-colors"

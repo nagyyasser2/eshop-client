@@ -35,17 +35,24 @@ function Product({ product }: ProductProps) {
   return (
     <div
       key={product.id}
-      className=" group bg-white rounded-lg shadow-[0_0_5px_rgba(0,0,0,0.3)]  hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
+      className="group bg-white border border-gray-200 rounded-2x rounded-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
     >
       {/* Product Image */}
       <div className="relative overflow-hidden">
         <Link to={`/product/${product.id}`}>
           <img
-            src={SERVER_URL + product.images?.[0]?.url || "/placeholder.png"}
+            src={
+              product.images?.[0]?.url
+                ? product.images[0].url.startsWith("http")
+                  ? product.images[0].url
+                  : SERVER_URL + product.images[0].url
+                : "/placeholder.png"
+            }
             alt={product.name}
             className="w-full h-48 sm:h-56 object-cover group-hover:scale-110 transition-transform duration-500"
             loading="lazy"
           />
+
           <div className="absolute top-4 right-4">
             <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
               {product.category.name || "Unknown"}

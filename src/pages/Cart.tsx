@@ -51,15 +51,13 @@ function Cart() {
 
   const handleRemoveItem = async (itemId: number) => {
     setRemovingItems((prev) => new Set([...prev, itemId]));
-    // Simulate API call delay
-    setTimeout(() => {
-      removeFromCart(itemId);
-      setRemovingItems((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(itemId);
-        return newSet;
-      });
-    }, 300);
+
+    removeFromCart(itemId);
+    setRemovingItems((prev) => {
+      const newSet = new Set(prev);
+      newSet.delete(itemId);
+      return newSet;
+    });
   };
 
   const handleQuantityChange = (itemId: number, newQuantity: number) => {
@@ -103,8 +101,8 @@ function Cart() {
   if (cart.length === 0) return <EmptyCart />;
 
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-white py-8">
-      <div className="container mx-auto ">
+    <div className="py-8">
+      <div className="container mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left section: Cart items */}
           <CartItems

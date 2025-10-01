@@ -11,6 +11,8 @@ import Filters from "../utils/Filters";
 import MobileFilterButton from "../utils/MobileFilterButton";
 import ProductGridSkeleton from "../sceletons/ProductGridSceleton";
 import ErrorMessage from "./ErrorMessage";
+import { Promotion, PromotionalBanner } from "./Promotion";
+import NoProductsFound from "./NoProductsFound";
 
 const Products: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -133,14 +135,14 @@ const Products: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto py-4 mb-8 ">
-      <div className="flex flex-col lg:flex-row gap-6 relative">
-        <Filters
-          onFilterChange={handleFilterChange}
-          isFiltersOpen={isFiltersOpen}
-          toggleFilters={toggleFilters}
-        />
-
+    <div className="container mx-auto  my-2 ">
+      <Promotion />
+      <Filters
+        onFilterChange={handleFilterChange}
+        isFiltersOpen={isFiltersOpen}
+        toggleFilters={toggleFilters}
+      />
+      <div className="flex flex-col lg:flex-row gap-6 mt-4 relative">
         <main className="flex-1">
           <MobileFilterButton
             toggleFilters={toggleFilters}
@@ -150,13 +152,7 @@ const Products: React.FC = () => {
             <ProductGridSkeleton />
           ) : (
             <>
-              <div className="mb-4 hidden lg:block">
-                <p className="text-slate-500">
-                  ( {products.length} ) - products
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6">
                 {products.map((product) => (
                   <Product key={product.id} product={product} />
                 ))}
@@ -168,20 +164,13 @@ const Products: React.FC = () => {
 
               {/* No products found message */}
               {products.length === 0 && !isFetching && (
-                <div className="text-center text-gray-500 mt-8">
-                  <p>No products found.</p>
-                  {searchQuery && (
-                    <>
-                      <p className="mt-2">Try adjusting your search terms.</p>
-                      <p className="mt-2">Or adjusting your filters.</p>
-                    </>
-                  )}
-                </div>
+                <NoProductsFound searchQuery={searchQuery} />
               )}
             </>
           )}
         </main>
       </div>
+      <PromotionalBanner />
     </div>
   );
 };

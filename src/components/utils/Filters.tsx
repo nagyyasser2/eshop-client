@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import getCategoriesTree, { type CategoryTreeDto } from "../../api/catalog";
-import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import CategorySkeleton from "../sceletons/CategorySkeleton";
 
 type FiltersProps = {
@@ -15,18 +14,11 @@ type FiltersProps = {
   toggleFilters: () => void;
 };
 
-// Sample tags
-const availableTags = ["New", "Sale", "Popular", "Limited"];
-
-// Predefined price ranges
 const priceRanges = [
-  { label: "0 - 100", min: 0, max: 100 },
-  { label: "100 - 500", min: 100, max: 500 },
-  { label: "500 - 1000", min: 500, max: 1000 },
-  { label: "1000 - 2000", min: 1000, max: 2000 },
+  { label: "0 - 500", min: 0, max: 500 },
+  { label: "500 - 2000", min: 500, max: 2000 },
   { label: "2000 - 6000", min: 2000, max: 6000 },
-  { label: "6000 - 15000", min: 6000, max: 15000 },
-  { label: "15000 - above", min: 15000, max: 100000 },
+  { label: "6000 - above", min: 6000, max: 100000 },
 ];
 
 const Filters: React.FC<FiltersProps> = ({
@@ -40,11 +32,18 @@ const Filters: React.FC<FiltersProps> = ({
   const [selectedPriceRange, setSelectedPriceRange] = useState<string>("");
   const [tags, setTags] = useState<string>("");
   const [category, setCategory] = useState<string>("All");
-  const [isPriceOpen, setIsPriceOpen] = useState<boolean>(true);
-  const [isCategoryOpen, setIsCategoryOpen] = useState<boolean>(true);
-  const [expandedCategories, setExpandedCategories] = useState<Set<number>>(
-    new Set()
-  );
+
+  // Dropdown states for desktop
+  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] =
+    useState<boolean>(false);
+  const [isPriceDropdownOpen, setIsPriceDropdownOpen] =
+    useState<boolean>(false);
+  const [isTagsDropdownOpen, setIsTagsDropdownOpen] = useState<boolean>(false);
+
+  // Refs for click outside detection
+  const categoryRef = useRef<HTMLDivElement>(null);
+  const priceRef = useRef<HTMLDivElement>(null);
+  const tagsRef = useRef<HTMLDivElement>(null);
 
   // Fetch categories on component mount
   useEffect(() => {
@@ -64,32 +63,29 @@ const Filters: React.FC<FiltersProps> = ({
     fetchCategories();
   }, []);
 
-  const toggleTag = (tag: string) => {
-    setTags((prev) => {
-      const tagList = prev
-        .split(",")
-        .map((t) => t.trim())
-        .filter((t) => t);
-
-      if (tagList.includes(tag)) {
-        return tagList.filter((t) => t !== tag).join(",");
-      } else {
-        return [...tagList, tag].join(",");
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        categoryRef.current &&
+        !categoryRef.current.contains(event.target as Node)
+      ) {
+        setIsCategoryDropdownOpen(false);
       }
-    });
-  };
-
-  const toggleCategoryExpansion = (categoryId: number) => {
-    setExpandedCategories((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(categoryId)) {
-        newSet.delete(categoryId);
-      } else {
-        newSet.add(categoryId);
+      if (
+        priceRef.current &&
+        !priceRef.current.contains(event.target as Node)
+      ) {
+        setIsPriceDropdownOpen(false);
       }
-      return newSet;
-    });
-  };
+      if (tagsRef.current && !tagsRef.current.contains(event.target as Node)) {
+        setIsTagsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const selectedRange = priceRanges.find(
@@ -102,191 +98,256 @@ const Filters: React.FC<FiltersProps> = ({
       categoryId: category !== "All" ? category : undefined,
     };
     onFilterChange(filters);
-    toggleFilters();
   }, [selectedPriceRange, tags, category, onFilterChange]);
 
-  const renderCategory = (categoryItem: CategoryTreeDto, level = 0) => {
-    const hasChildren =
-      categoryItem.childCategories && categoryItem.childCategories.length > 0;
-    const isExpanded = expandedCategories.has(categoryItem.id);
-    const isSelected = category === categoryItem.id.toString();
-
-    return (
-      <div key={categoryItem.id}>
-        <div
-          className={`flex items-center py-1 cursor-pointer transition-colors duration-200 ${
-            isSelected
-              ? "text-blue-500 font-semibold bg-blue-50 px-2 py-1 rounded"
-              : "text-gray-700 hover:text-blue-500 hover:bg-gray-50 px-2 py-1 rounded"
-          }`}
-          onClick={() => {
-            if (hasChildren) {
-              toggleCategoryExpansion(categoryItem.id);
-            } else {
-              setCategory(categoryItem.id.toString());
-            }
-          }}
-        >
-          {hasChildren && (
-            <span className="mr-2 transform transition-transform">
-              {isExpanded ? <FaChevronDown /> : <FaChevronRight />}
-            </span>
-          )}
-          <span
-            onClick={(e) => {
-              e.stopPropagation();
-              setCategory(categoryItem.id.toString());
-            }}
-            className={`transition-colors duration-200 ${
-              isSelected ? "text-blue-500" : "hover:text-blue-500"
-            }`}
-          >
-            {categoryItem.name}
-          </span>
-        </div>
-        {hasChildren && isExpanded && (
-          <div className="ml-4 border-l border-gray-200 pl-2">
-            {categoryItem.childCategories!.map((child) =>
-              renderCategory(child, level + 1)
-            )}
-          </div>
-        )}
-      </div>
-    );
-  };
+  const selectedTagsList = tags
+    .split(",")
+    .map((t) => t.trim())
+    .filter((t) => t);
+  const selectedCategoryName =
+    category === "All"
+      ? "All Categories"
+      : categories.find((c) => c.id.toString() === category)?.name ||
+        "All Categories";
 
   return (
     <>
+      {/* Mobile backdrop */}
       {isFiltersOpen && (
         <div
-          className="fixed inset-0 z-10 lg:hidden opacity-100 pointer-events-auto backdrop-blur-sm"
+          className="fixed inset-0 z-10 lg:hidden opacity-100 pointer-events-auto backdrop-blur-sm bg-black/30"
           onClick={toggleFilters}
         ></div>
       )}
-      <aside
-        className={`fixed rounded-md lg:sticky top-0 lg:top-[125px] left-0 h-full w-3/4 max-w-md lg:w-64 bg-white p-6 overflow-y-auto z-50 lg:z-auto transform transition-transform duration-300 ease-in-out border-gray-50 rounded-2xl px-4 py-1"
-           ${
-             isFiltersOpen ? "translate-x-0" : "-translate-x-full"
-           } lg:translate-x-0 lg:self-start`}
-        style={{ boxShadow: "0 0 3px rgba(0, 0, 0, 0.2)" }}
-      >
-        <div className="mb-6">
-          <div
-            className="flex justify-between items-center cursor-pointer"
-            onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+
+      {/* Desktop: Horizontal Flex Layout */}
+      <div className="hidden lg:flex gap-4 items-center mb-6 flex-wrap">
+        {/* Category Dropdown */}
+        <div className="relative" ref={categoryRef}>
+          <button
+            onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}
+            className="px-4 py-2.5 bg-white border border-gray-300 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 flex items-center gap-2 min-w-[180px] justify-between"
           >
-            <label className="block mb-2 font-medium text-gray-700">
+            <span className="font-medium text-gray-700">
+              {selectedCategoryName}
+            </span>
+            <svg
+              className={`w-4 h-4 transition-transform duration-200 ${
+                isCategoryDropdownOpen ? "rotate-180" : ""
+              }`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+          {isCategoryDropdownOpen && (
+            <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto">
+              {loading ? (
+                <div className="p-4">
+                  <CategorySkeleton />
+                </div>
+              ) : error ? (
+                <div className="p-4 text-red-500">{error}</div>
+              ) : (
+                <>
+                  <div
+                    className={`py-2 px-4 cursor-pointer hover:bg-blue-50 transition-colors ${
+                      category === "All"
+                        ? "bg-blue-50 text-blue-600 font-semibold"
+                        : "text-gray-700"
+                    }`}
+                    onClick={() => {
+                      setCategory("All");
+                      setIsCategoryDropdownOpen(false);
+                    }}
+                  >
+                    All Categories
+                  </div>
+                  {categories.map((categoryItem) => (
+                    <div
+                      key={categoryItem.id}
+                      className={`py-2 px-4 cursor-pointer hover:bg-blue-50 transition-colors ${
+                        category === categoryItem.id.toString()
+                          ? "bg-blue-50 text-blue-600 font-semibold"
+                          : "text-gray-700"
+                      }`}
+                      onClick={() => {
+                        setCategory(categoryItem.id.toString());
+                        setIsCategoryDropdownOpen(false);
+                      }}
+                    >
+                      {categoryItem.name}
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Price Dropdown */}
+        <div className="relative" ref={priceRef}>
+          <button
+            onClick={() => setIsPriceDropdownOpen(!isPriceDropdownOpen)}
+            className="px-4 py-2.5 bg-white border border-gray-300 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 flex items-center gap-2 min-w-[180px] justify-between"
+          >
+            <span className="font-medium text-gray-700">
+              {selectedPriceRange || "Any Price"}
+            </span>
+            <svg
+              className={`w-4 h-4 transition-transform duration-200 ${
+                isPriceDropdownOpen ? "rotate-180" : ""
+              }`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+          {isPriceDropdownOpen && (
+            <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto">
+              <div
+                className={`py-2 px-4 cursor-pointer hover:bg-blue-50 transition-colors ${
+                  selectedPriceRange === ""
+                    ? "bg-blue-50 text-blue-600 font-semibold"
+                    : "text-gray-700"
+                }`}
+                onClick={() => {
+                  setSelectedPriceRange("");
+                  setIsPriceDropdownOpen(false);
+                }}
+              >
+                Any Price
+              </div>
+              {priceRanges.map((range) => (
+                <div
+                  key={range.label}
+                  className={`py-2 px-4 cursor-pointer hover:bg-blue-50 transition-colors ${
+                    selectedPriceRange === range.label
+                      ? "bg-blue-50 text-blue-600 font-semibold"
+                      : "text-gray-700"
+                  }`}
+                  onClick={() => {
+                    setSelectedPriceRange(range.label);
+                    setIsPriceDropdownOpen(false);
+                  }}
+                >
+                  {range.label}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Mobile: Sidebar */}
+      <aside
+        className={`lg:hidden fixed p-4 flex top-0 left-0 h-full w-80 bg-white border border-gray-200 rounded-r-2xl overflow-y-auto z-50 transform transition-transform duration-300 ease-in-out shadow-xl ${
+          isFiltersOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        {/* Mobile Close Button */}
+        <button
+          onClick={toggleFilters}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+
+        <div className="w-full">
+          {/* Category Filters */}
+          <div className="mb-6">
+            <label className="block mb-3 font-semibold text-gray-800 text-lg">
               Category
             </label>
-            <span className="text-gray-500">
-              {isCategoryOpen ? (
-                <span className="text-2xl font-bold">-</span>
-              ) : (
-                <span className="text-2xl font-bold">+</span>
-              )}
-            </span>
-          </div>
-          <div
-            className={`overflow-hidden transition-all duration-300 ease-in-out ${
-              isCategoryOpen ? "max-h-96" : "max-h-0"
-            }`}
-          >
             {loading ? (
               <CategorySkeleton />
             ) : error ? (
               <div className="text-red-500">{error}</div>
             ) : (
-              <div className="mt-2">
+              <div className="space-y-1">
                 <div
-                  className={`py-1 px-2 cursor-pointer rounded transition-colors duration-200 ${
+                  className={`py-2 px-3 cursor-pointer rounded-lg transition-colors duration-200 ${
                     category === "All"
-                      ? "text-blue-500 font-semibold bg-blue-50"
-                      : "text-gray-700 hover:text-blue-500 hover:bg-gray-50"
+                      ? "text-blue-600 font-semibold bg-blue-50"
+                      : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                   }`}
                   onClick={() => setCategory("All")}
                 >
-                  All
+                  All Categories
                 </div>
-                <ul>{categories.map((cat) => renderCategory(cat))}</ul>
+                {categories.map((categoryItem) => (
+                  <div
+                    key={categoryItem.id}
+                    className={`py-2 px-3 cursor-pointer rounded-lg transition-colors duration-200 ${
+                      category === categoryItem.id.toString()
+                        ? "text-blue-600 font-semibold bg-blue-50"
+                        : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                    }`}
+                    onClick={() => setCategory(categoryItem.id.toString())}
+                  >
+                    {categoryItem.name}
+                  </div>
+                ))}
               </div>
             )}
           </div>
-        </div>
 
-        <div className="mb-6">
-          <div
-            className="flex justify-between items-center cursor-pointer"
-            onClick={() => setIsPriceOpen(!isPriceOpen)}
-          >
-            <label className="block mb-2 font-medium text-gray-700">
-              Price
+          {/* Price Filters */}
+          <div className="mb-6">
+            <label className="block mb-3 font-semibold text-gray-800 text-lg">
+              Price Range
             </label>
-            <span className="text-gray-500">
-              {isPriceOpen ? (
-                <span className="text-2xl font-bold">-</span>
-              ) : (
-                <span className="text-2xl font-bold">+</span>
-              )}
-            </span>
-          </div>
-          <div
-            className={`overflow-hidden transition-all duration-300 ease-in-out ${
-              isPriceOpen ? "max-h-96" : "max-h-0"
-            }`}
-          >
-            <ul className="list-disc pl-5 space-y-2 mt-2">
-              <li
-                className={`cursor-pointer hover:text-blue-500 ${
+            <div className="space-y-1">
+              <div
+                className={`py-2 px-3 cursor-pointer rounded-lg transition-colors duration-200 ${
                   selectedPriceRange === ""
-                    ? "text-blue-500 font-semibold"
-                    : "text-gray-700"
+                    ? "text-blue-600 font-semibold bg-blue-50"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                 }`}
                 onClick={() => setSelectedPriceRange("")}
               >
-                Any
-              </li>
+                Any Price
+              </div>
               {priceRanges.map((range) => (
-                <li
+                <div
                   key={range.label}
-                  className={`cursor-pointer hover:text-blue-500 ${
+                  className={`py-2 px-3 cursor-pointer rounded-lg transition-colors duration-200 ${
                     selectedPriceRange === range.label
-                      ? "text-blue-500 font-semibold"
-                      : "text-gray-700"
+                      ? "text-blue-600 font-semibold bg-blue-50"
+                      : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                   }`}
                   onClick={() => setSelectedPriceRange(range.label)}
                 >
                   {range.label}
-                </li>
+                </div>
               ))}
-            </ul>
-          </div>
-        </div>
-
-        <div className="mb-4">
-          <p className="mb-3 font-medium text-gray-700">Tags</p>
-          <div className="flex flex-wrap gap-2">
-            {availableTags.map((tag) => {
-              const tagList = tags
-                .split(",")
-                .map((t) => t.trim())
-                .filter((t) => t);
-              const isSelected = tagList.includes(tag);
-
-              return (
-                <button
-                  key={tag}
-                  onClick={() => toggleTag(tag)}
-                  className={`px-4 py-2 rounded-full border-2 font-medium transition-all duration-200 transform hover:scale-105 shadow-sm ${
-                    isSelected
-                      ? "bg-gradient-to-r from-blue-400 to-blue-500 text-white border-blue-500 shadow-md"
-                      : "border-gray-300 text-gray-700 bg-white hover:border-blue-300 hover:bg-gray-50"
-                  }`}
-                  type="button"
-                >
-                  {tag}
-                </button>
-              );
-            })}
+            </div>
           </div>
         </div>
       </aside>

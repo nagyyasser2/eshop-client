@@ -29,7 +29,6 @@ function OrderTracking() {
     return <OrderNotRegistered />;
   }
 
-  console.log("Fetched orders:", orders);
   return (
     <OrdersContainer>
       <OrdersHeader />

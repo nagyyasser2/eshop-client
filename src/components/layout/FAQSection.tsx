@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 interface FAQItem {
   id: number;
@@ -48,7 +49,7 @@ function FAQSection() {
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-white py-12 mb-8">
+    <div className="bg-gradient-to-br from-gray-50 to-white py-12 ">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
@@ -65,7 +66,7 @@ function FAQSection() {
         </div>
 
         {/* FAQ Items */}
-        <div className="max-w-3xl mx-auto">
+        <div className=" mx-auto">
           {faqs.map((faq, index) => (
             <div
               key={faq.id}
@@ -96,6 +97,12 @@ function FAQSection() {
               </div>
             </div>
           ))}
+        </div>
+        {/* CTA Button */}
+        <div className="text-center mt-12">
+          <button className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-8 py-3 rounded-full transition-colors duration-300">
+            <Link to={"/products"}>Explore Our Products</Link>
+          </button>
         </div>
       </div>
     </div>

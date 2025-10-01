@@ -36,8 +36,8 @@ function Home() {
   return (
     <div className="bg-white py-1">
       {/* Slider Section */}
-      <div className="container mx-auto  mb-16 mt-8">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-gray-50 to-gray-100 shadow-1xl py-15">
+      <div className="container mx-auto  mb-16 py-2">
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50 shadow-1xl py-15">
           {/* Slides Container */}
           <div
             className="flex transition-transform duration-700 ease-in-out"

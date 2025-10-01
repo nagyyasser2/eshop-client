@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 // Updated Footer without Explore section
 function Footer() {
   return (
-    <footer className="bg-gradient-to-br from-gray-100 to-gray-200 py-10 border-t border-gray-300 ">
-      <div className="container mx-auto px-4">
+    <footer className="py-3 bg-gradient-to-br from-indigo-300 to-purple-300">
+      <div className="container mx-auto px-4 p-8">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {/* Quick Links */}
           <div>
@@ -37,15 +37,6 @@ function Footer() {
                 >
                   <span className="w-1 h-1 bg-blue-600 rounded-full mr-3 group-hover:w-2 transition-all duration-200"></span>
                   Products
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/about"
-                  className="text-gray-600 hover:text-purple-600 transition-colors duration-200 flex items-center group"
-                >
-                  <span className="w-1 h-1 bg-purple-600 rounded-full mr-3 group-hover:w-2 transition-all duration-200"></span>
-                  About Us
                 </Link>
               </li>
             </ul>

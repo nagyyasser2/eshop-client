@@ -72,7 +72,7 @@ function AppRouter() {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <main className="flex-grow ">
+      <main className="flex-grow bg-gradient-to-br from-indigo-50 to-purple-50">
         <Routes>
           <Route path="/" element={<HomeLayout />} />
           <Route
