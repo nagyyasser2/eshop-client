@@ -1,33 +1,23 @@
 import axios from "axios";
+import { apiStoreService } from "../persist/api.store.service";
+import type { AuthResponse } from "../types/auth.types";
 
 export const API_URL = "https://localhost:7000/api";
 export const SERVER_URL = "https://localhost:7000/";
 
-// Token storage keys
-const ACCESS_TOKEN_KEY = "access_token";
-const REFRESH_TOKEN_KEY = "refresh_token";
-
 // Updated tokenManager with fixed expiration logic
 export const tokenManager = {
-  getAccessToken: (): string | null => {
-    return localStorage.getItem("access_token");
-  },
-
-  getRefreshToken: (): string | null => {
-    return localStorage.getItem("refresh_token");
-  },
+  getAccessToken: (): string | null => apiStoreService.getAccessToken(),
+  getRefreshToken: (): string | null => apiStoreService.getRefreshToken(),
 
   setTokens: (accessToken: string, refreshToken: string): void => {
-    localStorage.setItem("access_token", accessToken);
-    localStorage.setItem("refresh_token", refreshToken);
+    apiStoreService.setTokens(accessToken, refreshToken);
   },
 
   clearTokens: (): void => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
+    apiStoreService.clearTokens();
   },
 
-  // Fixed decode JWT to check expiration
   isTokenExpired: (token?: string): boolean => {
     const accessToken = token || tokenManager.getAccessToken();
     if (!accessToken) return true;
@@ -44,24 +34,12 @@ export const tokenManager = {
 
       const decoded = JSON.parse(jsonPayload);
       const currentTime = Date.now() / 1000;
-
-      console.log("Token expiration check:", {
-        currentTime,
-        tokenExp: decoded.exp,
-        timeUntilExpiry: decoded.exp - currentTime,
-        isExpired: decoded.exp < currentTime,
-      });
-
-      // Only consider expired if actually past expiration time
-      // Add small buffer (30 seconds) to account for network delays
-      return decoded.exp < currentTime + 30;
-    } catch (error) {
-      console.error("Error decoding token:", error);
+      return decoded.exp < currentTime + 30; // 30s buffer
+    } catch {
       return true;
     }
   },
 
-  // Check if token needs refresh (expires within next 2 minutes)
   shouldRefreshToken: (token?: string): boolean => {
     const accessToken = token || tokenManager.getAccessToken();
     if (!accessToken) return false;
@@ -78,10 +56,8 @@ export const tokenManager = {
 
       const decoded = JSON.parse(jsonPayload);
       const currentTime = Date.now() / 1000;
-
-      // Should refresh if expires within next 2 minutes
-      return decoded.exp < currentTime + 120;
-    } catch (error) {
+      return decoded.exp < currentTime + 120; // refresh if within 2 min
+    } catch {
       return false;
     }
   },
@@ -90,18 +66,6 @@ export const tokenManager = {
     return await refreshAccessToken();
   },
 };
-
-// Auth response interface matching your backend
-interface AuthResponse {
-  success: boolean;
-  message: string;
-  data?: {
-    token: string;
-    refreshToken: string;
-    user: any;
-  };
-  errors?: string[];
-}
 
 // Create axios instance
 const api = axios.create({
@@ -149,9 +113,9 @@ const refreshAccessToken = async (): Promise<string> => {
       }
     );
 
-    if (response.data.success && response.data.data) {
-      const { token: newAccessToken, refreshToken: newRefreshToken } =
-        response.data.data;
+    if (response.data && response.data) {
+      const { Token: newAccessToken, RefreshToken: newRefreshToken } =
+        response.data;
 
       // Update stored tokens
       tokenManager.setTokens(newAccessToken, newRefreshToken);
@@ -184,10 +148,8 @@ api.interceptors.request.use(
     ) {
       if (tokenManager.getRefreshToken()) {
         try {
-          console.log("Proactively refreshing token...");
           token = await refreshAccessToken();
         } catch (error) {
-          console.warn("Proactive token refresh failed:", error);
           // Don't throw here, let the response interceptor handle 401
         }
       }
@@ -202,6 +164,7 @@ api.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
+
 // Response interceptor
 api.interceptors.response.use(
   (response: any) => response,
@@ -265,15 +228,15 @@ api.interceptors.response.use(
 
 // Auth API methods
 export const authAPI = {
-  login: async (email: string, password: string) => {
+  login: async (email: string, password: string): Promise<AuthResponse> => {
     const response = await api.post<AuthResponse>("/auth/login", {
-      email,
-      password,
+      Email: email,
+      Password: password,
     });
 
-    if (response.data.success && response.data.data) {
-      const { token, refreshToken } = response.data.data;
-      tokenManager.setTokens(token, refreshToken);
+    if (response.data.Success && response.data.Data) {
+      const { Token, RefreshToken } = response.data.Data;
+      tokenManager.setTokens(Token, RefreshToken);
     }
 
     return response.data;
@@ -284,14 +247,14 @@ export const authAPI = {
     return response.data;
   },
 
-  googleLogin: async (credential: string) => {
+  googleLogin: async (credential: string): Promise<AuthResponse> => {
     const response = await api.post<AuthResponse>("/auth/google-jwt", {
       credential,
     });
 
-    if (response.data.success && response.data.data) {
-      const { token, refreshToken } = response.data.data;
-      tokenManager.setTokens(token, refreshToken);
+    if (response.data.Success && response.data.Data) {
+      const { Token, RefreshToken } = response.data.Data;
+      tokenManager.setTokens(Token, RefreshToken);
     }
 
     return response.data;
@@ -301,7 +264,6 @@ export const authAPI = {
     try {
       await api.post("/auth/logout");
     } catch (error) {
-      console.error("Logout API call failed:", error);
     } finally {
       tokenManager.clearTokens();
     }
@@ -335,7 +297,6 @@ export const getCurrentUser = () => {
 
     return JSON.parse(jsonPayload);
   } catch (error) {
-    console.error("Error decoding token:", error);
     return null;
   }
 };

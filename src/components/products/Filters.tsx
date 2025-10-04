@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
-import getCategoriesTree, { type CategoryTreeDto } from "../../api/catalog";
+import getCategories from "../../api/catalog";
 import CategorySkeleton from "../sceletons/CategorySkeleton";
+import type { Category } from "../../types/category.types";
 
 type FiltersProps = {
   onFilterChange: (filters: {
@@ -8,10 +9,12 @@ type FiltersProps = {
     maxPrice?: number;
     color?: string;
     tags?: string;
-    category?: string;
+    categoryId?: string;
   }) => void;
   isFiltersOpen: boolean;
   toggleFilters: () => void;
+  initialCategoryId?: string;
+  initialCategoryName?: string;
 };
 
 const priceRanges = [
@@ -25,32 +28,33 @@ const Filters: React.FC<FiltersProps> = ({
   onFilterChange,
   isFiltersOpen,
   toggleFilters,
+  initialCategoryId,
+  initialCategoryName,
 }) => {
-  const [categories, setCategories] = useState<CategoryTreeDto[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedPriceRange, setSelectedPriceRange] = useState<string>("");
-  const [tags, setTags] = useState<string>("");
-  const [category, setCategory] = useState<string>("All");
+  const [categoryId, setCategoryId] = useState<string>(
+    initialCategoryId?.toString() || "All"
+  );
 
   // Dropdown states for desktop
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] =
     useState<boolean>(false);
   const [isPriceDropdownOpen, setIsPriceDropdownOpen] =
     useState<boolean>(false);
-  const [isTagsDropdownOpen, setIsTagsDropdownOpen] = useState<boolean>(false);
 
   // Refs for click outside detection
   const categoryRef = useRef<HTMLDivElement>(null);
   const priceRef = useRef<HTMLDivElement>(null);
-  const tagsRef = useRef<HTMLDivElement>(null);
 
   // Fetch categories on component mount
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         setLoading(true);
-        const categoriesData = await getCategoriesTree();
+        const categoriesData = await getCategories();
         setCategories(categoriesData);
       } catch (err) {
         setError("Failed to load categories");
@@ -62,6 +66,13 @@ const Filters: React.FC<FiltersProps> = ({
 
     fetchCategories();
   }, []);
+
+  // Set initial category only on first mount or when explicitly changed from parent
+  useEffect(() => {
+    if (initialCategoryId) {
+      setCategoryId(initialCategoryId.toString());
+    }
+  }, [initialCategoryId]);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -78,15 +89,13 @@ const Filters: React.FC<FiltersProps> = ({
       ) {
         setIsPriceDropdownOpen(false);
       }
-      if (tagsRef.current && !tagsRef.current.contains(event.target as Node)) {
-        setIsTagsDropdownOpen(false);
-      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Apply filters when selection changes
   useEffect(() => {
     const selectedRange = priceRanges.find(
       (range) => range.label === selectedPriceRange
@@ -94,21 +103,17 @@ const Filters: React.FC<FiltersProps> = ({
     const filters = {
       minPrice: selectedRange ? selectedRange.min : undefined,
       maxPrice: selectedRange ? selectedRange.max : undefined,
-      tags: tags.length > 0 ? tags : undefined,
-      categoryId: category !== "All" ? category : undefined,
+      categoryId: categoryId !== "All" ? categoryId : undefined,
     };
     onFilterChange(filters);
-  }, [selectedPriceRange, tags, category, onFilterChange]);
+  }, [selectedPriceRange, categoryId, onFilterChange]);
 
-  const selectedTagsList = tags
-    .split(",")
-    .map((t) => t.trim())
-    .filter((t) => t);
   const selectedCategoryName =
-    category === "All"
+    categoryId.toString() === "All"
       ? "All Categories"
-      : categories.find((c) => c.id.toString() === category)?.name ||
-        "All Categories";
+      : categories.find((c) => c.Id?.toString() === categoryId.toString())
+          ?.Name ||
+        (initialCategoryId ? `${initialCategoryName}` : "All Categories");
 
   return (
     <>
@@ -159,12 +164,12 @@ const Filters: React.FC<FiltersProps> = ({
                 <>
                   <div
                     className={`py-2 px-4 cursor-pointer hover:bg-blue-50 transition-colors ${
-                      category === "All"
+                      categoryId === "All"
                         ? "bg-blue-50 text-blue-600 font-semibold"
                         : "text-gray-700"
                     }`}
                     onClick={() => {
-                      setCategory("All");
+                      setCategoryId("All");
                       setIsCategoryDropdownOpen(false);
                     }}
                   >
@@ -172,18 +177,18 @@ const Filters: React.FC<FiltersProps> = ({
                   </div>
                   {categories.map((categoryItem) => (
                     <div
-                      key={categoryItem.id}
+                      key={categoryItem.Id}
                       className={`py-2 px-4 cursor-pointer hover:bg-blue-50 transition-colors ${
-                        category === categoryItem.id.toString()
+                        categoryId === categoryItem.Id?.toString()
                           ? "bg-blue-50 text-blue-600 font-semibold"
                           : "text-gray-700"
                       }`}
                       onClick={() => {
-                        setCategory(categoryItem.id.toString());
+                        setCategoryId(categoryItem.Id?.toString());
                         setIsCategoryDropdownOpen(false);
                       }}
                     >
-                      {categoryItem.name}
+                      {categoryItem.Name}
                     </div>
                   ))}
                 </>
@@ -293,25 +298,25 @@ const Filters: React.FC<FiltersProps> = ({
               <div className="space-y-1">
                 <div
                   className={`py-2 px-3 cursor-pointer rounded-lg transition-colors duration-200 ${
-                    category === "All"
+                    categoryId === "All"
                       ? "text-blue-600 font-semibold bg-blue-50"
                       : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                   }`}
-                  onClick={() => setCategory("All")}
+                  onClick={() => setCategoryId("All")}
                 >
                   All Categories
                 </div>
-                {categories.map((categoryItem) => (
+                {categories.map((categoryItem, index) => (
                   <div
-                    key={categoryItem.id}
+                    key={categoryItem.Id ?? `category-${index}`}
                     className={`py-2 px-3 cursor-pointer rounded-lg transition-colors duration-200 ${
-                      category === categoryItem.id.toString()
+                      categoryId === categoryItem.Id?.toString()
                         ? "text-blue-600 font-semibold bg-blue-50"
                         : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                     }`}
-                    onClick={() => setCategory(categoryItem.id.toString())}
+                    onClick={() => setCategoryId(categoryItem.Id?.toString())}
                   >
-                    {categoryItem.name}
+                    {categoryItem.Name}
                   </div>
                 ))}
               </div>

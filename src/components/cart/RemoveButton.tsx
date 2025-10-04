@@ -1,10 +1,22 @@
-const RemoveButton = ({ item, handleRemoveItem, removingItems }: any) => (
+import type { CartItem } from "../../types/cart.types";
+
+interface RemoveButtonProp {
+  item: CartItem;
+  handleRemoveItem: any;
+  removingItems: any;
+}
+
+const RemoveButton = ({
+  item,
+  handleRemoveItem,
+  removingItems,
+}: RemoveButtonProp) => (
   <button
-    onClick={() => handleRemoveItem(item.id)}
-    disabled={removingItems.has(item.id)}
+    onClick={() => handleRemoveItem(item.ProductId)}
+    disabled={removingItems.has(item.ProductId)}
     className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all duration-200 disabled:opacity-50"
   >
-    {removingItems.has(item.id) ? (
+    {removingItems.has(item.ProductId) ? (
       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-red-500"></div>
     ) : (
       <svg

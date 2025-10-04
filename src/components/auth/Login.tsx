@@ -1,15 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { useEffect } from "react";
-import RegisterForm from "../components/auth/RegisterForm";
+import LoginForm from "./LoginForm";
 
-function Register() {
+function Login() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
-      navigate("/");
+      navigate(-1);
     }
   }, [user, navigate]);
 
@@ -18,30 +18,30 @@ function Register() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center p-4">
+    <div className="bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center p-4 py-4">
       <div className="w-full max-w-md">
-        {/* Register Card */}
+        {/* Login Card */}
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-slate-700 mb-2">
-              Create Account
+              Welcome Back
             </h1>
-            <p className="text-gray-600">Join us and start shopping</p>
+            <p className="text-gray-600">Sign in to your account</p>
           </div>
 
-          {/* Register Form */}
-          <RegisterForm />
+          {/* Login Form */}
+          <LoginForm />
 
-          {/* Login Link */}
+          {/* Register Link */}
           <div className="mt-8 pt-6 border-t border-gray-100">
             <p className="text-center text-gray-600">
-              Already have an account?{" "}
+              Don't have an account?{" "}
               <Link
-                to="/login"
+                to="/register"
                 className="font-medium text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition-all duration-200"
               >
-                Sign in here
+                Create one here
               </Link>
             </p>
           </div>
@@ -50,7 +50,7 @@ function Register() {
         {/* Footer */}
         <div className="text-center mt-6">
           <p className="text-sm text-gray-500">
-            By creating an account, you agree to our{" "}
+            By signing in, you agree to our{" "}
             <Link to="/terms" className="text-gray-700 hover:underline">
               Terms of Service
             </Link>{" "}
@@ -65,4 +65,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default Login;

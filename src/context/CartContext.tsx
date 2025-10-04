@@ -5,65 +5,37 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
-import { type ProductDTO } from "../api/products";
-import type { Category } from "../api/catalog";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type {
+  CartItem,
+  CartContextType,
+  ShippingInfo,
+  PaymentInfo,
+  OrderTotals,
+} from "../types/cart.types";
+import {
+  saveCartToStorage,
+  loadCartFromStorage,
+  clearCartFromStorage,
+} from "../persist/cart.store.service";
+import { placeOrder } from "../api/orders";
 
-// Define CartItem type based on ProductDTO
-export interface CartItem
-  extends Pick<ProductDTO, "id" | "name" | "price" | "sku"> {
-  quantity: number;
-  variantId?: number; // Optional, in case the product has variants
-  image?: string; // Optional, to store the image URL
-  category: Category;
-  description?: string; // Optional, to store the product description
-}
-
-interface CartContextType {
-  cart: CartItem[];
-  addToCart: (item: CartItem) => Promise<void>;
-  removeFromCart: (id: number) => void;
-  updateQuantity: (id: number, quantity: number) => void;
-  clearCart: () => void;
-  isLoading: boolean; // To track if cart is being loaded from storage
-}
+import type { CreateOrderItemDto } from "../types/order.types";
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
-
-const CART_STORAGE_KEY = "shopping-cart";
-
-// Helper functions for localStorage operations
-const saveCartToStorage = (cart: CartItem[]) => {
-  try {
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
-  } catch (error) {
-    console.error("Failed to save cart to localStorage:", error);
-  }
-};
-
-const loadCartFromStorage = (): CartItem[] => {
-  try {
-    const savedCart = localStorage.getItem(CART_STORAGE_KEY);
-    if (savedCart) {
-      return JSON.parse(savedCart);
-    }
-  } catch (error) {
-    console.error("Failed to load cart from localStorage:", error);
-  }
-  return [];
-};
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load cart from localStorage on component mount
+  const queryClient = useQueryClient();
+
   useEffect(() => {
     const savedCart = loadCartFromStorage();
     setCart(savedCart);
     setIsLoading(false);
   }, []);
 
-  // Save cart to localStorage whenever cart changes (except during initial load)
   useEffect(() => {
     if (!isLoading) {
       saveCartToStorage(cart);
@@ -72,30 +44,107 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const addToCart = async (item: CartItem) => {
     setCart((prev) => {
-      const existingItem = prev.find((i) => i.id === item.id);
+      const existingItem = prev.find((i) => i.ProductId === item.ProductId);
       if (existingItem) {
         return prev.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + item.quantity } : i
+          i.ProductId === item.ProductId
+            ? { ...i, Quantity: i.Quantity + item.Quantity }
+            : i
         );
       }
       return [...prev, { ...item }];
     });
   };
 
-  const removeFromCart = (id: number) => {
-    setCart((prev) => prev.filter((item) => item.id !== id));
+  const removeFromCart = (productId: number) => {
+    setCart((prev) => prev.filter((item) => item.ProductId !== productId));
   };
 
   const updateQuantity = (id: number, quantity: number) => {
     setCart((prev) =>
       prev.map((item) =>
-        item.id === id ? { ...item, quantity: Math.max(1, quantity) } : item
+        item.ProductId === id
+          ? { ...item, Quantity: Math.max(1, quantity) }
+          : item
       )
     );
   };
 
   const clearCart = () => {
     setCart([]);
+    clearCartFromStorage();
+  };
+
+  const calculateTotals = (
+    shippingAmount: number = 0,
+    discountAmount: number = 0,
+    taxRate: number = 0.1
+  ): OrderTotals => {
+    const subTotal = cart.reduce(
+      (sum, item) => sum + item.UnitPrice * item.Quantity,
+      0
+    );
+    const taxAmount = subTotal * taxRate;
+    const totalAmount = subTotal + taxAmount + shippingAmount - discountAmount;
+
+    return {
+      SubTotal: parseFloat(subTotal.toFixed(2)),
+      TaxAmount: parseFloat(taxAmount.toFixed(2)),
+      ShippingAmount: parseFloat(shippingAmount.toFixed(2)),
+      DiscountAmount: parseFloat(discountAmount.toFixed(2)),
+      TotalAmount: parseFloat(totalAmount.toFixed(2)),
+    };
+  };
+
+  const placeOrderMutation = useMutation({
+    mutationFn: (order: CreateOrderItemDto) => placeOrder(order),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userOrders"] });
+    },
+    onError: (error) => {
+      console.error("Error creating order:", error);
+    },
+  });
+
+  const createOrder = async (
+    shippingInfo: ShippingInfo,
+    paymentInfo: PaymentInfo,
+    notes?: string | undefined
+  ) => {
+    if (cart.length === 0) {
+      throw new Error("Cart is empty");
+    }
+
+    const totals = calculateTotals(
+      paymentInfo.ShippingAmount || 0,
+      paymentInfo.DiscountAmount || 0,
+      paymentInfo.TaxRate || 0.1
+    );
+
+    const orderItems = cart.map((item) => ({
+      ProductId: item.ProductId,
+      Quantity: item.Quantity,
+      UnitPrice: item.UnitPrice,
+      ProductName: item.ProductName,
+      ProductSKU: item.ProductSKU,
+    }));
+
+    const orderRequest: any = {
+      OrderItems: orderItems,
+      ShippingFirstName: shippingInfo.ShippingFirstName,
+      ShippingLastName: shippingInfo.ShippingLastName,
+      ShippingAddress: shippingInfo.ShippingAddress,
+      ShippingCity: shippingInfo.ShippingCity,
+      ShippingState: shippingInfo.ShippingState,
+      ShippingZipCode: shippingInfo.ShippingZipCode,
+      ShippingCountry: shippingInfo.ShippingCountry,
+      ShippingPhone: shippingInfo.ShippingPhone,
+      Notes: notes,
+      DiscountAmount: totals.DiscountAmount,
+      ShippingAmount: totals.ShippingAmount,
+    };
+
+    return await placeOrderMutation.mutateAsync(orderRequest);
   };
 
   return (
@@ -107,6 +156,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         updateQuantity,
         clearCart,
         isLoading,
+        calculateTotals,
+        createOrder,
       }}
     >
       {children}

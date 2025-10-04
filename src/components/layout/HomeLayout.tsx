@@ -1,7 +1,7 @@
-import Home from "../../pages/Home";
 import FeaturedProducts from "../products/FeaturedProducts";
-import TestimonialsSection from "../testimonial/TestimonialsSection";
+import TestimonialsSection from "./TestimonialsSection";
 import FAQSection from "./FAQSection";
+import Home from "./Home";
 import WhyChooseUs from "./WhyChooseUs";
 
 function HomeLayout() {

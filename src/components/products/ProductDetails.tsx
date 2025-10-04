@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { useCart } from "../context/CartContext";
-import { fetchProductById } from "../api/products";
-import { formatCurrency } from "../utils/formatCurrency";
-import { SERVER_URL } from "../api/api";
-import ProductDetailsSkeleton from "../components/utils/ProductDetailsSkeleton";
-import FAQSection from "../components/layout/FAQSection";
+import { useCart } from "../../context/CartContext";
+import { fetchProductById } from "../../api/products";
+import ProductDetailsSkeleton from "./ProductDetailsSkeleton";
+import { SERVER_URL } from "../../api/api";
+import { formatCurrency } from "../../utils/formatCurrency";
 
 function ProductDetails() {
   const { id } = useParams<{ id: string }>();
@@ -25,25 +24,41 @@ function ProductDetails() {
     queryFn: () => fetchProductById(Number(id)),
   });
 
-  const productImages = product?.images?.length
-    ? product.images.map((img) => img.url)
+  const productImages = product?.Images?.length
+    ? product.Images.map((img) => img.Url)
     : ["/placeholder-image.jpg"];
 
   const handleAddToCart = async () => {
-    if (!product || product.stockQuantity < quantity) return;
+    if (!product || product.StockQuantity < quantity) return;
+
+    // Check if variant is required but not selected
+    if (product.Variants?.length && !selectedVariant) {
+      alert("Please select a variant");
+      return;
+    }
 
     setIsAddingToCart(true);
     try {
       await addToCart({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        sku: product.sku,
-        category: product.category,
-        image: productImages[selectedImage],
-        quantity,
-        variantId: selectedVariant || undefined,
+        ProductId: product.Id,
+        ProductName: product.Name,
+        UnitPrice: product.Price,
+        ProductSKU: product.Sku,
+        Quantity: quantity,
+        CategoryName: product.Category?.Name,
+        ImageUrl: product.Images?.[0]?.Url
+          ? product.Images[0].Url.startsWith("http")
+            ? product.Images[0].Url
+            : SERVER_URL + product.Images[0].Url
+          : "/placeholder.png",
+        TotalPrice: product.Price * quantity,
       });
+
+      // Optional: Reset quantity after adding
+      setQuantity(1);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      alert("Failed to add product to cart. Please try again.");
     } finally {
       setIsAddingToCart(false);
     }
@@ -90,16 +105,16 @@ function ProductDetails() {
                       : SERVER_URL + productImages[selectedImage]
                     : "/placeholder.png"
                 }
-                alt={product.name}
+                alt={product.Name}
                 className="w-full object-contain transition-transform duration-500 rounded-2xl"
                 loading="lazy"
               />
             </div>
             <div className="absolute top-4 right-4">
               <span className="bg-blue-500 text-white text-sm px-3 py-2 rounded-full font-medium">
-                {product.isFeatured
+                {product.IsFeatured
                   ? "Featured"
-                  : product.category?.name || "Product"}
+                  : product.Category?.Name || "Product"}
               </span>
             </div>
           </div>
@@ -117,7 +132,7 @@ function ProductDetails() {
                 >
                   <img
                     src={image.startsWith("http") ? image : SERVER_URL + image}
-                    alt={`${product.name} view ${index + 1}`}
+                    alt={`${product.Name} view ${index + 1}`}
                     className="w-full h-full object-contain"
                     loading="lazy"
                   />
@@ -130,18 +145,18 @@ function ProductDetails() {
         {/* Product Info Section */}
         <div className="p-4 sm:p-6 lg:p-8 w-full lg:w-1/2 flex flex-col">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-            {product.name}
+            {product.Name}
           </h1>
           <div className="mb-4 sm:mb-6">
             <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              {formatCurrency(product.price)}
+              {formatCurrency(product.Price)}
             </span>
-            {product.isFeatured && (
+            {product.IsFeatured && (
               <span className="text-gray-500 text-base sm:text-lg ml-2 line-through">
-                {formatCurrency(product.price * 1.2)}
+                {formatCurrency(product.Price * 1.2)}
               </span>
             )}
-            {product.isFeatured && (
+            {product.IsFeatured && (
               <span className="bg-green-100 text-green-800 text-xs sm:text-sm px-2 py-1 rounded-full ml-2 sm:ml-3">
                 Save 20%
               </span>
@@ -163,23 +178,23 @@ function ProductDetails() {
               (4.8) • 156 reviews
             </span>
           </div>
-          {product.variants?.length ? (
+          {product.Variants?.length ? (
             <div className="mb-4 sm:mb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-3">
                 Variants
               </h3>
               <div className="flex flex-wrap gap-2">
-                {product.variants.map((variant) => (
+                {product.Variants.map((variant) => (
                   <button
-                    key={variant.id}
-                    onClick={() => setSelectedVariant(variant.id)}
+                    key={variant.Id}
+                    onClick={() => setSelectedVariant(variant.Id)}
                     className={`px-3 py-1 sm:px-4 sm:py-2 rounded-lg border transition-all text-sm sm:text-base ${
-                      selectedVariant === variant.id
+                      selectedVariant === variant.Id
                         ? "border-blue-500 bg-blue-50 text-blue-700"
                         : "border-gray-300 hover:border-gray-400"
                     }`}
                   >
-                    {variant.name}
+                    {variant.Name}
                   </button>
                 ))}
               </div>
@@ -190,19 +205,19 @@ function ProductDetails() {
               Description
             </h3>
             <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
-              {product.description ||
-                product.shortDescription ||
+              {product.Description ||
+                product.ShortDescription ||
                 "No description available."}
             </p>
           </div>
           <div className="mb-4 sm:mb-6">
             <p
               className={`text-sm font-medium ${
-                product.stockQuantity > 0 ? "text-green-600" : "text-red-600"
+                product.StockQuantity > 0 ? "text-green-600" : "text-red-600"
               }`}
             >
-              {product.stockQuantity > 0
-                ? `${product.stockQuantity} in stock`
+              {product.StockQuantity > 0
+                ? `${product.StockQuantity} in stock`
                 : "Out of stock"}
             </p>
           </div>
@@ -225,10 +240,10 @@ function ProductDetails() {
                   </span>
                   <button
                     onClick={() =>
-                      setQuantity(Math.min(product.stockQuantity, quantity + 1))
+                      setQuantity(Math.min(product.StockQuantity, quantity + 1))
                     }
                     className="px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 transition-colors"
-                    disabled={quantity >= product.stockQuantity}
+                    disabled={quantity >= product.StockQuantity}
                   >
                     +
                   </button>
@@ -240,8 +255,8 @@ function ProductDetails() {
                 onClick={handleAddToCart}
                 disabled={
                   Boolean(isAddingToCart) ||
-                  product.stockQuantity === 0 ||
-                  (Boolean(product.variants?.length) && !selectedVariant)
+                  product.StockQuantity === 0 ||
+                  (Boolean(product.Variants?.length) && !selectedVariant)
                 }
                 className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-xl sm:rounded-2xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-sm sm:text-base"
               >
@@ -291,7 +306,6 @@ function ProductDetails() {
           </div>
         </div>
       </div>
-      <FAQSection />
     </div>
   );
 }

@@ -7,14 +7,12 @@ import {
   FaCog,
   FaHeart,
   FaJediOrder,
-  FaSearch,
   FaBars,
   FaTimes,
 } from "react-icons/fa";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
-import Search from "../utils/Search";
-import SearchIcon from "../utils/SearchIcon";
+import SearchIcon from "./SearchIcon";
 
 function Navbar() {
   const { cart } = useCart();
@@ -24,17 +22,13 @@ function Navbar() {
   const { user, logout } = useAuth();
   const { clearCart } = useCart();
   const location = useLocation();
-  const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const itemCount = cart.reduce((sum, item) => sum + item.Quantity, 0);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
 
   const toggleUserDropdown = () => {
     setIsUserDropdownOpen(!isUserDropdownOpen);
-  };
-
-  const toggleSearchVisibility = () => {
-    setIsSearchVisible(!isSearchVisible);
   };
 
   const toggleMobileMenu = () => {
@@ -133,6 +127,16 @@ function Navbar() {
               Products
             </Link>
             <Link
+              to="/orders"
+              className={`font-medium transition-colors duration-200 ${
+                isActivePath("/orders")
+                  ? "text-purple-600"
+                  : "text-slate-700 hover:text-purple-600"
+              }`}
+            >
+              My Orders
+            </Link>
+            <Link
               to="/support"
               className={`font-medium transition-colors duration-200 ${
                 isActivePath("/support")
@@ -195,11 +199,11 @@ function Navbar() {
                           <FaUser className="h-4 w-4 text-white" />
                         </div>
 
-                        <div>
-                          <div className="font-semibold text-slate-800">
+                        <div className="min-w-0">
+                          <div className="font-semibold text-slate-800 truncate">
                             {user.firstName} {user.lastName}
                           </div>
-                          <div className="text-sm text-slate-500">
+                          <div className="text-sm text-slate-500 truncate">
                             {user.email}
                           </div>
                         </div>
@@ -224,14 +228,6 @@ function Navbar() {
                         <span>Support</span>
                       </Link>
 
-                      <Link
-                        to="/profile"
-                        className="flex items-center space-x-3 px-4 py-2 text-slate-700 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-200"
-                        onClick={() => setIsUserDropdownOpen(false)}
-                      >
-                        <FaCog className="h-4 w-4" />
-                        <span>Settings</span>
-                      </Link>
                       <div className="border-t border-gray-100 my-2"></div>
 
                       <button
@@ -295,6 +291,17 @@ function Navbar() {
               }`}
             >
               Products
+            </Link>
+            <Link
+              to="/orders"
+              onClick={closeMobileMenu}
+              className={`block px-4 py-3 font-medium transition-colors duration-200 ${
+                isActivePath("/orders")
+                  ? "text-purple-600 bg-purple-50"
+                  : "text-slate-700 hover:text-purple-600 hover:bg-purple-50"
+              }`}
+            >
+              My Orders
             </Link>
             <Link
               to="/support"

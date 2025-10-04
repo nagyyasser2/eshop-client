@@ -60,7 +60,7 @@ function Support({ orderNumber: propOrderNumber }: SupportProps) {
         {/* Contact Methods - Responsive Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-10">
           {/* Email Contact */}
-          <div className="bg-white rounded-lg sm:rounded-xl p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+          {/* <div className="bg-white rounded-lg sm:rounded-xl p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
             <div className="flex items-center mb-3 sm:mb-4">
               <div className="bg-blue-100 p-2 sm:p-3 rounded-full mr-3 sm:mr-4">
                 <MailIcon className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
@@ -91,10 +91,10 @@ function Support({ orderNumber: propOrderNumber }: SupportProps) {
                 />
               </svg>
             </a>
-          </div>
+          </div> */}
 
           {/* Phone Contact */}
-          <div className="bg-white rounded-lg sm:rounded-xl p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+          {/* <div className="bg-white rounded-lg sm:rounded-xl p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
             <div className="flex items-center mb-3 sm:mb-4">
               <div className="bg-green-100 p-2 sm:p-3 rounded-full mr-3 sm:mr-4">
                 <PhoneIcon className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
@@ -125,7 +125,7 @@ function Support({ orderNumber: propOrderNumber }: SupportProps) {
                 />
               </svg>
             </a>
-          </div>
+          </div> */}
         </div>
 
         {/* Success Message */}

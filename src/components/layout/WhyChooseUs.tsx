@@ -27,18 +27,7 @@ function WhyChooseUs() {
       description:
         "Our customer support team is available around the clock to assist you with any questions.",
     },
-    {
-      icon: <FaMoneyBillWave className="text-2xl" />,
-      title: "Best Price Guarantee",
-      description:
-        "Found a lower price? We'll match it. We're committed to offering the best value.",
-    },
-    {
-      icon: <FaAward className="text-2xl" />,
-      title: "Premium Quality",
-      description:
-        "All our products undergo rigorous quality checks to ensure they meet the highest standards.",
-    },
+
     {
       icon: <FaSync className="text-2xl" />,
       title: "Easy Returns",
@@ -55,7 +44,7 @@ function WhyChooseUs() {
           <div className="lg:w-1/2">
             <div className="text-center lg:text-left mb-10 lg:mb-0">
               <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-                <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-blue-300 via-purple-400 to-pink-300 bg-clip-text text-transparent">
                   Why Choose Us
                 </span>
               </h2>
@@ -68,20 +57,20 @@ function WhyChooseUs() {
               {/* Stats */}
               <div className="grid grid-cols-2 gap-6 mb-8">
                 <div className="text-center lg:text-left">
-                  <div className="text-3xl font-bold text-blue-600">10K+</div>
-                  <div className="text-gray-600">Happy Customers</div>
+                  <div className="text-3xl font-bold text-blue-400">10K+</div>
+                  <div className="text-gray-400">Happy Customers</div>
                 </div>
                 <div className="text-center lg:text-left">
-                  <div className="text-3xl font-bold text-purple-600">5+</div>
-                  <div className="text-gray-600">Years Experience</div>
+                  <div className="text-3xl font-bold text-purple-400">5+</div>
+                  <div className="text-gray-400">Years Experience</div>
                 </div>
                 <div className="text-center lg:text-left">
-                  <div className="text-3xl font-bold text-pink-600">99%</div>
-                  <div className="text-gray-600">Positive Reviews</div>
+                  <div className="text-3xl font-bold text-pink-400">99%</div>
+                  <div className="text-gray-400">Positive Reviews</div>
                 </div>
                 <div className="text-center lg:text-left">
                   <div className="text-3xl font-bold text-blue-500">24/7</div>
-                  <div className="text-gray-600">Customer Support</div>
+                  <div className="text-gray-400">Customer Support</div>
                 </div>
               </div>
             </div>

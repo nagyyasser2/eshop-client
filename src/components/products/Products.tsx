@@ -1,14 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 import {
   fetchProductsForUseQuery,
   type ProductQueryParams,
   type PaginatedProductsResponse,
 } from "../../api/products";
 import Product from "./Product";
-import Filters from "../utils/Filters";
-import MobileFilterButton from "../utils/MobileFilterButton";
+import Filters from "./Filters";
+import MobileFilterButton from "./MobileFilterButton";
 import ProductGridSkeleton from "../sceletons/ProductGridSceleton";
 import ErrorMessage from "./ErrorMessage";
 import { Promotion, PromotionalBanner } from "./Promotion";
@@ -16,8 +16,14 @@ import NoProductsFound from "./NoProductsFound";
 
 const Products: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const [isFiltersOpen, setIsFiltersOpen] = React.useState(true);
+  const location = useLocation();
+  const [isFiltersOpen, setIsFiltersOpen] = React.useState(false);
   const searchQuery = searchParams.get("search") || "";
+
+  // Get categoryId, categoryName from location state
+  const categoryIdFromState = location.state?.categoryId;
+  const categoryNameFromState = location.state?.categoryName;
+
   const observer = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
@@ -27,7 +33,10 @@ const Products: React.FC = () => {
     color?: string;
     tags?: string;
     categoryId?: string;
-  }>({});
+  }>({
+    // Initialize with categoryId from state if available
+    categoryId: categoryIdFromState,
+  });
 
   // Use useMemo to create a stable query key tuple
   const queryKey = React.useMemo(
@@ -98,7 +107,7 @@ const Products: React.FC = () => {
 
     observer.current = new IntersectionObserver(handleObserver, {
       root: null,
-      rootMargin: "100px", // Load more when 100px from bottom
+      rootMargin: "100px",
       threshold: 0.1,
     });
 
@@ -130,18 +139,31 @@ const Products: React.FC = () => {
     setIsFiltersOpen(!isFiltersOpen);
   };
 
+  // Set initial category from state only when it changes (e.g., navigation from another page)
+  React.useEffect(() => {
+    if (categoryIdFromState) {
+      setFilterParams((prev) => ({
+        ...prev,
+        categoryId: categoryIdFromState,
+      }));
+    }
+  }, [categoryIdFromState]);
+
   if (error) {
     return <ErrorMessage error={error} />;
   }
 
   return (
-    <div className="container mx-auto  my-2 ">
+    <div className="container mx-auto my-2">
       <Promotion />
       <Filters
         onFilterChange={handleFilterChange}
         isFiltersOpen={isFiltersOpen}
         toggleFilters={toggleFilters}
+        initialCategoryId={categoryIdFromState}
+        initialCategoryName={categoryNameFromState}
       />
+
       <div className="flex flex-col lg:flex-row gap-6 mt-4 relative">
         <main className="flex-1">
           <MobileFilterButton
@@ -154,7 +176,7 @@ const Products: React.FC = () => {
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6">
                 {products.map((product) => (
-                  <Product key={product.id} product={product} />
+                  <Product key={product.Id} product={product} />
                 ))}
               </div>
 
@@ -162,7 +184,6 @@ const Products: React.FC = () => {
 
               <div ref={loadMoreRef} className="h-10" />
 
-              {/* No products found message */}
               {products.length === 0 && !isFetching && (
                 <NoProductsFound searchQuery={searchQuery} />
               )}

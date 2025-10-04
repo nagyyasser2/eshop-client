@@ -54,7 +54,7 @@ function FAQSection() {
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-300 via-purple-400 to-pink-300 bg-clip-text text-transparent">
               Frequently Asked Questions
             </span>
           </h2>
@@ -97,12 +97,6 @@ function FAQSection() {
               </div>
             </div>
           ))}
-        </div>
-        {/* CTA Button */}
-        <div className="text-center mt-12">
-          <button className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-8 py-3 rounded-full transition-colors duration-300">
-            <Link to={"/products"}>Explore Our Products</Link>
-          </button>
         </div>
       </div>
     </div>

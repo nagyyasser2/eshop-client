@@ -1,10 +1,12 @@
-import type { OrderDto } from "../../api/orders";
 import { useState } from "react";
 import OrderDetails from "./OrderDetails";
-import { mapPaymentStatus } from "../../utils/order.util";
-import { formatOrderDate } from "../../utils/order.util";
+import type { Order } from "../../types/order.types";
+import {
+  formatOrderDate,
+  getPaymentStatusString,
+} from "../../utils/order.util";
 
-export default function OrdersList({ orders }: { orders: OrderDto[] }) {
+export default function OrdersList({ orders }: { orders: Order[] }) {
   const [expandedOrder, setExpandedOrder] = useState<number | null>(null);
 
   const toggleAccordion = (orderId: number) => {
@@ -13,32 +15,31 @@ export default function OrdersList({ orders }: { orders: OrderDto[] }) {
 
   return (
     <div className="rounded-1xl bg-gradient-to-br from-indigo-50 to-purple-50 overflow-hidden">
-      <div className="p-0 space-y-2">
-        {orders.map((order: OrderDto) => {
-          const paymentStatus = mapPaymentStatus(order.paymentStatus);
-          const isPaid =
-            paymentStatus === "Completed" || paymentStatus === "Paid";
-          const isExpanded = expandedOrder === order.id;
+      <div className="p-0 space-y-2 rounded-2xl">
+        {orders.map((order: Order, index: number) => {
+          const paymentStatus = getPaymentStatusString(order.PaymentStatus);
+          const isPaid = paymentStatus === "Completed";
+          const isExpanded = expandedOrder === order.Id;
 
           return (
             <div
-              key={order.id}
-              className="bg-white border border-gray-200 rounded-2xl overflow-hidden  transition-all duration-300 rtansform"
+              key={`${order.Id ?? "no-id"}-${index}`}
+              className="bg-white border border-gray-200 rounded-2xl overflow-hidden transition-all duration-300 transform"
             >
               <button
-                onClick={() => toggleAccordion(order.id)}
+                onClick={() => toggleAccordion(order.Id)}
                 className="w-full flex justify-between items-center px-3 py-2 cursor-pointer transition-all duration-300"
               >
                 <div className="flex items-center space-x-4">
                   <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
-                    #{order.orderNumber.slice(-2)}
+                    #{order.OrderNumber?.slice(-2)}
                   </div>
                   <div className="text-left">
                     <span className="block font-bold text-gray-900 text-lg">
-                      #{order.orderNumber}
+                      #{order.OrderNumber}
                     </span>
                     <span className="block text-sm text-gray-600 font-medium">
-                      {formatOrderDate(order.createdAt)}
+                      {formatOrderDate(order.CreatedAt)}
                     </span>
                   </div>
                 </div>
@@ -76,7 +77,7 @@ export default function OrdersList({ orders }: { orders: OrderDto[] }) {
                           />
                         </svg>
                         <span className="text-orange-800 font-bold text-sm">
-                          COD
+                          {paymentStatus}
                         </span>
                       </div>
                     )}
@@ -113,7 +114,7 @@ export default function OrdersList({ orders }: { orders: OrderDto[] }) {
         })}
 
         {orders.length === 0 && (
-          <div className="text-center py-12">
+          <div className="text-center py-12 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50">
             <div className="w-24 h-24 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg
                 className="w-12 h-12 text-purple-400"

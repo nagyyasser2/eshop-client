@@ -1,0 +1,401 @@
+import { useState } from 'react';
+import { ShoppingBag, CreditCard, MapPin, Check, AlertCircle } from 'lucide-react';
+
+// Mock cart context for demo
+const mockCart = [
+  { ProductId: 1, ProductName: "Premium Headphones", ProductSKU: "HDN-001", UnitPrice: 299.99, Quantity: 1 },
+  { ProductId: 2, ProductName: "Wireless Mouse", ProductSKU: "MOU-002", UnitPrice: 49.99, Quantity: 2 }
+];
+
+function CheckoutSummary({ cart, totals }) {
+  return (
+    <div className="bg-white rounded-xl shadow-lg p-6 sticky top-6">
+      <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-6">
+        Order Summary
+      </h2>
+      
+      <div className="space-y-4 mb-6">
+        {cart.map((item) => (
+          <div key={item.ProductId} className="flex justify-between items-start pb-4 border-b border-gray-100">
+            <div className="flex-1">
+              <p className="font-medium text-gray-800">{item.ProductName}</p>
+              <p className="text-sm text-gray-500">Qty: {item.Quantity}</p>
+            </div>
+            <p className="font-semibold text-gray-800">${(item.UnitPrice * item.Quantity).toFixed(2)}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="space-y-3 mb-6 pb-6 border-b border-gray-200">
+        <div className="flex justify-between text-gray-600">
+          <span>Subtotal</span>
+          <span>${totals.SubTotal.toFixed(2)}</span>
+        </div>
+        <div className="flex justify-between text-gray-600">
+          <span>Shipping</span>
+          <span>${totals.ShippingAmount.toFixed(2)}</span>
+        </div>
+        <div className="flex justify-between text-gray-600">
+          <span>Tax</span>
+          <span>${totals.TaxAmount.toFixed(2)}</span>
+        </div>
+        {totals.DiscountAmount > 0 && (
+          <div className="flex justify-between text-green-600">
+            <span>Discount</span>
+            <span>-${totals.DiscountAmount.toFixed(2)}</span>
+          </div>
+        )}
+      </div>
+
+      <div className="flex justify-between items-center text-xl font-bold">
+        <span className="text-gray-800">Total</span>
+        <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          ${totals.TotalAmount.toFixed(2)}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function CheckoutAddressForm({ formData, onChange, errors }) {
+  return (
+    <div className="bg-white rounded-xl shadow-lg p-6">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center">
+          <MapPin className="w-5 h-5 text-white" />
+        </div>
+        <h2 className="text-2xl font-bold text-gray-800">Shipping Address</h2>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+          <input
+            type="text"
+            value={formData.ShippingFirstName}
+            onChange={(e) => onChange('ShippingFirstName', e.target.value)}
+            className={`w-full px-4 py-2 border ${errors.ShippingFirstName ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition`}
+            placeholder="John"
+          />
+          {errors.ShippingFirstName && <p className="text-red-500 text-xs mt-1">{errors.ShippingFirstName}</p>}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+          <input
+            type="text"
+            value={formData.ShippingLastName}
+            onChange={(e) => onChange('ShippingLastName', e.target.value)}
+            className={`w-full px-4 py-2 border ${errors.ShippingLastName ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition`}
+            placeholder="Doe"
+          />
+          {errors.ShippingLastName && <p className="text-red-500 text-xs mt-1">{errors.ShippingLastName}</p>}
+        </div>
+
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Address</label>
+          <input
+            type="text"
+            value={formData.ShippingAddress}
+            onChange={(e) => onChange('ShippingAddress', e.target.value)}
+            className={`w-full px-4 py-2 border ${errors.ShippingAddress ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition`}
+            placeholder="123 Main Street"
+          />
+          {errors.ShippingAddress && <p className="text-red-500 text-xs mt-1">{errors.ShippingAddress}</p>}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
+          <input
+            type="text"
+            value={formData.ShippingCity}
+            onChange={(e) => onChange('ShippingCity', e.target.value)}
+            className={`w-full px-4 py-2 border ${errors.ShippingCity ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition`}
+            placeholder="New York"
+          />
+          {errors.ShippingCity && <p className="text-red-500 text-xs mt-1">{errors.ShippingCity}</p>}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">State</label>
+          <input
+            type="text"
+            value={formData.ShippingState}
+            onChange={(e) => onChange('ShippingState', e.target.value)}
+            className={`w-full px-4 py-2 border ${errors.ShippingState ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition`}
+            placeholder="NY"
+          />
+          {errors.ShippingState && <p className="text-red-500 text-xs mt-1">{errors.ShippingState}</p>}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">ZIP Code</label>
+          <input
+            type="text"
+            value={formData.ShippingZipCode}
+            onChange={(e) => onChange('ShippingZipCode', e.target.value)}
+            className={`w-full px-4 py-2 border ${errors.ShippingZipCode ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition`}
+            placeholder="10001"
+          />
+          {errors.ShippingZipCode && <p className="text-red-500 text-xs mt-1">{errors.ShippingZipCode}</p>}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Country</label>
+          <input
+            type="text"
+            value={formData.ShippingCountry}
+            onChange={(e) => onChange('ShippingCountry', e.target.value)}
+            className={`w-full px-4 py-2 border ${errors.ShippingCountry ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition`}
+            placeholder="USA"
+          />
+          {errors.ShippingCountry && <p className="text-red-500 text-xs mt-1">{errors.ShippingCountry}</p>}
+        </div>
+
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+          <input
+            type="tel"
+            value={formData.ShippingPhone}
+            onChange={(e) => onChange('ShippingPhone', e.target.value)}
+            className={`w-full px-4 py-2 border ${errors.ShippingPhone ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition`}
+            placeholder="+1 (555) 123-4567"
+          />
+          {errors.ShippingPhone && <p className="text-red-500 text-xs mt-1">{errors.ShippingPhone}</p>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CheckoutPaymentMethod({ formData, onChange }) {
+  return (
+    <div className="bg-white rounded-xl shadow-lg p-6">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-pink-700 flex items-center justify-center">
+          <CreditCard className="w-5 h-5 text-white" />
+        </div>
+        <h2 className="text-2xl font-bold text-gray-800">Payment Method</h2>
+      </div>
+
+      <div className="space-y-4">
+        <div className="grid grid-cols-3 gap-3">
+          {['Credit Card', 'PayPal', 'Cash'].map((method) => (
+            <button
+              key={method}
+              onClick={() => onChange('PaymentMethod', method)}
+              className={`px-4 py-3 rounded-lg border-2 transition font-medium ${
+                formData.PaymentMethod === method
+                  ? 'border-purple-600 bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700'
+                  : 'border-gray-200 hover:border-purple-300 text-gray-700'
+              }`}
+            >
+              {method}
+            </button>
+          ))}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Shipping Cost</label>
+          <input
+            type="number"
+            step="0.01"
+            value={formData.ShippingAmount}
+            onChange={(e) => onChange('ShippingAmount', parseFloat(e.target.value) || 0)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+            placeholder="0.00"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Discount Code</label>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+              placeholder="Enter discount code"
+            />
+            <button className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition font-medium">
+              Apply
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Order Notes (Optional)</label>
+          <textarea
+            value={formData.Notes}
+            onChange={(e) => onChange('Notes', e.target.value)}
+            rows={3}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition resize-none"
+            placeholder="Any special instructions..."
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CheckoutActions({ onPlaceOrder, isProcessing, isValid }) {
+  return (
+    <div className="bg-white rounded-xl shadow-lg p-6">
+      <button
+        onClick={onPlaceOrder}
+        disabled={isProcessing || !isValid}
+        className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-bold text-lg hover:from-purple-700 hover:to-pink-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+      >
+        {isProcessing ? (
+          <>
+            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            Processing...
+          </>
+        ) : (
+          <>
+            <Check className="w-5 h-5" />
+            Place Order
+          </>
+        )}
+      </button>
+      
+      <p className="text-center text-sm text-gray-500 mt-4">
+        By placing your order, you agree to our terms and conditions
+      </p>
+    </div>
+  );
+}
+
+export default function Checkout() {
+  const [shippingInfo, setShippingInfo] = useState({
+    ShippingFirstName: '',
+    ShippingLastName: '',
+    ShippingAddress: '',
+    ShippingCity: '',
+    ShippingState: '',
+    ShippingZipCode: '',
+    ShippingCountry: '',
+    ShippingPhone: '',
+  });
+
+  const [paymentInfo, setPaymentInfo] = useState({
+    PaymentMethod: 'Credit Card',
+    ShippingAmount: 15.00,
+    DiscountAmount: 0,
+    TaxRate: 0.1,
+    Notes: '',
+  });
+
+  const [errors, setErrors] = useState({});
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [orderSuccess, setOrderSuccess] = useState(false);
+
+  const handleShippingChange = (field, value) => {
+    setShippingInfo(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  };
+
+  const handlePaymentChange = (field, value) => {
+    setPaymentInfo(prev => ({ ...prev, [field]: value }));
+  };
+
+  const calculateTotals = () => {
+    const subTotal = mockCart.reduce((sum, item) => sum + item.UnitPrice * item.Quantity, 0);
+    const taxAmount = subTotal * paymentInfo.TaxRate;
+    const totalAmount = subTotal + taxAmount + paymentInfo.ShippingAmount - paymentInfo.DiscountAmount;
+
+    return {
+      SubTotal: subTotal,
+      TaxAmount: taxAmount,
+      ShippingAmount: paymentInfo.ShippingAmount,
+      DiscountAmount: paymentInfo.DiscountAmount,
+      TotalAmount: totalAmount,
+    };
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    Object.keys(shippingInfo).forEach(key => {
+      if (!shippingInfo[key].trim()) {
+        newErrors[key] = 'This field is required';
+      }
+    });
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handlePlaceOrder = async () => {
+    if (!validateForm()) return;
+
+    setIsProcessing(true);
+    setTimeout(() => {
+      setIsProcessing(false);
+      setOrderSuccess(true);
+    }, 2000);
+  };
+
+  if (orderSuccess) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-white py-12 px-4">
+        <div className="max-w-2xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-2xl p-12 text-center">
+            <div className="w-20 h-20 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Check className="w-12 h-12 text-white" />
+            </div>
+            <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              Order Placed Successfully!
+            </h1>
+            <p className="text-gray-600 text-lg mb-8">
+              Thank you for your purchase. Your order has been confirmed and will be shipped soon.
+            </p>
+            <button
+              onClick={() => setOrderSuccess(false)}
+              className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition"
+            >
+              Place Another Order
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const totals = calculateTotals();
+  const isValid = Object.values(shippingInfo).every(v => v.trim() !== '');
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-white py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex items-center gap-3 mb-8">
+          <ShoppingBag className="w-10 h-10 text-purple-600" />
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            Checkout
+          </h1>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-6">
+            <CheckoutAddressForm 
+              formData={shippingInfo}
+              onChange={handleShippingChange}
+              errors={errors}
+            />
+            <CheckoutPaymentMethod 
+              formData={paymentInfo}
+              onChange={handlePaymentChange}
+            />
+            <CheckoutActions 
+              onPlaceOrder={handlePlaceOrder}
+              isProcessing={isProcessing}
+              isValid={isValid}
+            />
+          </div>
+
+          <div className="lg:col-span-1">
+            <CheckoutSummary cart={mockCart} totals={totals} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

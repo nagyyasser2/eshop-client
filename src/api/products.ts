@@ -3,68 +3,67 @@ import { type QueryFunctionContext } from "@tanstack/react-query";
 import type { Category } from "./catalog";
 
 export interface Product {
-  id: number;
-  name: string;
-  description?: string;
-  shortDescription?: string;
-  sku: string;
-  price: number;
-  comparePrice?: number | null;
-  stockQuantity: number;
-  trackQuantity: boolean;
-  isActive: boolean;
-  isFeatured: boolean;
-  weight: number;
-  dimensions?: string;
-  tags?: string;
-  createdAt: Date;
+  Id: number;
+  Name: string;
+  Description?: string;
+  ShortDescription?: string;
+  Sku: string;
+  Price: number;
+  ComparePrice?: number | null;
+  StockQuantity: number;
+  TrackQuantity: boolean;
+  IsActive: boolean;
+  IsFeatured: boolean;
+  Weight: number;
+  Dimensions?: string;
+  Tags?: string;
+  CreatedAt: Date;
 
-  categoryId?: number | null;
-  category?: Category | null;
-  images?: Image[];
-  variants?: Variant[];
+  CategoryId?: number | null;
+  Category?: Category | null;
+  Images?: Image[];
+  Variants?: Variant[];
 }
 
 export interface Variant {
-  id: number;
-  sku: string;
-  price?: number | null;
-  stockQuantity: number;
-  isActive: boolean;
-  color: string;
-  size: string;
-  createdAt: Date;
-
-  productId: number;
-  product?: Product;
+  Id: number;
+  Sku: string;
+  Price?: number | null;
+  StockQuantity: number;
+  IsActive: boolean;
+  Color: string;
+  Size: string;
+  CreatedAt: Date;
+  ProductId: number;
+  Product?: Product;
 }
 
 export interface Image {
-  id: number;
-  url: string;
-  altText?: string;
-  isPrimary: boolean;
-  sortOrder: number;
-  createdAt: Date;
+  Id: number;
+  Url: string;
+  AltText?: string;
+  IsPrimary: boolean;
+  SortOrder: number;
+  CreatedAt: Date;
 
-  productId: number;
-  product?: Product;
+  ProductId: number;
+  Product?: Product;
 }
 
 export interface ProductDTO {
-  id: number;
-  name: string;
-  sku: string;
-  price: number;
-  description?: string;
-  shortDescription?: string;
-  stockQuantity: number;
-  isActive: boolean;
-  isFeatured: boolean;
-  categoryId: number;
-  category: Category;
-  images?: { id: number; url: string }[];
-  variants?: { id: number; name: string }[];
+  Id: number;
+  Name: string;
+  Sku: string;
+  Price: number;
+  Description?: string;
+  ShortDescription?: string;
+  StockQuantity: number;
+  IsActive: boolean;
+  IsFeatured: boolean;
+  CategoryId: number;
+  Category: Category;
+  Images?: { Id: number; Url: string }[];
+  Variants?: { Id: number; Name: string }[];
 }
 
 export interface PaginatedProductsResponse {

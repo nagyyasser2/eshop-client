@@ -9,10 +9,20 @@ import {
 import ProductCardSkeleton from "./ProductCardSkeleton";
 import ProductComponent from "./Product";
 
+// Swiper imports
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+// @ts-ignore
+import "swiper/css";
+// @ts-ignore
+import "swiper/css/navigation";
+// @ts-ignore
+import "swiper/css/pagination";
+
 function FeaturedProducts() {
   const queryParams: ProductQueryParams = {
-    featured: false,
-    pageSize: 6,
+    featured: true, // ✅ use featured products
+    pageSize: 5,
   };
 
   const { data, isLoading, isError, error } = useQuery<
@@ -21,7 +31,6 @@ function FeaturedProducts() {
   >({
     queryKey: ["products", queryParams],
     queryFn: (context) => {
-      // Type assertion to ensure correct types
       const params = context.queryKey[1] as ProductQueryParams;
       return fetchProductsForUseQuery({
         ...context,
@@ -31,17 +40,16 @@ function FeaturedProducts() {
     },
   });
 
-  // Get products from the single page response
   const products = data?.data ?? [];
 
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-white py-15 mb-8">
-      <div className="container mx-auto ">
-        {/* Header with View All Link */}
-        <div className="flex items-center justify-center mb-8">
+    <div className="bg-gray-50 py-16 mb-8">
+      <div className="container mx-auto px-4">
+        {/* Header */}
+        <div className="flex items-center justify-center mb-10">
           <div className="text-center">
             <h1 className="text-3xl sm:text-4xl font-bold mb-2">
-              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-300 via-purple-400 to-pink-300 bg-clip-text text-transparent">
                 <Link to={"/products"} className="hover:underline">
                   Featured Products
                 </Link>
@@ -53,29 +61,49 @@ function FeaturedProducts() {
           </div>
         </div>
 
-        {/* Loading State */}
+        {/* Loading */}
         {isLoading && <ProductCardSkeleton length={6} />}
 
-        {/* Error State */}
+        {/* Error */}
         {isError && (
           <div className="text-center text-red-600">
             Error: {error?.message || "Failed to load products"}
           </div>
         )}
 
-        {/* Products Grid */}
-        {!isLoading && !isError && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Swiper Products Carousel */}
+        {!isLoading && !isError && products.length > 0 && (
+          <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            navigation
+            pagination={{ clickable: true }}
+            loop={true}
+            autoplay={{ delay: 4000, disableOnInteraction: false }}
+            spaceBetween={24}
+            breakpoints={{
+              320: { slidesPerView: 1 },
+              640: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+              1280: { slidesPerView: 4 },
+            }}
+            className="pb-12"
+          >
             {products.map((product: ProductDTO) => (
-              <ProductComponent product={product} />
+              <SwiperSlide key={product.Id}>
+                <ProductComponent product={product} />
+              </SwiperSlide>
             ))}
-          </div>
+          </Swiper>
         )}
+
         {/* CTA Button */}
         <div className="text-center mt-12">
-          <button className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-8 py-3 rounded-full transition-colors duration-300">
-            <Link to={"/products"}>Explore Our Products</Link>
-          </button>
+          <Link
+            to={"/products"}
+            className="inline-block bg-purple-400 hover:bg-purple-500 text-white font-semibold px-8 py-3 rounded-full transition-colors duration-300"
+          >
+            Explore Our Products
+          </Link>
         </div>
       </div>
     </div>

@@ -1,25 +1,13 @@
 import api from "./api";
 
-export interface PaymentStatus {
-  Pending: "Pending";
-  Paid: "Paid";
-  Failed: "Failed";
-  Processing: "Processing";
-  CashOnDelivery: "CashOnDelivery";
-  Refunded: "Refunded";
-  Cancelled: "Cancelled";
-  Disputed: "Disputed";
-  Completed: "Completed";
-}
-
 export interface CreateCheckoutSessionDto {
   orderId: number;
   customerEmail?: string;
 }
 
 export interface CheckoutSessionResponse {
-  sessionId: string;
-  url: string;
+  SessionId: string;
+  Url: string;
 }
 
 // Create checkout session for payment

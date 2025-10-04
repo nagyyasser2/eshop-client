@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { useCart } from "../context/CartContext";
-import MobileSidebar from "../components/products/MobileSidebar";
-import CategorySidebar from "../components/category/CategorySidebar";
-import ProductsGrid from "../components/products/ProductsGrid";
+import { useCart } from "../../context/CartContext";
+import MobileSidebar from "./MobileSidebar";
+import CategorySidebar from "../category/CategorySidebar";
+import ProductsGrid from "./ProductsGrid";
 import {
   fetchProductsForUseQuery,
   type PaginatedProductsResponse,
   type ProductDTO,
   type ProductQueryParams,
-} from "../api/products";
+} from "../../api/products";
 import { useQuery } from "@tanstack/react-query";
 
 type Product = ProductDTO;
@@ -73,13 +73,13 @@ function ProductsPage() {
     // Category filter
     const categoryMatch =
       selectedCategory === "all" ||
-      product.category.name.toLowerCase() === selectedCategory.toLowerCase();
+      product.Category.Name.toLowerCase() === selectedCategory.toLowerCase();
 
     // Search filter
     const searchMatch =
       !searchQuery ||
-      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product?.description?.toLowerCase().includes(searchQuery.toLowerCase());
+      product.Name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product?.Description?.toLowerCase().includes(searchQuery.toLowerCase());
 
     return categoryMatch && searchMatch;
   });
@@ -88,13 +88,13 @@ function ProductsPage() {
     setIsAddingToCart(true);
     try {
       await addToCart({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        sku: product.sku,
+        id: product.Id,
+        name: product.Name,
+        price: product.Price,
+        sku: product.Sku,
         quantity,
-        category: product.category,
-        image: product.images?.[0]?.url || "/placeholder.png",
+        category: product.Category,
+        image: product.Images?.[0]?.Url || "/placeholder.png",
       });
       // Optional: Show success message or toast
     } catch (error) {

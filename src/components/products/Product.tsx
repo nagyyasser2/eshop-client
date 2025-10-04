@@ -19,13 +19,18 @@ function Product({ product }: ProductProps) {
     setIsAddingToCart(true);
     try {
       await addToCart({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        sku: product.sku,
-        quantity,
-        category: product.category,
-        image: product.images?.[0]?.url || "/placeholder.png",
+        ProductId: product.Id,
+        ProductName: product.Name,
+        UnitPrice: product.Price,
+        ProductSKU: product.Sku,
+        Quantity: quantity,
+        CategoryName: product.Category?.Name,
+        ImageUrl: product.Images?.[0]?.Url
+          ? product.Images[0].Url.startsWith("http")
+            ? product.Images[0].Url
+            : SERVER_URL + product.Images[0].Url
+          : "/placeholder.png",
+        TotalPrice: product.Price * quantity,
       });
     } finally {
       setIsAddingToCart(false);
@@ -34,28 +39,28 @@ function Product({ product }: ProductProps) {
 
   return (
     <div
-      key={product.id}
-      className="group bg-white border border-gray-200 rounded-2x rounded-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
+      key={product.Id}
+      className="group bg-white border border-gray-200 rounded-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
     >
       {/* Product Image */}
       <div className="relative overflow-hidden">
-        <Link to={`/product/${product.id}`}>
+        <Link to={`/product/${product.Id}`}>
           <img
             src={
-              product.images?.[0]?.url
-                ? product.images[0].url.startsWith("http")
-                  ? product.images[0].url
-                  : SERVER_URL + product.images[0].url
+              product.Images?.[0]?.Url
+                ? product.Images[0].Url.startsWith("http")
+                  ? product.Images[0].Url
+                  : SERVER_URL + product.Images[0].Url
                 : "/placeholder.png"
             }
-            alt={product.name}
+            alt={product.Name}
             className="w-full h-48 sm:h-56 object-cover group-hover:scale-110 transition-transform duration-500"
             loading="lazy"
           />
 
           <div className="absolute top-4 right-4">
             <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
-              {product.category.name || "Unknown"}
+              {product.Category?.Name || "Unknown"}
             </span>
           </div>
         </Link>
@@ -64,20 +69,22 @@ function Product({ product }: ProductProps) {
       {/* Product Info */}
       <div className="p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-          {product.name}
+          {product.Name}
         </h3>
         <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-          {product.description}
+          {product.Description}
         </p>
 
         <div className="flex items-center justify-between">
           <span className="text-2xl font-bold text-blue-600">
-            ${product.price.toLocaleString()}
+            ${product.Price?.toLocaleString()}
           </span>
           <button
             onClick={() => handleAddToCart(product, 1)}
             disabled={isAddingToCart}
-            className={`cursor-pointer bg-gradient-to-r from-pink-400 to-blue-400 p-3 text-white font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300 group`}
+            className={`cursor-pointer bg-gradient-to-r from-pink-400 to-blue-400 p-3 text-white font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300 group ${
+              isAddingToCart ? "opacity-50 cursor-not-allowed" : ""
+            }`}
             title="Add to Cart"
           >
             {isAddingToCart ? (

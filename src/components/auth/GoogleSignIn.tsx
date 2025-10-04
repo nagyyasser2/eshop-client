@@ -12,29 +12,15 @@ const GoogleSignIn = () => {
   const handleSuccess = async (credentialResponse: any) => {
     setIsLoading(true);
     try {
-      // Use the authAPI from the updated api.ts
       const response = await authAPI.googleLogin(credentialResponse.credential);
 
-      if (response.success && response.data) {
-        // Updated to handle both access and refresh tokens
+      if (response.Success && response.Data) {
         await setCredentials({
-          token: response.data.token,
-          refreshToken: response.data.refreshToken,
-          user: {
-            id: response.data.user.id,
-            email: response.data.user.email,
-            firstName: response.data.user.firstName,
-            lastName: response.data.user.lastName,
-            dateOfBirth: response.data.user.dateOfBirth,
-            profilePictureUrl: response.data.user.profilePictureUrl,
-            roles: response.data.user.roles,
-          },
+          token: response.Data.Token,
+          refreshToken: response.Data.RefreshToken,
+          user: response.Data.User,
         });
-
-        console.log("Google login successful:", response.message);
         navigate("/", { replace: true });
-      } else {
-        console.error("Google login failed:", response.message);
       }
     } catch (error: any) {
       console.error(

@@ -1,14 +1,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  FaEye,
-  FaEyeSlash,
-  FaEnvelope,
-  FaLock,
-  FaGoogle,
-} from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaEnvelope, FaLock } from "react-icons/fa";
 import { useMutation } from "@tanstack/react-query";
-import { login, loginWithGoogle } from "../../api/auth";
+import { login } from "../../api/auth";
 import { useAuth } from "../../context/AuthContext";
 import GoogleSignIn from "./GoogleSignIn";
 

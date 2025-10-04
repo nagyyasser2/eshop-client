@@ -2,7 +2,7 @@ import { type FC } from "react";
 
 const OrderSkeleton: FC = () => {
   return (
-    <div className="rounded-1xl bg-white overflow-hidden">
+    <div className="rounded-1xl bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl overflow-hidden">
       <div className="p-0 space-y-2">
         {/* Render multiple skeleton items to mimic a list of orders */}
         {[...Array(3)].map((_, index) => (
