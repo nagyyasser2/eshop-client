@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export function Promotion() {
   return (
-    <div className="bg-gradient-to-r from-purple-100 via-pink-100 to-purple-100 px-6 py-1 my-4 rounded-2xl">
+    <div className="bg-gradient-to-r from-purple-100 via-pink-100 to-purple-100 p-4 my-4 rounded-2xl">
       <div className="flex items-center justify-between gap-4">
         {/* Text Content */}
         <div className="flex-1">
@@ -107,7 +107,7 @@ export function Promotion() {
 
 export function PromotionalBanner() {
   return (
-    <div className="bg-gradient-to-r from-purple-100 via-pink-100 to-purple-100 rounded-2xl mb-8">
+    <div className="p-4 bg-gradient-to-r from-purple-100 via-pink-100 to-purple-100 rounded-2xl mb-8">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-8 flex-col md:flex-row">
         {/* Text Content */}
         <div className="flex-1 space-y-4">

@@ -5,11 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { login } from "../../api/auth";
 import { useAuth } from "../../context/AuthContext";
 import GoogleSignIn from "./GoogleSignIn";
-
-interface LoginFormData {
-  email: string;
-  password: string;
-}
+import type { AuthResponse, LoginFormData } from "../../types/auth.types";
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -31,27 +27,28 @@ function LoginForm() {
     mutationFn: async (data: LoginFormData) => {
       return await login(data.email, data.password);
     },
-    onSuccess: (response: any) => {
-      if (response.success && response.data) {
-        console.log("Login successful:", response.message);
-        // Updated to handle both access and refresh tokens
+    onSuccess: (response: AuthResponse) => {
+      console.log("API Response:", response); // ← Add this
+
+      if (response.Success && response.Data) {
         setCredentials({
-          user: response.data.user,
-          token: response.data.token,
-          refreshToken: response.data.refreshToken,
+          user: response.Data.User,
+          token: response.Data.Token,
+          refreshToken: response.Data.RefreshToken,
         });
       } else {
+        console.log("Setting error with message:", response.Message); // ← Add this
         setError("root", {
           type: "manual",
-          message: response.message || "Login failed",
+          message: response.Message || "Login failed",
         });
       }
     },
-    onError: (error: any) => {
+    onError: (error: AuthResponse) => {
       setError("root", {
         type: "manual",
         message:
-          error.message || "Invalid email or password. Please try again.",
+          error.Message || "Invalid email or password. Please try again.",
       });
     },
     gcTime: 0,

@@ -14,7 +14,7 @@ const RemoveButton = ({
   <button
     onClick={() => handleRemoveItem(item.ProductId)}
     disabled={removingItems.has(item.ProductId)}
-    className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all duration-200 disabled:opacity-50"
+    className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all duration-200 disabled:opacity-50 flex-shrink-0"
   >
     {removingItems.has(item.ProductId) ? (
       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-red-500"></div>

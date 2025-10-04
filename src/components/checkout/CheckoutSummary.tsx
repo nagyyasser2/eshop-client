@@ -7,7 +7,7 @@ interface CheckoutSummaryProp {
 
 export default function CheckoutSummary({ cart, totals }: CheckoutSummaryProp) {
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 sticky top-25">
+    <div className="bg-white rounded-xl shadow-lg p-4 sm:p-8 sticky top-25">
       <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-6">
         Order Summary
       </h2>

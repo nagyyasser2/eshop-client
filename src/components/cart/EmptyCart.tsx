@@ -6,9 +6,9 @@ export default function EmptyCart() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto text-center">
           <div className="mb-8">
-            <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
               <svg
-                className="w-12 h-12 text-gray-400"
+                className="w-10 h-10 sm:w-12 sm:h-12 text-gray-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -21,16 +21,16 @@ export default function EmptyCart() {
                 />
               </svg>
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Your cart is empty
             </h1>
-            <p className="text-gray-600 text-lg mb-8">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-8">
               Looks like you haven't added any items to your cart yet. Start
               shopping to fill it up!
             </p>
             <Link
               to="/products"
-              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-2xl hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+              className="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-2xl hover:shadow-lg transform hover:scale-105 transition-all duration-300"
             >
               <svg
                 className="w-5 h-5 mr-2"

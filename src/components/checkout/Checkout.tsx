@@ -169,8 +169,8 @@ export default function Checkout() {
   const totals = calculateTotals();
 
   return (
-    <div className=" bg-gradient-to-br from-purple-50 via-pink-50 to-white py-8 px-4">
-      <div className="container mx-auto my-2">
+    <div className="bg-gradient-to-br from-purple-50 via-pink-50 to-white py-4 px-0 ">
+      <div className="container mx-auto p-4">
         <div className="flex items-center gap-3 mb-8">
           <ShoppingBag className="w-8 h-8 text-purple-600" />
           <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">

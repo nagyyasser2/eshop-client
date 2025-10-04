@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import getCategories from "../../api/catalog";
 import CategorySkeleton from "../sceletons/CategorySkeleton";
 import type { Category } from "../../types/category.types";
+import { useQueryClient } from "@tanstack/react-query";
 
 type FiltersProps = {
   onFilterChange: (filters: {
@@ -31,6 +32,8 @@ const Filters: React.FC<FiltersProps> = ({
   initialCategoryId,
   initialCategoryName,
 }) => {
+  const queryClient = useQueryClient();
+
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -51,21 +54,31 @@ const Filters: React.FC<FiltersProps> = ({
 
   // Fetch categories on component mount
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        setLoading(true);
-        const categoriesData = await getCategories();
-        setCategories(categoriesData);
-      } catch (err) {
-        setError("Failed to load categories");
-        console.error("Error fetching categories:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    const cachedCategories = queryClient.getQueryData<Category[]>([
+      "categories",
+    ]);
 
-    fetchCategories();
-  }, []);
+    if (cachedCategories) {
+      // ✅ Use cached data (no re-fetch)
+      setCategories(cachedCategories);
+      setLoading(false);
+    } else {
+      // 🌀 Fallback: fetch manually if cache is empty (e.g. direct page load)
+      const fetchCategories = async () => {
+        try {
+          setLoading(true);
+          const categoriesData = await getCategories();
+          setCategories(categoriesData);
+        } catch (err) {
+          setError("Failed to load categories");
+          console.error("Error fetching categories:", err);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchCategories();
+    }
+  }, [queryClient]);
 
   // Set initial category only on first mount or when explicitly changed from parent
   useEffect(() => {
@@ -106,7 +119,25 @@ const Filters: React.FC<FiltersProps> = ({
       categoryId: categoryId !== "All" ? categoryId : undefined,
     };
     onFilterChange(filters);
+    toggleFilters();
   }, [selectedPriceRange, categoryId, onFilterChange]);
+
+  useEffect(() => {
+    if (isFiltersOpen) {
+      const scrollBarWidth =
+        window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = `${scrollBarWidth}px`;
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    };
+  }, [isFiltersOpen]);
 
   const selectedCategoryName =
     categoryId.toString() === "All"

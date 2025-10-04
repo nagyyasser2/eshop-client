@@ -12,15 +12,7 @@ import {
 import { register as registerUser } from "../../api/auth";
 import { useNavigate } from "react-router-dom";
 import GoogleSignIn from "./GoogleSignIn";
-
-interface RegisterFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  dateOfBirth: string;
-}
+import type { AuthResponse, RegisterFormData } from "../../types/auth.types";
 
 function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -41,7 +33,7 @@ function RegisterForm() {
   // Regular registration mutation
   const registerMutation = useMutation({
     mutationFn: async (data: RegisterFormData) => {
-      return await registerUser(
+      const response = await registerUser(
         data.firstName,
         data.lastName,
         data.email,
@@ -49,30 +41,39 @@ function RegisterForm() {
         data.confirmPassword,
         data.dateOfBirth
       );
+
+      // Check if the response indicates failure
+      if (!response.Success) {
+        // Throw the response as an error so it goes to onError
+        throw response;
+      }
+
+      return response;
     },
-    onSuccess: (response) => {
-      if (response.success) {
-        console.log("Registration successful:", response.message);
-        // Navigate to login since registration doesn't return tokens
-        navigate("/login");
-        // You could show a success message here
-      } else {
-        setError("root", {
-          type: "manual",
-          message: response.message || "Registration failed",
-        });
-        if (response.errors?.length) {
-          setError("root", {
-            type: "manual",
-            message: response.errors.join(", "),
-          });
+    onSuccess: (response: AuthResponse) => {
+      console.log("Registration successful:", response.Message);
+      navigate("/login");
+    },
+    onError: (error: AuthResponse | Error) => {
+      console.log("Error in onError:", error); // Debug log
+
+      let errorMessage = "Registration failed. Please try again.";
+
+      // Check if it's our AuthResponse type
+      if (error && typeof error === "object" && "Message" in error) {
+        errorMessage = error.Message || errorMessage;
+
+        // Also include any additional errors
+        if (error.Errors?.length) {
+          errorMessage = [errorMessage, ...error.Errors]
+            .filter(Boolean)
+            .join(", ");
         }
       }
-    },
-    onError: (error: any) => {
+
       setError("root", {
         type: "manual",
-        message: error.message || "Registration failed. Please try again.",
+        message: errorMessage,
       });
     },
   });
@@ -465,9 +466,6 @@ function RegisterForm() {
           <span className="px-2 bg-white text-gray-500">Or continue with</span>
         </div>
       </div>
-
-      {/* Google Registration Button */}
-      <GoogleSignIn />
 
       {/* Terms and Privacy */}
       <p className="text-xs text-gray-500 text-center">

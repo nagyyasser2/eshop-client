@@ -23,7 +23,7 @@ export default function AccordionSection({
       <button
         type="button"
         onClick={onToggle}
-        className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition"
+        className="w-full p-4 flex items-center justify-between hover:bg-gray-50 transition"
       >
         <div className="flex items-center gap-3">
           <div
@@ -50,7 +50,7 @@ export default function AccordionSection({
         </div>
       </button>
 
-      {isOpen && <div className="px-6 pb-6 pt-2">{children}</div>}
+      {isOpen && <div className="p-4 sm:px-8">{children}</div>}
     </div>
   );
 }

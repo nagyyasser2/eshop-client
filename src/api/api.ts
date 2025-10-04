@@ -2,8 +2,8 @@ import axios from "axios";
 import { apiStoreService } from "../persist/api.store.service";
 import type { AuthResponse } from "../types/auth.types";
 
-export const API_URL = "https://localhost:7000/api";
-export const SERVER_URL = "https://localhost:7000/";
+export const API_URL = "https://10.10.0.68:7000/api";
+export const SERVER_URL = "https://10.10.0.68:7000/";
 
 // Updated tokenManager with fixed expiration logic
 export const tokenManager = {
@@ -75,7 +75,6 @@ const api = axios.create({
   },
 });
 
-// Flag to prevent multiple refresh attempts
 let isRefreshing = false;
 let failedQueue: Array<{
   resolve: (value?: any) => void;
@@ -114,15 +113,16 @@ const refreshAccessToken = async (): Promise<string> => {
     );
 
     if (response.data && response.data) {
-      const { Token: newAccessToken, RefreshToken: newRefreshToken } =
-        response.data;
+      const {
+        Data: { Token: newAccessToken, RefreshToken: newRefreshToken },
+      } = response.data;
 
       // Update stored tokens
       tokenManager.setTokens(newAccessToken, newRefreshToken);
 
       return newAccessToken;
     } else {
-      throw new Error(response.data.message || "Token refresh failed");
+      throw new Error("Token refresh failed");
     }
   } catch (error) {
     // Clear tokens on refresh failure

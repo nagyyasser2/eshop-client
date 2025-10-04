@@ -10,7 +10,7 @@ const QuantityControls = ({
   item,
   handleQuantityChange,
 }: QuantityControlsProp) => (
-  <div className="flex items-center space-x-3">
+  <div className="flex items-center justify-between sm:justify-start space-x-3 w-full sm:w-auto">
     <div className="flex items-center border border-gray-300 rounded-lg">
       <button
         onClick={() => handleQuantityChange(item.ProductId, item.Quantity - 1)}
@@ -29,12 +29,11 @@ const QuantityControls = ({
         +
       </button>
     </div>
-    <div className="text-right min-w-[5rem]">
-      <p className="text-lg font-semibold text-gray-900">
+    <div className="text-right min-w-[4rem] sm:min-w-[5rem]">
+      <p className="text-sm sm:text-lg font-semibold text-gray-900">
         {formatCurrency(item.UnitPrice * item.Quantity)}
       </p>
     </div>
   </div>
 );
-
 export default QuantityControls;

@@ -22,6 +22,7 @@ import Checkout from "./checkout/Checkout";
 import ProtectCheckout from "./checkout/ProtectCheckout";
 import CheckoutSuccess from "./checkout/CheckoutSuccess";
 import OrderSuccess from "./checkout/OrderSuccess";
+import LoadingProductsPage from "./products/LoadingProductsPage";
 
 const Products = lazy(() => import("./products/Products"));
 
@@ -61,7 +62,7 @@ function AppRouter() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen ">
       <Navbar />
       <main className="flex-grow bg-gradient-to-br from-indigo-50 to-purple-50">
         <Routes>
@@ -69,7 +70,7 @@ function AppRouter() {
           <Route
             path="/products"
             element={
-              <Suspense fallback={<Loading />}>
+              <Suspense fallback={<LoadingProductsPage />}>
                 <Products />
               </Suspense>
             }

@@ -105,8 +105,8 @@ function Cart() {
   if (cart.length === 0) return <EmptyCart />;
 
   return (
-    <div className="bg-gradient-to-br from-purple-50 via-pink-50 to-white py-8 px-4">
-      <div className="container mx-auto my-2">
+    <div className="bg-gradient-to-br from-purple-50 via-pink-50 to-white py-4 px-0">
+      <div className="container mx-auto p-4 ">
         {/* Page Header */}
         <div className="flex items-center gap-3 mb-8">
           <ShoppingCart className="w-8 h-8 text-purple-600" />
@@ -114,7 +114,7 @@ function Cart() {
             Your Cart
           </h1>
           {cart.length > 0 && (
-            <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">
+            <span className="text-xs bg-purple-100 text-purple-800 py-1 rounded-full">
               {cart.length} {cart.length === 1 ? "item" : "items"}
             </span>
           )}
@@ -137,6 +137,7 @@ function Cart() {
             <OrderSummary
               subtotal={totals.SubTotal}
               total={totals.TotalAmount}
+              itemCount={cart.length}
             />
 
             <div className="space-y-3">
@@ -165,17 +166,6 @@ function Cart() {
           </div>
         </div>
       </div>
-
-      {/* Order Confirmation Modal */}
-      <OrderConfirmationModal
-        isOpen={isOrderModalOpen}
-        onClose={() => setIsOrderModalOpen(false)}
-        onConfirm={handleConfirmOrder}
-        orderTotal={totals.TotalAmount}
-        itemCount={itemCount}
-        paymentMethod={selectedPaymentMethod}
-        isLoading={isPlacingOrder}
-      />
     </div>
   );
 }

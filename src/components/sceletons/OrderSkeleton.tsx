@@ -2,33 +2,34 @@ import { type FC } from "react";
 
 const OrderSkeleton: FC = () => {
   return (
-    <div className="rounded-1xl bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl overflow-hidden">
-      <div className="p-0 space-y-2">
+    <div className="rounded-2xl overflow-hidden">
+      <div className="p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4">
         {/* Render multiple skeleton items to mimic a list of orders */}
         {[...Array(3)].map((_, index) => (
           <div
             key={index}
             className="bg-white border border-gray-200 rounded-2xl overflow-hidden transition-all duration-300 transform"
           >
-            <div className="w-full flex justify-between items-center px-3 py-2">
-              <div className="flex items-center space-x-4">
+            <div className="w-full flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-4 px-3 sm:px-4 py-3 sm:py-4">
+              <div className="flex items-center space-x-3 sm:space-x-4">
                 {/* Skeleton for order number circle */}
-                <div className="w-10 h-10 bg-gray-200 rounded-full animate-pulse" />
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gray-200 rounded-full animate-pulse" />
                 <div className="text-left">
                   {/* Skeleton for order number */}
-                  <div className="h-5 w-24 bg-gray-200 rounded animate-pulse mb-2" />
+                  <div className="h-4 sm:h-5 w-20 sm:w-24 bg-gray-200 rounded animate-pulse mb-1 sm:mb-2" />
                   {/* Skeleton for order date */}
-                  <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
+                  <div className="h-3 sm:h-4 w-24 sm:w-32 bg-gray-200 rounded animate-pulse" />
                 </div>
               </div>
-              <div className="flex items-center space-x-4">
+
+              <div className="flex items-center justify-between sm:justify-end space-x-2 sm:space-x-4">
                 {/* Skeleton for payment status */}
-                <div className="flex items-center space-x-2 bg-gray-200 px-4 py-2 rounded-full animate-pulse">
-                  <div className="w-4 h-4 bg-gray-300 rounded-full" />
-                  <div className="h-4 w-12 bg-gray-300 rounded" />
+                <div className="flex items-center space-x-2 bg-gray-200 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full animate-pulse">
+                  <div className="w-3 h-3 sm:w-4 sm:h-4 bg-gray-300 rounded-full" />
+                  <div className="h-3 sm:h-4 w-10 sm:w-12 bg-gray-300 rounded" />
                 </div>
                 {/* Skeleton for accordion arrow */}
-                <div className="w-10 h-10 bg-gray-200 rounded-full animate-pulse" />
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gray-200 rounded-full animate-pulse" />
               </div>
             </div>
           </div>

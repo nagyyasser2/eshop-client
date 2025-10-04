@@ -17,7 +17,7 @@ import NoProductsFound from "./NoProductsFound";
 const Products: React.FC = () => {
   const [searchParams] = useSearchParams();
   const location = useLocation();
-  const [isFiltersOpen, setIsFiltersOpen] = React.useState(false);
+  const [isFiltersOpen, setIsFiltersOpen] = React.useState(true);
   const searchQuery = searchParams.get("search") || "";
 
   // Get categoryId, categoryName from location state
@@ -139,7 +139,6 @@ const Products: React.FC = () => {
     setIsFiltersOpen(!isFiltersOpen);
   };
 
-  // Set initial category from state only when it changes (e.g., navigation from another page)
   React.useEffect(() => {
     if (categoryIdFromState) {
       setFilterParams((prev) => ({
@@ -154,7 +153,7 @@ const Products: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto my-2">
+    <div className="container mx-auto p-4 pb-2">
       <Promotion />
       <Filters
         onFilterChange={handleFilterChange}

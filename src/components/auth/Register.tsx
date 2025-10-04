@@ -18,10 +18,10 @@ function Register() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center p-4">
+    <div className="bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center p-4 sm:p-8">
       <div className="w-full max-w-md">
         {/* Register Card */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+        <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-8 border border-gray-100">
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-slate-700 mb-2">

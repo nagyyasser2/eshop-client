@@ -7,7 +7,7 @@ interface CartItemProp {
   item: CartItem;
   handleQuantityChange: (id: number, quantity: number) => void;
   handleRemoveItem: (id: number) => void;
-  removingItems: Set<number>;
+  removingItems: any;
 }
 
 const CartItemComponent = ({
@@ -18,7 +18,7 @@ const CartItemComponent = ({
 }: CartItemProp) => {
   return (
     <div
-      className={`p-6 transition-all duration-300 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50
+      className={`p-4 sm:p-6 transition-all duration-300 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50
         ${
           removingItems.has(item.ProductId)
             ? "opacity-50 scale-95"
@@ -26,37 +26,37 @@ const CartItemComponent = ({
         }
       `}
     >
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
         {/* Product Image */}
-        <div className="flex-shrink-0">
+        <div className="flex-shrink-0 self-center sm:self-auto">
           <img
             src={
               item.ImageUrl ||
               `https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=150&h=150&fit=crop`
             }
             alt={item.ProductName}
-            className="w-20 h-20 rounded-xl object-cover shadow-sm border border-gray-100"
+            className="w-24 h-24 sm:w-20 sm:h-20 rounded-xl object-cover shadow-sm border border-gray-100"
           />
         </div>
 
         {/* Product Details */}
         <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-semibold text-gray-900 truncate">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
             {item.ProductName}
           </h3>
-          <p className="text-gray-600 mt-1">
+          <p className="text-gray-600 mt-1 text-sm sm:text-base">
             {formatCurrency(item.UnitPrice)}{" "}
-            <span className="text-sm text-gray-400">each</span>
+            <span className="text-xs text-gray-400">each</span>
           </p>
           {item.CategoryName && (
-            <p className="text-xs font-medium text-purple-600 mt-1 bg-purple-50 inline-block px-2 py-0.5 rounded-md">
+            <p className="text-xs font-medium text-purple-600 mt-2 bg-purple-50 inline-block px-2 py-0.5 rounded-md">
               {item.CategoryName}
             </p>
           )}
         </div>
 
         {/* Quantity + Remove */}
-        <div className="flex items-center gap-3">
+        <div className="flex flex-row sm:flex-col sm:items-end gap-3 w-full sm:w-auto">
           <QuantityControls
             item={item}
             handleQuantityChange={handleQuantityChange}

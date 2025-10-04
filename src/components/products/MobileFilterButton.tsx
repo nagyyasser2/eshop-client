@@ -1,12 +1,12 @@
 export default function MobileFilterButton({ toggleFilters }: any) {
   return (
-    <div className="lg:hidden flex items-center justify-between mb-4">
+    <div className="lg:hidden flex items-center mb-4" onClick={toggleFilters}>
       <img
         src="/filter.svg"
         alt="Filter"
         className="h-10 w-10 cursor-pointer"
-        onClick={toggleFilters}
       />
+      <p className="text-xl">Filters</p>
     </div>
   );
 }

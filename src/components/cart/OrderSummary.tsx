@@ -28,7 +28,7 @@ const OrderSummary = ({
 }: OrderSummaryProps) => {
   return (
     <div className="lg:col-span-1">
-      <div className="bg-white rounded-xl shadow-lg p-6 sticky top-25">
+      <div className="bg-white rounded-xl shadow-lg p-4 sticky top-25">
         <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-6">
           Order Summary
         </h2>

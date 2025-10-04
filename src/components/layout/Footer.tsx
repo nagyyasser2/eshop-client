@@ -4,83 +4,89 @@ import { Link } from "react-router-dom";
 function Footer() {
   return (
     <footer className="py-3 bg-gradient-to-br from-indigo-300 to-purple-300">
-      <div className="container mx-auto px-4 p-8">
+      <div className="container mx-auto px-4 p-6 sm:p-8">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {/* Quick Links */}
           <div>
-            <h3 className="text-xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Quick Links
             </h3>
             <ul className="space-y-3">
-              <li>
+              <li className="flex items-center text-gray-700 text-sm sm:text-base md:text-lg">
+                <div className="w-3 h-3 bg-blue-600 rounded-full mr-3"></div>
                 <Link
                   to="/"
-                  className="text-gray-600 hover:text-blue-600 transition-colors duration-200 flex items-center group"
+                  className="hover:text-blue-600 transition-colors duration-200"
                 >
-                  <span className="w-1 h-1 bg-blue-600 rounded-full mr-3 group-hover:w-2 transition-all duration-200"></span>
                   Home
                 </Link>
               </li>
-              <li>
+
+              <li className="flex items-center text-gray-700 text-sm sm:text-base md:text-lg">
+                <div className="w-3 h-3 bg-pink-600 rounded-full mr-3"></div>
                 <Link
                   to="/orders"
-                  className="text-gray-600 hover:text-pink-600 transition-colors duration-200 flex items-center group"
+                  className="hover:text-pink-600 transition-colors duration-200"
                 >
-                  <span className="w-1 h-1 bg-pink-600 rounded-full mr-3 group-hover:w-2 transition-all duration-200"></span>
                   Orders
                 </Link>
               </li>
-              <li>
+
+              <li className="flex items-center text-gray-700 text-sm sm:text-base md:text-lg">
+                <div className="w-3 h-3 bg-blue-600 rounded-full mr-3"></div>
                 <Link
                   to="/products"
-                  className="text-gray-600 hover:text-blue-600 transition-colors duration-200 flex items-center group"
+                  className="hover:text-blue-600 transition-colors duration-200"
                 >
-                  <span className="w-1 h-1 bg-blue-600 rounded-full mr-3 group-hover:w-2 transition-all duration-200"></span>
                   Products
                 </Link>
               </li>
             </ul>
           </div>
+
           {/* Contact Information */}
           <div>
-            <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
               Contact Us
             </h3>
-            <div className="space-y-4">
-              <div className="flex items-center text-gray-700">
+            <ul className="space-y-4">
+              <li className="flex items-center text-gray-700 text-sm sm:text-base md:text-lg">
                 <div className="w-3 h-3 bg-blue-600 rounded-full mr-3"></div>
-                <span className="text-base font-medium">Email:</span>
+                <span className="font-sm">Email:</span>
                 <a
                   href="mailto:support@eshop.com"
                   className="ml-2 text-blue-600 hover:text-blue-500 transition-colors"
                 >
                   support@eshop.com
                 </a>
-              </div>
-              <div className="flex items-center text-gray-700">
+              </li>
+
+              <li className="flex items-center text-gray-700 text-sm sm:text-base md:text-lg">
                 <div className="w-3 h-3 bg-purple-600 rounded-full mr-3"></div>
-                <span className="text-base font-medium">Phone:</span>
+                <span className="font-sm">Phone:</span>
                 <a
                   href="tel:+11234567890"
                   className="ml-2 text-purple-600 hover:text-purple-500 transition-colors"
                 >
                   (+20) 1090312546
                 </a>
-              </div>
-              <div className="flex items-start text-gray-700">
+              </li>
+
+              <li className="flex items-start text-gray-700 text-sm sm:text-base md:text-lg">
                 <div className="w-3 h-3 bg-pink-600 rounded-full mr-3 mt-1.5"></div>
                 <div>
-                  <span className="text-base font-medium">Address: </span>
+                  <span className="font-sm">Address:</span>
                   <p className="text-gray-600 mt-1">
                     123 E-Shop St Commerce City, EG
                   </p>
                 </div>
-              </div>
-            </div>
+              </li>
+            </ul>
           </div>
+
           {/* Social Links */}
           <div>
-            <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
               Follow Us
             </h3>
             <div className="flex space-x-4">
@@ -145,14 +151,14 @@ function Footer() {
                 </svg>
               </a>
             </div>
-            <p className="text-gray-600 mt-4">
+            <p className="text-gray-600 mt-4 text-sm sm:text-base md:text-lg">
               Follow us on social media for updates, promotions, and more!
             </p>
           </div>
         </div>
-        {/* Copyright with border above */}
+        {/* Copyright */}
         <div className="border-t border-gray-300 mt-8 pt-6 text-center">
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-500 text-xs sm:text-sm md:text-base">
             &copy; {new Date().getFullYear()} ShopHub. All rights reserved.
           </p>
         </div>

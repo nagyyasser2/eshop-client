@@ -31,7 +31,6 @@ function ProductDetails() {
   const handleAddToCart = async () => {
     if (!product || product.StockQuantity < quantity) return;
 
-    // Check if variant is required but not selected
     if (product.Variants?.length && !selectedVariant) {
       alert("Please select a variant");
       return;
@@ -54,7 +53,6 @@ function ProductDetails() {
         TotalPrice: product.Price * quantity,
       });
 
-      // Optional: Reset quantity after adding
       setQuantity(1);
     } catch (error) {
       console.error("Error adding to cart:", error);
@@ -92,11 +90,11 @@ function ProductDetails() {
 
   return (
     <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl">
-      <div className="flex max-w-5xl flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 mx-auto">
+      <div className="flex max-w-5xl flex-col lg:flex-row items-start justify-center lg:gap-12 mx-auto p-4 sm:p-6 lg:p-8">
         {/* Image Section */}
-        <div className="container mx-auto sm:p-0 lg:p-2 w-full lg:w-1/2">
-          <div className="relative mb-4">
-            <div className="aspect-square rounded-2xl overflow-hidden flex items-center justify-centerbg-gradient-to-br from-indigo-50 to-purple-50">
+        <div className="w-full lg:w-1/2 rounded-2xl">
+          <div className="relative mb-4 rounded-2xl">
+            <div className="rounded-2xl overflow-hidden flex items-center justify-center bg-gradient-to-br from-indigo-50 to-purple-50">
               <img
                 src={
                   productImages[selectedImage]
@@ -106,18 +104,12 @@ function ProductDetails() {
                     : "/placeholder.png"
                 }
                 alt={product.Name}
-                className="w-full object-contain transition-transform duration-500 rounded-2xl"
+                className=" h-auto max-h-[400px] object-contain transition-transform duration-500 rounded-2xl"
                 loading="lazy"
               />
             </div>
-            <div className="absolute top-4 right-4">
-              <span className="bg-blue-500 text-white text-sm px-3 py-2 rounded-full font-medium">
-                {product.IsFeatured
-                  ? "Featured"
-                  : product.Category?.Name || "Product"}
-              </span>
-            </div>
           </div>
+
           {productImages.length > 1 && (
             <div className="flex flex-wrap gap-2 sm:gap-3 justify-center sm:justify-start">
               {productImages.map((image, index) => (
@@ -133,7 +125,7 @@ function ProductDetails() {
                   <img
                     src={image.startsWith("http") ? image : SERVER_URL + image}
                     alt={`${product.Name} view ${index + 1}`}
-                    className="w-full h-full object-contain"
+                    className="w-full h-full object-contain rounded-2xl"
                     loading="lazy"
                   />
                 </button>
@@ -143,25 +135,29 @@ function ProductDetails() {
         </div>
 
         {/* Product Info Section */}
-        <div className="p-4 sm:p-6 lg:p-8 w-full lg:w-1/2 flex flex-col">
+        <div className="w-full lg:w-1/2 flex flex-col">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
             {product.Name}
           </h1>
+
+          {/* Price */}
           <div className="mb-4 sm:mb-6">
             <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               {formatCurrency(product.Price)}
             </span>
             {product.IsFeatured && (
-              <span className="text-gray-500 text-base sm:text-lg ml-2 line-through">
-                {formatCurrency(product.Price * 1.2)}
-              </span>
-            )}
-            {product.IsFeatured && (
-              <span className="bg-green-100 text-green-800 text-xs sm:text-sm px-2 py-1 rounded-full ml-2 sm:ml-3">
-                Save 20%
-              </span>
+              <>
+                <span className="text-gray-500 text-base sm:text-lg ml-2 line-through">
+                  {formatCurrency(product.Price * 1.2)}
+                </span>
+                <span className="bg-green-100 text-green-800 text-xs sm:text-sm px-2 py-1 rounded-full ml-2 sm:ml-3">
+                  Save 20%
+                </span>
+              </>
             )}
           </div>
+
+          {/* Rating */}
           <div className="flex items-center mb-4 sm:mb-6">
             <div className="flex text-yellow-400">
               {[...Array(5)].map((_, i) => (
@@ -178,6 +174,8 @@ function ProductDetails() {
               (4.8) • 156 reviews
             </span>
           </div>
+
+          {/* Variants */}
           {product.Variants?.length ? (
             <div className="mb-4 sm:mb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-3">
@@ -200,6 +198,8 @@ function ProductDetails() {
               </div>
             </div>
           ) : null}
+
+          {/* Description */}
           <div className="mb-6 sm:mb-8">
             <h3 className="text-lg font-semibold text-gray-900 mb-3">
               Description
@@ -210,6 +210,8 @@ function ProductDetails() {
                 "No description available."}
             </p>
           </div>
+
+          {/* Stock */}
           <div className="mb-4 sm:mb-6">
             <p
               className={`text-sm font-medium ${
@@ -221,6 +223,8 @@ function ProductDetails() {
                 : "Out of stock"}
             </p>
           </div>
+
+          {/* Quantity + Add to Cart */}
           <div className="mt-auto">
             <div className="flex items-center space-x-4 mb-4 sm:mb-6">
               <div className="flex items-center">
@@ -250,6 +254,7 @@ function ProductDetails() {
                 </div>
               </div>
             </div>
+
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <button
                 onClick={handleAddToCart}
@@ -285,6 +290,8 @@ function ProductDetails() {
                 )}
               </button>
             </div>
+
+            {/* Extra info */}
             <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-gray-50 rounded-lg">
               <div className="flex items-center text-xs sm:text-sm text-gray-600">
                 <svg

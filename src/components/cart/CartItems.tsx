@@ -2,10 +2,11 @@ import type { CartItem as CartItemType } from "../../types/cart.types";
 import CartItemComponent from "./CartItem";
 
 interface CartItemsProps {
+  clearCart: any;
   cart: CartItemType[];
   handleQuantityChange: (id: number, quantity: number) => void;
   handleRemoveItem: (id: number) => void;
-  removingItems: number[];
+  removingItems: any;
 }
 
 const CartItems = ({
@@ -18,7 +19,7 @@ const CartItems = ({
     <div className="lg:col-span-2">
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-100">
+        <div className="px-3 py-2 border-b border-gray-100">
           <h2 className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
             Cart Items
           </h2>

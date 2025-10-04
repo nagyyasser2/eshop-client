@@ -1,3 +1,4 @@
+import { useState, useRef } from "react";
 import Search from "./Search";
 
 export default function SearchIcon({
@@ -9,6 +10,8 @@ export default function SearchIcon({
   isSearchVisible: boolean;
   setIsSearchVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const [searchQuery, setSearchQuery] = useState(""); // 👈 persist here
+
   return (
     <div className="relative" ref={searchRef}>
       <button
@@ -65,10 +68,13 @@ export default function SearchIcon({
         </svg>
       </button>
 
-      {/* Search Dropdown */}
       {isSearchVisible && (
         <div className="fixed sm:absolute top-20 sm:top-14 right-4 sm:right-0 left-4 sm:left-auto sm:mt-2 w-auto sm:w-80 bg-white rounded-xl shadow-lg border border-gray-200 p-4 z-50">
-          <Search onSearchSubmit={() => setIsSearchVisible(false)} />
+          <Search
+            searchQuery={searchQuery} // 👈 controlled
+            setSearchQuery={setSearchQuery} // 👈 controlled
+            onSearchSubmit={() => setIsSearchVisible(false)}
+          />
         </div>
       )}
     </div>

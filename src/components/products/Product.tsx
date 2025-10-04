@@ -40,11 +40,11 @@ function Product({ product }: ProductProps) {
   return (
     <div
       key={product.Id}
-      className="group bg-white border border-gray-200 rounded-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
+      className="flex flex-col bg-white border border-gray-200 rounded-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
     >
       {/* Product Image */}
-      <div className="relative overflow-hidden">
-        <Link to={`/product/${product.Id}`}>
+      <div className="relative overflow-hidden flex-shrink-0">
+        <Link to={`/product/${product.Id}`} className="block">
           <img
             src={
               product.Images?.[0]?.Url
@@ -54,7 +54,7 @@ function Product({ product }: ProductProps) {
                 : "/placeholder.png"
             }
             alt={product.Name}
-            className="w-full h-48 sm:h-56 object-cover group-hover:scale-110 transition-transform duration-500"
+            className="w-full h-48 sm:h-56 object-cover hover:scale-110 transition-transform duration-500"
             loading="lazy"
           />
 
@@ -67,22 +67,25 @@ function Product({ product }: ProductProps) {
       </div>
 
       {/* Product Info */}
-      <div className="p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-          {product.Name}
-        </h3>
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-          {product.Description}
-        </p>
+      <div className="flex flex-col justify-between p-6 flex-1">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-blue-600 transition-colors">
+            {product.Name}
+          </h3>
+          <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+            {product.Description}
+          </p>
+        </div>
 
         <div className="flex items-center justify-between">
           <span className="text-2xl font-bold text-blue-600">
             ${product.Price?.toLocaleString()}
           </span>
+
           <button
             onClick={() => handleAddToCart(product, 1)}
             disabled={isAddingToCart}
-            className={`cursor-pointer bg-gradient-to-r from-pink-400 to-blue-400 p-3 text-white font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300 group ${
+            className={`cursor-pointer bg-gradient-to-r from-pink-400 to-blue-400 p-3 text-white font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300 ${
               isAddingToCart ? "opacity-50 cursor-not-allowed" : ""
             }`}
             title="Add to Cart"
