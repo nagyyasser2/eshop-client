@@ -1,11 +1,4 @@
-import {
-  FaShieldAlt,
-  FaShippingFast,
-  FaHeadset,
-  FaMoneyBillWave,
-  FaAward,
-  FaSync,
-} from "react-icons/fa";
+import { FaShieldAlt, FaShippingFast, FaHeadset, FaSync } from "react-icons/fa";
 
 function WhyChooseUs() {
   const features = [

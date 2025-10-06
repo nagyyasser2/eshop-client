@@ -77,7 +77,6 @@ function TestimonialsSection() {
         {/* Swiper Carousel */}
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}
-          navigation
           pagination={{ clickable: true }}
           autoplay={{ delay: 5000, disableOnInteraction: false }}
           loop={true}
@@ -90,6 +89,24 @@ function TestimonialsSection() {
               <Testimonial testimonial={testimonial} />
             </SwiperSlide>
           ))}
+          <style>{`
+            .swiper-pagination-bullet {
+            display: none;
+                width: 10px;
+                height: 10px;
+                margin: 10px 6px;
+              }
+              .swiper-button-next,
+              .swiper-button-prev {
+                display: none; /* hide on all */
+              }
+              @media (min-width: 640px) {
+                .swiper-button-next,
+                .swiper-button-prev {
+                  display: flex; /* show from sm and up */
+                }
+              }
+            `}</style>
         </Swiper>
       </div>
     </div>

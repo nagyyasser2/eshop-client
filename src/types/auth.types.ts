@@ -25,15 +25,20 @@ export interface ApplicationUser {
   Orders?: Order[];
 }
 
-export interface AuthResponse {
+export interface UpdateProfileRequest {
+  phoneNumber: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+}
+
+export interface ApiResponse<T = any> {
   Success: boolean;
-  Message: string;
-  Data: {
-    Token: string;
-    RefreshToken: string;
-    User: ApplicationUser;
-  };
-  Errors: string[];
+  Message?: string;
+  Errors?: string[];
+  Data?: T;
 }
 
 export interface RegisterFormData {
@@ -48,4 +53,26 @@ export interface RegisterFormData {
 export interface LoginFormData {
   email: string;
   password: string;
+}
+
+export interface ConfirmEmailPayload {
+  userId: string;
+  token: string;
+}
+
+export interface ChangePasswordPayload {
+  currentPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  userId: string;
+  token: string;
+  newPassword: string;
+  confirmPassword: string;
 }

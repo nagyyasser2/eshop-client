@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export function Promotion() {
   return (
-    <div className="bg-gradient-to-r from-purple-100 via-pink-100 to-purple-100 p-4 my-4 rounded-2xl">
+    <div className="bg-gradient-to-r from-purple-100 via-pink-100 to-purple-100 p-4 py-2 my-2 mb-4 rounded-2xl">
       <div className="flex items-center justify-between gap-4">
         {/* Text Content */}
         <div className="flex-1">

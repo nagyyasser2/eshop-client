@@ -25,6 +25,14 @@ const priceRanges = [
   { label: "6000 - above", min: 6000, max: 100000 },
 ];
 
+const dateRanges = [
+  { label: "This Week", value: 7 },
+  { label: "This Month", value: 30 },
+  { label: "Last 3 Months", value: 90 },
+  { label: "Last 6 Months", value: 180 },
+  { label: "This Year", value: 365 },
+];
+
 const Filters: React.FC<FiltersProps> = ({
   onFilterChange,
   isFiltersOpen,
@@ -41,29 +49,29 @@ const Filters: React.FC<FiltersProps> = ({
   const [categoryId, setCategoryId] = useState<string>(
     initialCategoryId?.toString() || "All"
   );
+  const [selectedDateRange, setSelectedDateRange] = useState("");
 
   // Dropdown states for desktop
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] =
     useState<boolean>(false);
   const [isPriceDropdownOpen, setIsPriceDropdownOpen] =
     useState<boolean>(false);
+  const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false);
 
   // Refs for click outside detection
   const categoryRef = useRef<HTMLDivElement>(null);
   const priceRef = useRef<HTMLDivElement>(null);
+  const dateRef = useRef<HTMLDivElement>(null);
 
-  // Fetch categories on component mount
   useEffect(() => {
     const cachedCategories = queryClient.getQueryData<Category[]>([
       "categories",
     ]);
 
     if (cachedCategories) {
-      // ✅ Use cached data (no re-fetch)
       setCategories(cachedCategories);
       setLoading(false);
     } else {
-      // 🌀 Fallback: fetch manually if cache is empty (e.g. direct page load)
       const fetchCategories = async () => {
         try {
           setLoading(true);
@@ -80,14 +88,12 @@ const Filters: React.FC<FiltersProps> = ({
     }
   }, [queryClient]);
 
-  // Set initial category only on first mount or when explicitly changed from parent
   useEffect(() => {
     if (initialCategoryId) {
       setCategoryId(initialCategoryId.toString());
     }
   }, [initialCategoryId]);
 
-  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -102,25 +108,30 @@ const Filters: React.FC<FiltersProps> = ({
       ) {
         setIsPriceDropdownOpen(false);
       }
+      if (dateRef.current && !dateRef.current.contains(event.target as Node)) {
+        setIsDateDropdownOpen(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Apply filters when selection changes
   useEffect(() => {
     const selectedRange = priceRanges.find(
       (range) => range.label === selectedPriceRange
     );
+    const selectedDate = dateRanges.find(
+      (range) => range.label === selectedDateRange
+    );
     const filters = {
       minPrice: selectedRange ? selectedRange.min : undefined,
       maxPrice: selectedRange ? selectedRange.max : undefined,
+      daysBack: selectedDate ? selectedDate.value : undefined,
       categoryId: categoryId !== "All" ? categoryId : undefined,
     };
     onFilterChange(filters);
-    toggleFilters();
-  }, [selectedPriceRange, categoryId, onFilterChange]);
+  }, [selectedPriceRange, categoryId, selectedDateRange, onFilterChange]);
 
   useEffect(() => {
     if (isFiltersOpen) {
@@ -287,6 +298,66 @@ const Filters: React.FC<FiltersProps> = ({
             </div>
           )}
         </div>
+
+        {/* Date Published Dropdown */}
+        <div className="relative" ref={dateRef}>
+          <button
+            onClick={() => setIsDateDropdownOpen(!isDateDropdownOpen)}
+            className="px-4 py-2.5 bg-white border border-gray-300 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 flex items-center gap-2 min-w-[180px] justify-between"
+          >
+            <span className="font-medium text-gray-700">
+              {selectedDateRange || "Any Time"}
+            </span>
+            <svg
+              className={`w-4 h-4 transition-transform duration-200 ${
+                isDateDropdownOpen ? "rotate-180" : ""
+              }`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+          {isDateDropdownOpen && (
+            <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto">
+              <div
+                className={`py-2 px-4 cursor-pointer hover:bg-blue-50 transition-colors ${
+                  selectedDateRange === ""
+                    ? "bg-blue-50 text-blue-600 font-semibold"
+                    : "text-gray-700"
+                }`}
+                onClick={() => {
+                  setSelectedDateRange("");
+                  setIsDateDropdownOpen(false);
+                }}
+              >
+                Any Time
+              </div>
+              {dateRanges.map((range) => (
+                <div
+                  key={range.label}
+                  className={`py-2 px-4 cursor-pointer hover:bg-blue-50 transition-colors ${
+                    selectedDateRange === range.label
+                      ? "bg-blue-50 text-blue-600 font-semibold"
+                      : "text-gray-700"
+                  }`}
+                  onClick={() => {
+                    setSelectedDateRange(range.label);
+                    setIsDateDropdownOpen(false);
+                  }}
+                >
+                  {range.label}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Mobile: Sidebar */}
@@ -333,7 +404,10 @@ const Filters: React.FC<FiltersProps> = ({
                       ? "text-blue-600 font-semibold bg-blue-50"
                       : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                   }`}
-                  onClick={() => setCategoryId("All")}
+                  onClick={() => {
+                    setCategoryId("All");
+                    if (window.innerWidth < 1024) toggleFilters();
+                  }}
                 >
                   All Categories
                 </div>
@@ -345,7 +419,10 @@ const Filters: React.FC<FiltersProps> = ({
                         ? "text-blue-600 font-semibold bg-blue-50"
                         : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                     }`}
-                    onClick={() => setCategoryId(categoryItem.Id?.toString())}
+                    onClick={() => {
+                      setCategoryId(categoryItem.Id?.toString());
+                      if (window.innerWidth < 1024) toggleFilters();
+                    }}
                   >
                     {categoryItem.Name}
                   </div>
@@ -366,7 +443,10 @@ const Filters: React.FC<FiltersProps> = ({
                     ? "text-blue-600 font-semibold bg-blue-50"
                     : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                 }`}
-                onClick={() => setSelectedPriceRange("")}
+                onClick={() => {
+                  setSelectedPriceRange("");
+                  if (window.innerWidth < 1024) toggleFilters();
+                }}
               >
                 Any Price
               </div>
@@ -378,7 +458,48 @@ const Filters: React.FC<FiltersProps> = ({
                       ? "text-blue-600 font-semibold bg-blue-50"
                       : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                   }`}
-                  onClick={() => setSelectedPriceRange(range.label)}
+                  onClick={() => {
+                    setSelectedPriceRange(range.label);
+                    if (window.innerWidth < 1024) toggleFilters();
+                  }}
+                >
+                  {range.label}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Date Filters */}
+          <div className="mb-6">
+            <label className="block mb-3 font-semibold text-gray-800 text-lg">
+              Date Range
+            </label>
+            <div className="space-y-1">
+              <div
+                className={`py-2 px-3 cursor-pointer rounded-lg transition-colors duration-200 ${
+                  selectedDateRange === ""
+                    ? "text-blue-600 font-semibold bg-blue-50"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                }`}
+                onClick={() => {
+                  setSelectedDateRange("");
+                  if (window.innerWidth < 1024) toggleFilters();
+                }}
+              >
+                Any Date
+              </div>
+              {dateRanges.map((range) => (
+                <div
+                  key={range.label}
+                  className={`py-2 px-3 cursor-pointer rounded-lg transition-colors duration-200 ${
+                    selectedDateRange === range.label
+                      ? "text-blue-600 font-semibold bg-blue-50"
+                      : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                  }`}
+                  onClick={() => {
+                    setSelectedDateRange(range.label);
+                    if (window.innerWidth < 1024) toggleFilters();
+                  }}
                 >
                   {range.label}
                 </div>

@@ -100,7 +100,7 @@ const refreshAccessToken = async (): Promise<string> => {
   const accessToken = tokenManager.getAccessToken();
 
   if (!refreshToken || !accessToken) {
-    throw new Error("No refresh token available");
+    return "";
   }
 
   try {

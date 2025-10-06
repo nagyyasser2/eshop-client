@@ -32,7 +32,7 @@ function Home() {
   };
 
   return (
-    <div className="bg-white pb-0.5">
+    <div className="bg-white pb-1">
       <div className="container mx-auto mb-8 sm:mb-12 lg:mb-16 py-2 px-2 sm:px-4">
         {isLoading ? (
           // Skeleton Loader
@@ -42,7 +42,6 @@ function Home() {
               <div className="flex-1 flex justify-center w-full">
                 <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg h-48 sm:h-64 md:h-72 lg:h-80 bg-gray-200 rounded-2xl sm:rounded-3xl" />
               </div>
-
               {/* Text Skeleton */}
               <div className="flex-1 text-center lg:text-left space-y-3 sm:space-y-4 lg:space-y-6 w-full">
                 <div className="h-8 sm:h-9 lg:h-10 w-3/4 bg-gray-200 rounded-lg mx-auto lg:mx-0" />
@@ -55,11 +54,10 @@ function Home() {
         ) : (
           <Swiper
             modules={[Navigation, Pagination, Autoplay]}
-            navigation
             pagination={{ clickable: true }}
             loop={true}
             autoplay={{ delay: 5000, disableOnInteraction: false }}
-            className="rounded-xl sm:rounded-2xl bg-gradient-to-r from-indigo-50 to-purple-50 shadow-lg sm:shadow-xl"
+            className="rounded-xl sm:rounded-2xl bg-gradient-to-r from-indigo-50 to-purple-50 shadow-lg sm:shadow-xl "
           >
             {categories?.map((category) => (
               <SwiperSlide key={category.Id}>
@@ -117,6 +115,12 @@ function Home() {
               </SwiperSlide>
             ))}
             <style>{`
+            .swiper-pagination-bullet {
+            display: none;
+                width: 10px;
+                height: 10px;
+                margin: 10px 6px;
+              }
               .swiper-button-next,
               .swiper-button-prev {
                 display: none; /* hide on all */

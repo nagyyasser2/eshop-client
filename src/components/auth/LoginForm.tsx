@@ -6,6 +6,7 @@ import { login } from "../../api/auth";
 import { useAuth } from "../../context/AuthContext";
 import GoogleSignIn from "./GoogleSignIn";
 import type { AuthResponse, LoginFormData } from "../../types/auth.types";
+import { Link } from "react-router-dom";
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,7 +20,6 @@ function LoginForm() {
 
   const { setCredentials } = useAuth();
 
-  // Regular login mutation
   const loginMutation = useMutation({
     onMutate: () => {
       clearErrors("root");
@@ -28,8 +28,6 @@ function LoginForm() {
       return await login(data.email, data.password);
     },
     onSuccess: (response: AuthResponse) => {
-      console.log("API Response:", response); // ← Add this
-
       if (response.Success && response.Data) {
         setCredentials({
           user: response.Data.User,
@@ -37,20 +35,24 @@ function LoginForm() {
           refreshToken: response.Data.RefreshToken,
         });
       } else {
-        console.log("Setting error with message:", response.Message); // ← Add this
         setError("root", {
           type: "manual",
           message: response.Message || "Login failed",
         });
       }
     },
-    onError: (error: AuthResponse) => {
+    onError: (error: any) => {
+      const apiMessage =
+        error?.response?.data?.Message ||
+        error?.message ||
+        "Invalid email or password. Please try again.";
+
       setError("root", {
         type: "manual",
-        message:
-          error.Message || "Invalid email or password. Please try again.",
+        message: apiMessage,
       });
     },
+
     gcTime: 0,
     retry: false,
   });
@@ -164,12 +166,12 @@ function LoginForm() {
 
         {/* Forgot Password Link */}
         <div className="text-right">
-          <a
-            href="/forgot-password"
+          <Link
+            to="/forgot-password"
             className="text-sm text-gray-600 hover:text-gray-800 transition-colors"
           >
             Forgot your password?
-          </a>
+          </Link>
         </div>
 
         {/* Submit Button */}

@@ -3,7 +3,7 @@ import React from "react";
 const ProductGridSkeleton: React.FC = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 my-8">
-      {[...Array(4)].map((_, index) => (
+      {[...Array(3)].map((_, index) => (
         <div
           key={index}
           className="bg-white rounded-2xl shadow-lg animate-pulse overflow-hidden"

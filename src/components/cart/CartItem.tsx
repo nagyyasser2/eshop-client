@@ -1,13 +1,12 @@
 import type { CartItem } from "../../types/cart.types";
 import { formatCurrency } from "../../utils/formatCurrency";
 import QuantityControls from "./QuantityControls";
-import RemoveButton from "./RemoveButton";
 
 interface CartItemProp {
   item: CartItem;
   handleQuantityChange: (id: number, quantity: number) => void;
   handleRemoveItem: (id: number) => void;
-  removingItems: any;
+  removingItems: Set<number>;
 }
 
 const CartItemComponent = ({
@@ -60,9 +59,6 @@ const CartItemComponent = ({
           <QuantityControls
             item={item}
             handleQuantityChange={handleQuantityChange}
-          />
-          <RemoveButton
-            item={item}
             handleRemoveItem={handleRemoveItem}
             removingItems={removingItems}
           />

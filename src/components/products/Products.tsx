@@ -17,7 +17,7 @@ import NoProductsFound from "./NoProductsFound";
 const Products: React.FC = () => {
   const [searchParams] = useSearchParams();
   const location = useLocation();
-  const [isFiltersOpen, setIsFiltersOpen] = React.useState(true);
+  const [isFiltersOpen, setIsFiltersOpen] = React.useState(false);
   const searchQuery = searchParams.get("search") || "";
 
   // Get categoryId, categoryName from location state
@@ -30,6 +30,7 @@ const Products: React.FC = () => {
   const [filterParams, setFilterParams] = React.useState<{
     minPrice?: number;
     maxPrice?: number;
+    daysBack?: number;
     color?: string;
     tags?: string;
     categoryId?: string;
@@ -47,6 +48,7 @@ const Products: React.FC = () => {
           pageSize: 20,
           minPrice: filterParams.minPrice,
           maxPrice: filterParams.maxPrice,
+          daysBack: filterParams.daysBack,
           color: filterParams.color,
           tags: filterParams.tags,
           categoryId: filterParams.categoryId,
@@ -56,6 +58,7 @@ const Products: React.FC = () => {
     [
       filterParams.minPrice,
       filterParams.maxPrice,
+      filterParams.daysBack,
       filterParams.color,
       filterParams.tags,
       filterParams.categoryId,
@@ -126,6 +129,7 @@ const Products: React.FC = () => {
     (filters: {
       minPrice?: number;
       maxPrice?: number;
+      daysBack?: number;
       color?: string;
       tags?: string;
       categoryId?: string;
@@ -153,7 +157,7 @@ const Products: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-4 pb-2">
+    <div className="container mx-auto p-4 py-0 pb-2">
       <Promotion />
       <Filters
         onFilterChange={handleFilterChange}

@@ -23,6 +23,14 @@ import ProtectCheckout from "./checkout/ProtectCheckout";
 import CheckoutSuccess from "./checkout/CheckoutSuccess";
 import OrderSuccess from "./checkout/OrderSuccess";
 import LoadingProductsPage from "./products/LoadingProductsPage";
+import PrivacyPolicy from "./auth/PrivacyPolicy";
+import TermsOfService from "./auth/TermsOfService";
+import ConfirmEmail from "./auth/ConfirmEmail";
+import ChangePassword from "./auth/ChangePassword";
+import ForgotPassword from "./auth/ForgotPassword";
+import ResetPassword from "./auth/ResetPassword";
+import Profile from "./auth/Profile";
+import ProtectRoutes from "./auth/ProtectedRoutes";
 
 const Products = lazy(() => import("./products/Products"));
 
@@ -89,10 +97,24 @@ function AppRouter() {
           <Route path="/orders" element={<Orders />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/confirmEmail" element={<ConfirmEmail />} />
+          <Route
+            path="/change-password"
+            element={
+              <ProtectRoutes>
+                <ChangePassword />
+              </ProtectRoutes>
+            }
+          />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/payment-failed" element={<PaymentFailed />} />
           <Route path="/support" element={<Support />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/termsOfService" element={<TermsOfService />} />
+          <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

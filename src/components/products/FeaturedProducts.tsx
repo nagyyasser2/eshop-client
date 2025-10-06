@@ -21,7 +21,7 @@ import "swiper/css/pagination";
 
 function FeaturedProducts() {
   const queryParams: ProductQueryParams = {
-    featured: true, // ✅ use featured products
+    featured: true,
     pageSize: 5,
   };
 
@@ -43,7 +43,7 @@ function FeaturedProducts() {
   const products = data?.data ?? [];
 
   return (
-    <div className="bg-gray-50 py-16 mb-8">
+    <div className="bg-gray-50 py-16 mb-4">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="flex items-center justify-center mb-10">
@@ -75,7 +75,6 @@ function FeaturedProducts() {
         {!isLoading && !isError && products.length > 0 && (
           <Swiper
             modules={[Navigation, Pagination, Autoplay]}
-            navigation
             pagination={{ clickable: true }}
             loop={true}
             autoplay={{ delay: 4000, disableOnInteraction: false }}
@@ -86,13 +85,24 @@ function FeaturedProducts() {
               1024: { slidesPerView: 3 },
               1280: { slidesPerView: 4 },
             }}
-            className="pb-12"
           >
             {products.map((product: ProductDTO) => (
               <SwiperSlide key={product.Id}>
                 <ProductComponent product={product} />
               </SwiperSlide>
             ))}
+            <style>{`
+              .swiper-button-next,
+              .swiper-button-prev {
+                display: none; /* hide on all */
+              }
+              @media (min-width: 640px) {
+                .swiper-button-next,
+                .swiper-button-prev {
+                  display: flex; /* show from sm and up */
+                }
+              }
+            `}</style>
           </Swiper>
         )}
 

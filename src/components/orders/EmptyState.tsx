@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 export default function EmptyState() {
   return (
     <>
-      <div className="bg-white rounded-3xl shadow-xl p-8 text-center">
-        <div className="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+      <div className=" rounded-2xl p-2 mb-10 text-center">
+        <div className="w-15 h-15 bg-gray-300 rounded-full flex items-center justify-center mx-auto mb-6">
           <FaShoppingBag className="text-gray-400 text-4xl" />
         </div>
         <h3 className="text-2xl font-bold text-gray-900 mb-3">No orders yet</h3>

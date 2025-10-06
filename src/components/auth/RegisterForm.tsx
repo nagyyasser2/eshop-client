@@ -10,14 +10,13 @@ import {
   FaCalendarAlt,
 } from "react-icons/fa";
 import { register as registerUser } from "../../api/auth";
-import { useNavigate } from "react-router-dom";
-import GoogleSignIn from "./GoogleSignIn";
+import { Link } from "react-router-dom";
 import type { AuthResponse, RegisterFormData } from "../../types/auth.types";
 
 function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const navigate = useNavigate();
+  const [successMessage, setSuccessMessage] = useState("");
 
   const {
     register,
@@ -25,12 +24,12 @@ function RegisterForm() {
     formState: { errors },
     setError,
     clearErrors,
+    reset,
     watch,
   } = useForm<RegisterFormData>();
 
   const watchPassword = watch("password");
 
-  // Regular registration mutation
   const registerMutation = useMutation({
     mutationFn: async (data: RegisterFormData) => {
       const response = await registerUser(
@@ -42,43 +41,39 @@ function RegisterForm() {
         data.dateOfBirth
       );
 
-      // Check if the response indicates failure
       if (!response.Success) {
-        // Throw the response as an error so it goes to onError
-        throw response;
+        // Instead of throwing the raw response, throw an Error that React Query understands
+        throw new Error(response.Message);
       }
 
       return response;
     },
     onSuccess: (response: AuthResponse) => {
-      console.log("Registration successful:", response.Message);
-      navigate("/login");
+      setSuccessMessage(response.Message);
+      reset();
     },
-    onError: (error: AuthResponse | Error) => {
-      console.log("Error in onError:", error); // Debug log
+    onError: (error: any) => {
+      console.log(error);
 
-      let errorMessage = "Registration failed. Please try again.";
-
-      // Check if it's our AuthResponse type
-      if (error && typeof error === "object" && "Message" in error) {
-        errorMessage = error.Message || errorMessage;
-
-        // Also include any additional errors
-        if (error.Errors?.length) {
-          errorMessage = [errorMessage, ...error.Errors]
-            .filter(Boolean)
-            .join(", ");
-        }
+      // Handle Axios errors
+      if (error.response?.data) {
+        const apiError: AuthResponse = error.response.data;
+        setError("root", {
+          type: "manual",
+          message: apiError.Message || "Something went wrong.",
+        });
+      } else {
+        // Handle thrown Error (like above when !response.Success)
+        setError("root", {
+          type: "manual",
+          message: error.message || "Unexpected error.",
+        });
       }
-
-      setError("root", {
-        type: "manual",
-        message: errorMessage,
-      });
     },
   });
 
   const onSubmit = async (data: RegisterFormData) => {
+    setSuccessMessage("");
     if (data.password !== data.confirmPassword) {
       setError("confirmPassword", {
         type: "manual",
@@ -99,7 +94,6 @@ function RegisterForm() {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  // Password strength checker
   const getPasswordStrength = (password: string) => {
     if (!password) return { score: 0, text: "", color: "" };
 
@@ -436,6 +430,13 @@ function RegisterForm() {
           </div>
         )}
 
+        {/* Success Message*/}
+        {successMessage && (
+          <div className="bg-red-50 border border-green-200 rounded-lg p-3">
+            <p className="text-sm text-green-600">{successMessage}</p>
+          </div>
+        )}
+
         {/* Submit Button */}
         <button
           type="submit"
@@ -467,24 +468,19 @@ function RegisterForm() {
         </div>
       </div>
 
-      {/* Terms and Privacy */}
-      <p className="text-xs text-gray-500 text-center">
-        By creating an account, you agree to our{" "}
-        <a
-          href="/terms"
-          className="text-purple-600 hover:text-purple-700 underline"
-        >
-          Terms of Service
-        </a>{" "}
-        and{" "}
-        <a
-          href="/privacy"
-          className="text-purple-600 hover:text-purple-700 underline"
-        >
-          Privacy Policy
-        </a>
-        .
-      </p>
+      {/* Footer */}
+      <div className="text-center mt-6">
+        <p className="text-sm text-gray-500">
+          By signing in, you agree to our{" "}
+          <Link to="/termsOfService" className="text-gray-700 hover:underline">
+            Terms of Service
+          </Link>{" "}
+          and{" "}
+          <Link to="/privacyPolicy" className="text-gray-700 hover:underline">
+            Privacy Policy
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

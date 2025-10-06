@@ -9,7 +9,7 @@ function Login() {
 
   useEffect(() => {
     if (user) {
-      navigate(-1);
+      navigate("/");
     }
   }, [user, navigate]);
 
@@ -51,11 +51,14 @@ function Login() {
         <div className="text-center mt-6">
           <p className="text-sm text-gray-500">
             By signing in, you agree to our{" "}
-            <Link to="/terms" className="text-gray-700 hover:underline">
+            <Link
+              to="/termsOfService"
+              className="text-gray-700 hover:underline"
+            >
               Terms of Service
             </Link>{" "}
             and{" "}
-            <Link to="/privacy" className="text-gray-700 hover:underline">
+            <Link to="/privacyPolicy" className="text-gray-700 hover:underline">
               Privacy Policy
             </Link>
           </p>

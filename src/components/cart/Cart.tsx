@@ -1,37 +1,20 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 import EmptyCart from "./EmptyCart";
 import CartItems from "./CartItems";
 import OrderSummary from "./OrderSummary";
-import OrderConfirmationModal from "./OrderConfirmationModal";
 import { useCart } from "../../context/CartContext";
-import type { ShippingInfo, PaymentInfo } from "../../types/cart.types";
 import { ShoppingCart } from "lucide-react";
 
 function Cart() {
-  const {
-    cart,
-    removeFromCart,
-    updateQuantity,
-    clearCart,
-    calculateTotals,
-    createOrder,
-  } = useCart();
+  const { cart, removeFromCart, updateQuantity, clearCart, calculateTotals } =
+    useCart();
   const [removingItems, setRemovingItems] = useState(new Set<number>());
-  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
-  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
-  const selectedPaymentMethod = "cod";
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
   // Calculate totals using cart context
   const shippingAmount = 0;
   const discountAmount = 0;
-  const taxRate = 0.1; // 10% tax
   const totals = calculateTotals(shippingAmount, discountAmount);
-
-  const itemCount = cart.reduce((sum, item) => sum + item.Quantity, 0);
 
   const handleRemoveItem = async (itemId: number) => {
     setRemovingItems((prev) => new Set([...prev, itemId]));
@@ -46,59 +29,6 @@ function Cart() {
   const handleQuantityChange = (itemId: number, newQuantity: number) => {
     if (newQuantity >= 1) {
       updateQuantity(itemId, newQuantity);
-    }
-  };
-
-  const handlePlaceOrder = () => {
-    setIsOrderModalOpen(true);
-  };
-
-  const handleConfirmOrder = async () => {
-    setIsPlacingOrder(true);
-
-    // Prepare shipping info (in real app, this would come from a form)
-    const shippingInfo: ShippingInfo = {
-      ShippingFirstName: "John",
-      ShippingLastName: "Doe",
-      ShippingAddress: "123 Main St",
-      ShippingCity: "Anytown",
-      ShippingState: "CA",
-      ShippingZipCode: "12345",
-      ShippingCountry: "USA",
-      ShippingPhone: "123-456-7890",
-    };
-
-    // Prepare payment info
-    const paymentInfo: PaymentInfo = {
-      PaymentMethod: selectedPaymentMethod,
-      TransactionId: undefined,
-      ShippingAmount: shippingAmount,
-      DiscountAmount: discountAmount,
-      TaxRate: taxRate,
-    };
-
-    try {
-      await createOrder(shippingInfo, paymentInfo, "");
-
-      // Close modal
-      setIsOrderModalOpen(false);
-
-      // Invalidate userOrders query to refetch orders
-      queryClient.invalidateQueries({ queryKey: ["userOrders"] });
-
-      // Navigate to success page
-      navigate("/order-success", {
-        state: {
-          total: totals.TotalAmount,
-          itemCount,
-          paymentMethod: selectedPaymentMethod,
-        },
-      });
-    } catch (error) {
-      console.error("Failed to place order:", error);
-      alert("Failed to place order. Please try again.");
-    } finally {
-      setIsPlacingOrder(false);
     }
   };
 
@@ -146,14 +76,10 @@ function Cart() {
                 className={`w-full block text-center bg-gradient-to-r from-purple-600 to-pink-400 
               text-white font-bold py-4 px-6 rounded-xl shadow-md 
               focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2
-              transition-all
-              ${
-                isPlacingOrder
-                  ? "opacity-50 cursor-not-allowed"
-                  : "hover:from-purple-700 hover:to-pink-500 transform hover:scale-[1.02]"
-              }`}
+              transition-all hover:from-purple-700 hover:to-pink-500 transform hover:scale-[1.02]"
+              `}
               >
-                {isPlacingOrder ? "Processing..." : "Proceed to Checkout"}
+                Proceed to Checkout
               </Link>
 
               <Link

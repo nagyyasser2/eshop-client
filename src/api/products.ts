@@ -1,6 +1,6 @@
 import api from "./api";
 import { type QueryFunctionContext } from "@tanstack/react-query";
-import type { Category } from "./catalog";
+import type { Category } from "../types/category.types";
 
 export interface Product {
   Id: number;
@@ -79,6 +79,7 @@ export interface ProductQueryParams {
   featured?: boolean;
   active?: boolean;
   categoryId?: number;
+  daysBack?: number;
   sortBy?: string;
   searchQuery?: string;
   minPrice?: number;
@@ -126,10 +127,11 @@ export const fetchProductsForUseQuery = async ({
       page: pageParam,
       pageSize: params.pageSize ?? 10,
       sortBy: params.sortBy,
-      searchQuery: params.searchQuery, // This should now work correctly
+      searchQuery: params.searchQuery,
       // Also include filter parameters if needed
       minPrice: params.minPrice,
       maxPrice: params.maxPrice,
+      daysBack: params.daysBack,
       color: params.color,
       tags: params.tags,
       category: params.category,

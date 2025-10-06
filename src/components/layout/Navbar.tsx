@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   FaUser,
@@ -10,19 +10,17 @@ import {
 } from "react-icons/fa";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
-import SearchIcon from "./SearchIcon";
+import { User } from "lucide-react";
 
 function Navbar() {
   const { cart } = useCart();
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, logout } = useAuth();
   const { clearCart } = useCart();
   const location = useLocation();
   const itemCount = cart.reduce((sum, item) => sum + item.Quantity, 0);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const searchRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
 
   const toggleUserDropdown = () => {
@@ -42,39 +40,6 @@ function Navbar() {
     clearCart();
     setIsUserDropdownOpen(false);
   };
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: any) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsUserDropdownOpen(false);
-      }
-
-      // Close search if clicking outside
-      if (
-        isSearchVisible &&
-        searchRef.current &&
-        !searchRef.current.contains(event.target)
-      ) {
-        setIsSearchVisible(false);
-      }
-
-      // Close mobile menu if clicking outside
-      if (
-        isMobileMenuOpen &&
-        mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(event.target)
-      ) {
-        setIsMobileMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isSearchVisible, isMobileMenuOpen]);
 
   const isActivePath = (path: string) => {
     return location.pathname === path;
@@ -150,12 +115,6 @@ function Navbar() {
 
           {/* Right Side - Search, Cart, User */}
           <div className="flex items-center space-x-0">
-            {/* Search Icon/Toggle */}
-            <SearchIcon
-              searchRef={searchRef}
-              isSearchVisible={isSearchVisible}
-              setIsSearchVisible={setIsSearchVisible}
-            />
             {/* Cart */}
             <Link to="/cart" className="relative">
               <img src="/cart.svg" alt="Cart" className="h-10" />
@@ -167,15 +126,15 @@ function Navbar() {
             </Link>
 
             {/* User Menu */}
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center">
               {user ? (
                 <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={toggleUserDropdown}
-                    className="flex items-center space-x-3 px-4 py-2 hover:from-purple-100 hover:to-pink-100 rounded-xl hover:border-purple-300 transition-all duration-200 group"
+                    className="flex items-center space-x-3 px-4 py-2 pl-2 hover:from-purple-100 hover:to-pink-100 rounded-xl hover:border-purple-300 transition-all duration-200 group"
                   >
                     <div className="flex items-center space-x-2">
-                      <div className="w-8 h-8 sm:h-10 sm:w-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-sm">
+                      <div className="w-10 h-10 sm:h-10 sm:w-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-sm">
                         <FaUser className="text-white" />
                       </div>
                     </div>
@@ -187,44 +146,26 @@ function Navbar() {
                   </button>
 
                   <div
-                    className={`absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50 transition-all duration-200 ${
+                    className={`absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-gray-200 py-0 z-50 transition-all duration-200 ${
                       isUserDropdownOpen
                         ? "opacity-100 visible transform translate-y-0"
                         : "opacity-0 invisible transform -translate-y-2"
                     }`}
                   >
-                    <div className="px-4 py-3 border-b border-gray-100">
-                      <div className="flex items-center space-x-3">
-                        <div className="aspect-square w-10 flex-shrink-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-sm">
-                          <FaUser className="h-4 w-4 text-white" />
-                        </div>
-
-                        <div className="min-w-0">
-                          <div className="font-semibold text-slate-800 truncate">
-                            {user.firstName} {user.lastName}
-                          </div>
-                          <div className="text-sm text-slate-500 truncate">
-                            {user.email}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="py-2">
+                    <div className="">
                       <Link
-                        to="/orders"
-                        className="flex items-center space-x-3 px-4 py-2 text-slate-700 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-200"
+                        to="/profile"
+                        className="flex items-center space-x-3 px-4 py-3 text-slate-700 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-200"
                         onClick={() => setIsUserDropdownOpen(false)}
                       >
-                        <FaJediOrder className="h-4 w-4" />
-                        <span>Orders</span>
+                        <User className="h-4 w-4" />
+                        <span>Profile</span>
                       </Link>
-
-                      <div className="border-t border-gray-100 my-2"></div>
+                      <div className="border-t border-gray-100 "></div>
 
                       <button
                         onClick={handleLogout}
-                        className="flex items-center space-x-3 w-full px-4 py-2 text-slate-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
+                        className="flex items-center space-x-3 w-full cursor-pointer px-4 py-3 text-slate-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
                       >
                         <FaSignOutAlt className="h-4 w-4" />
                         <span>Sign Out</span>

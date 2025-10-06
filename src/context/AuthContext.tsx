@@ -4,16 +4,16 @@ import {
   getCurrentUser,
   setupAuthEventListeners,
 } from "../api/api";
-import type { User } from "../api/auth";
+import type { ApplicationUser } from "../types/auth.types";
 
 interface AuthContextType {
-  user: User | null;
+  user: ApplicationUser | null;
   loading: boolean;
   error: string | null;
   setCredentials: (credentials: {
     token: string;
     refreshToken: string;
-    user: User;
+    user: ApplicationUser;
   }) => Promise<void>;
   logout: () => void;
   clearError: () => void;
@@ -26,42 +26,48 @@ interface AuthProviderProps {
 }
 
 // Helper function to safely map JWT token to User object
-const mapTokenToUser = (tokenUser: any): User | null => {
+const mapTokenToUser = (tokenUser: any): ApplicationUser | null => {
   if (!tokenUser || !tokenUser.email) {
     return null;
   }
 
   try {
     return {
-      id: tokenUser.sub || tokenUser.id || tokenUser.nameid || "",
-      email: tokenUser.email || "",
-      firstName:
+      Id: tokenUser.sub || tokenUser.id || tokenUser.nameid || "",
+      Email: tokenUser.email || "",
+      FirstName:
         tokenUser.firstName ||
         tokenUser.given_name ||
         tokenUser.first_name ||
         "",
-      lastName:
+      LastName:
         tokenUser.lastName ||
         tokenUser.family_name ||
         tokenUser.last_name ||
         "",
-      roles: (() => {
+      Roles: (() => {
         // Handle various role claim formats
         const roleValue = tokenUser.role || tokenUser.roles;
         if (Array.isArray(roleValue)) return roleValue;
         if (typeof roleValue === "string") return [roleValue];
         return [];
       })(),
-      dateOfBirth: tokenUser.dateOfBirth || tokenUser.date_of_birth,
-      profilePictureUrl:
+      DateOfBirth: tokenUser.dateOfBirth || tokenUser.date_of_birth,
+      ProfilePictureUrl:
         tokenUser.profilePictureUrl ||
         tokenUser.picture ||
         tokenUser.profile_picture_url,
-      address: tokenUser.address,
-      city: tokenUser.city,
-      state: tokenUser.state,
-      zipCode: tokenUser.zipCode || tokenUser.zip_code,
-      country: tokenUser.country,
+      Address: tokenUser.address,
+      City: tokenUser.city,
+      State: tokenUser.state,
+      ZipCode: tokenUser.zipCode || tokenUser.zip_code,
+      Country: tokenUser.country,
+      UserName: "",
+      CreatedDate: "",
+      IsActive: false,
+      IsGoogleUser: false,
+      RefreshTokenExpiryTime: "",
+      EmailConfirmed: false,
     };
   } catch (error) {
     return null;
@@ -69,7 +75,7 @@ const mapTokenToUser = (tokenUser: any): User | null => {
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<ApplicationUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -138,7 +144,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const setCredentials = async (credentials: {
     token: string;
     refreshToken: string;
-    user: User;
+    user: ApplicationUser;
   }) => {
     try {
       tokenManager.setTokens(credentials.token, credentials.refreshToken);
