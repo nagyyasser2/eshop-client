@@ -47,7 +47,7 @@ function Navbar() {
   return (
     <nav className="backdrop-blur-md sticky top-0 z-10 text-slate-700">
       <div className="container mx-auto p-4 pb-2">
-        <div className="flex justify-between items-center rounded-2xl px-2 py-1 bg-white border border-gray-200">
+        <div className="flex justify-between items-center rounded-2xl px-2 py-1 mx-2 bg-white border border-gray-200">
           {/* Mobile Menu Toggle */}
           <div className="flex items-center space-x-1">
             <button

@@ -11,23 +11,22 @@ import ordersSvg from "../../assets/orders.svg";
 function Orders() {
   const { user } = useAuth();
 
+  if (!user) {
+    return <OrderNotRegistered />;
+  }
+
   const {
     data: orders,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["userOrders", user?.id],
+    queryKey: ["userOrders", user?.Id],
     queryFn: () => {
-      console.log("Refetching orders due to focus or mount");
       return getMyOrders();
     },
     refetchOnWindowFocus: true,
     refetchOnMount: true,
   });
-
-  if (!user) {
-    return <OrderNotRegistered />;
-  }
 
   return (
     <div className="py-4 px-0">

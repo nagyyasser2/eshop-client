@@ -1,6 +1,5 @@
 import axios from "axios";
 import { apiStoreService } from "../persist/api.store.service";
-import type { AuthResponse } from "../types/auth.types";
 
 export const API_URL = "https://10.10.0.68:7000/api";
 export const SERVER_URL = "https://10.10.0.68:7000/";

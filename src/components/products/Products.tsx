@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSearchParams, useLocation } from "react-router-dom";
 import {
@@ -16,9 +16,9 @@ import NoProductsFound from "./NoProductsFound";
 
 const Products: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const location = useLocation();
-  const [isFiltersOpen, setIsFiltersOpen] = React.useState(false);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const searchQuery = searchParams.get("search") || "";
+  const location = useLocation();
 
   // Get categoryId, categoryName from location state
   const categoryIdFromState = location.state?.categoryId;
@@ -35,11 +35,9 @@ const Products: React.FC = () => {
     tags?: string;
     categoryId?: string;
   }>({
-    // Initialize with categoryId from state if available
     categoryId: categoryIdFromState,
   });
 
-  // Use useMemo to create a stable query key tuple
   const queryKey = React.useMemo(
     () =>
       [

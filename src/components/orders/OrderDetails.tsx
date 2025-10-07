@@ -12,16 +12,6 @@ interface OrderDetailsProps {
   order: Order;
 }
 
-// utility to calculate delivery estimate
-function getEstimatedDelivery(
-  deliveredAt?: string | null,
-  shippedAt?: string | null
-) {
-  if (deliveredAt) return `Delivered on ${formatOrderDate(deliveredAt)}`;
-  if (shippedAt) return `Shipped on ${formatOrderDate(shippedAt)}`;
-  return "Not shipped yet";
-}
-
 // Payment status: 0=Pending, 1=Completed, 2=Failed
 function getPaymentStatusStyle(status: number) {
   switch (status) {
@@ -54,7 +44,6 @@ export default function OrderDetails({ order }: OrderDetailsProps) {
   const { mutate: startCheckout } = useMutation({
     mutationFn: createCheckoutSession,
     onSuccess: (data) => {
-      console.log(data);
       if (data?.Url) {
         window.location.href = data.Url;
       }

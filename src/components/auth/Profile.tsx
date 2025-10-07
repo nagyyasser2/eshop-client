@@ -27,7 +27,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="bg-gradient-to-br from-purple-50 via-white to-pink-50 py-4 md:py-8 px-3 md:px-4">
+    <div className=" py-4 md:py-8 px-3 md:px-4">
       <div className="container mx-auto px-0 sm:px-4">
         {/* Header */}
         <ProfileHeader user={user} isEditing={isEditing} onEdit={handleEdit} />

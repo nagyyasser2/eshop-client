@@ -68,7 +68,7 @@ function ProductDetails() {
 
   if (error || !product) {
     return (
-      <div className="bg-gradient-to-br from-gray-50 to-white flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center py-10">
         <div className="text-center">
           <div className="text-red-500 text-6xl mb-4">⚠️</div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
