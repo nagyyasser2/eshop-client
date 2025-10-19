@@ -84,5 +84,13 @@ export interface ProductDto {
   CreatedAt: string;
   CategoryId?: number;
   Category?: CategoryDto;
-  Images: ImageDto[];
+  ProductImages: ProductImageDto[];
+}
+
+export interface ProductImageDto {
+  Id: number;
+  Path: string;
+  IsPrimary: boolean;
+  CreatedAt: Date;
+  ProductId: number;
 }

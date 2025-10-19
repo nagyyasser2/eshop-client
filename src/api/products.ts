@@ -1,6 +1,7 @@
 import api from "./api";
 import { type QueryFunctionContext } from "@tanstack/react-query";
 import type { Category } from "../types/category.types";
+import type { ProductDto } from "../types/product.types";
 
 export interface Product {
   Id: number;
@@ -50,24 +51,8 @@ export interface Image {
   Product?: Product;
 }
 
-export interface ProductDTO {
-  Id: number;
-  Name: string;
-  Sku: string;
-  Price: number;
-  Description?: string;
-  ShortDescription?: string;
-  StockQuantity: number;
-  IsActive: boolean;
-  IsFeatured: boolean;
-  CategoryId: number;
-  Category: Category;
-  Images?: { Id: number; Url: string }[];
-  Variants?: { Id: number; Name: string }[];
-}
-
 export interface PaginatedProductsResponse {
-  data: ProductDTO[];
+  data: ProductDto[];
   count: number;
   page: number;
   pageSize: number;
@@ -139,8 +124,8 @@ export const fetchProductsForUseQuery = async ({
   });
   return response.data;
 };
-export const fetchProductById = async (id: number): Promise<ProductDTO> => {
-  const response = await api.get<ProductDTO>(`/products/${id}`);
+export const fetchProductById = async (id: number): Promise<ProductDto> => {
+  const response = await api.get<ProductDto>(`/products/${id}`);
   return response.data;
 };
 

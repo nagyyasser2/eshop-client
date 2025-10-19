@@ -4,7 +4,6 @@ import {
   FaUser,
   FaSignOutAlt,
   FaChevronDown,
-  FaJediOrder,
   FaBars,
   FaTimes,
 } from "react-icons/fa";
@@ -47,7 +46,7 @@ function Navbar() {
   return (
     <nav className="backdrop-blur-md sticky top-0 z-10 text-slate-700">
       <div className="container mx-auto p-4 pb-2">
-        <div className="flex justify-between items-center rounded-2xl px-2 py-1 mx-2 bg-white border border-gray-200">
+        <div className="flex justify-between items-center rounded-4xl px-2 py-1 mx-2 bg-white border border-gray-200">
           {/* Mobile Menu Toggle */}
           <div className="flex items-center space-x-1">
             <button
@@ -155,7 +154,7 @@ function Navbar() {
                     <div className="">
                       <Link
                         to="/profile"
-                        className="flex items-center space-x-3 px-4 py-3 text-slate-700 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-200"
+                        className="flex items-center space-x-3 px-4 py-3 text-slate-700 rounded-t-2xl hover:bg-purple-50 hover:text-purple-700 transition-colors duration-200"
                         onClick={() => setIsUserDropdownOpen(false)}
                       >
                         <User className="h-4 w-4" />
@@ -165,7 +164,7 @@ function Navbar() {
 
                       <button
                         onClick={handleLogout}
-                        className="flex items-center space-x-3 w-full cursor-pointer px-4 py-3 text-slate-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
+                        className="flex items-center space-x-3 w-full cursor-pointer  rounded-b-2xl px-4 py-3 text-slate-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
                       >
                         <FaSignOutAlt className="h-4 w-4" />
                         <span>Sign Out</span>

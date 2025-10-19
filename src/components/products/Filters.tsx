@@ -169,6 +169,8 @@ const Filters: React.FC<FiltersProps> = ({
 
       {/* Desktop: Horizontal Flex Layout */}
       <div className="hidden lg:flex gap-4 items-center mb-6 flex-wrap">
+        {/* Header */}
+
         {/* Category Dropdown */}
         <div className="relative" ref={categoryRef}>
           <button
@@ -362,7 +364,7 @@ const Filters: React.FC<FiltersProps> = ({
 
       {/* Mobile: Sidebar */}
       <aside
-        className={`lg:hidden fixed p-4 flex top-0 left-0 h-full w-80 bg-white border border-gray-200 rounded-r-2xl overflow-y-auto z-50 transform transition-transform duration-300 ease-in-out shadow-xl ${
+        className={`lg:hidden fixed p-4 flex top-0 left-0 h-full w-80 bg-white border border-gray-200 overflow-y-auto z-50 transform transition-transform duration-300 ease-in-out shadow-xl ${
           isFiltersOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >

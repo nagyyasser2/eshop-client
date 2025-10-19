@@ -1,12 +1,13 @@
+import filterIcon from "../../assets/filters-2-svgrepo-com.svg";
+
 export default function MobileFilterButton({ toggleFilters }: any) {
   return (
     <div className="lg:hidden flex items-center mb-4" onClick={toggleFilters}>
       <img
-        src="/filter.svg"
+        src={filterIcon}
         alt="Filter"
-        className="h-10 w-10 cursor-pointer"
+        className="h-8 w-8 cursor-pointer text-slate-600"
       />
-      <p className="text-xl">Filters</p>
     </div>
   );
 }

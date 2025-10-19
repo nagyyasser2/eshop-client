@@ -5,10 +5,10 @@ export interface CartItem {
   UnitPrice: number;
   TotalPrice: number;
   ProductName: string;
-  ProductSKU: string;
+  ProductSku: string;
   ProductId: number;
   ImageUrl?: string;
-  CategoryName: string;
+  CategoryName?: string;
   CreatedAt?: string | Date;
   UpdatedAt?: string | Date;
 }
