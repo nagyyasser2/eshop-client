@@ -55,7 +55,7 @@ function Home() {
             modules={[Navigation, Pagination, Autoplay]}
             pagination={{ clickable: true }}
             loop={true}
-            autoplay={{ delay: 5000, disableOnInteraction: false }}
+            autoplay={{ delay: 4000, disableOnInteraction: false }}
             className="rounded-xl sm:rounded-4xl bg-gradient-to-r from-slate-100  to-slate-100"
           >
             {categories?.map((category) => (
@@ -75,7 +75,10 @@ function Home() {
                         }
                         alt={category.Name}
                         onClick={() => handleShopNow(category)}
-                        className="relative w-full h-48 sm:h-64 md:h-72 lg:h-80 object-cover rounded-2xl sm:rounded-3xl  transform group-hover:scale-105 transition-all duration-300"
+                        className="relative w-full cursor-pointer 
+             h-52 sm:h-64 md:h-72 lg:h-96 xl:h-[28rem]
+             object-cover rounded-2xl sm:rounded-3xl 
+             transform group-hover:scale-105 transition-all duration-300"
                       />
                     </div>
                   </div>
@@ -95,7 +98,7 @@ function Home() {
                       onClick={() => handleShopNow(category)}
                       className="hidden sm:inline-flex items-center border-2 border-slate-400 px-4 py-2 cursor-pointer text-md sm:text-xl md:text-1xl font-semibold text-slate-500 rounded-full transform transition-all duration-300 group"
                     >
-                      <span>Shop</span>
+                      <span>Shop Now</span>
                       <svg
                         className="w-5 h-5 sm:w-6 sm:h-6 ml-2 group-hover:translate-x-1 transition-transform duration-200 text-blue-500"
                         fill="none"

@@ -1,4 +1,4 @@
-import FeaturedProducts from "../products/FeaturedProducts";
+import CustomProducts from "../products/CustomProducts";
 import FAQSection from "./FAQSection";
 import Home from "./Home";
 
@@ -6,7 +6,12 @@ function HomeLayout() {
   return (
     <>
       <Home />
-      <FeaturedProducts />
+      <CustomProducts
+        title="Best Seller Bags"
+        categoryId={null}
+        productId={null}
+        featured={true}
+      />
       <FAQSection />
     </>
   );

@@ -29,13 +29,11 @@ function Orders() {
   });
 
   return (
-    <div className="py-4 pb-0 flex flex-col gap-15 min-h-133">
+    <div className="py-4 pb-0 flex flex-col gap-15">
       <div className="container mx-auto p-4 ">
         <div className="flex items-center mb-2">
           <div className="flex items-center gap-2 justify-center">
-            <p className="text-stale-700 font-semibold text-lg text-slate-600">
-              My Orders
-            </p>
+            <p className="font-semibold text-lg text-slate-600">My Orders</p>
           </div>
         </div>
         {isLoading && <OrderSkeleton />}

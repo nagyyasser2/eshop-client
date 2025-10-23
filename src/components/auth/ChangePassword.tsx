@@ -55,7 +55,7 @@ export default function ChangePassword() {
   };
 
   return (
-    <div className="max-w-md mt-10 mb-10 bg-white shadow-md rounded-xl p-6 sm:p-8 mx-4 sm:mx-auto">
+    <div className="max-w-md mt-10 mb-10 p-6 sm:p-8 mx-4 sm:mx-auto text-slate-600">
       <h2 className="text-2xl font-semibold text-center mb-6">
         Change Password
       </h2>
@@ -79,7 +79,7 @@ export default function ChangePassword() {
 
       {/* Success Message */}
       {successMessage && (
-        <div className="flex items-center gap-2 text-green-600 bg-green-50 p-3 rounded-lg mb-4">
+        <div className="flex items-center gap-2 text-blue-600 bg-green-50 p-3 rounded-lg mb-4">
           <CheckCircle size={20} />
           <span>{successMessage}</span>
         </div>
@@ -95,7 +95,7 @@ export default function ChangePassword() {
             <input
               type={showCurrent ? "text" : "password"}
               {...register("currentPassword", { required: "Required" })}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 pr-10 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 pr-10 focus:ring-2  focus:outline-none"
               placeholder="Enter your current password"
             />
             <button
@@ -123,7 +123,7 @@ export default function ChangePassword() {
                 required: "Required",
                 minLength: { value: 6, message: "Minimum 6 characters" },
               })}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 pr-10 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 pr-10 focus:ring-2  focus:outline-none"
               placeholder="Enter a new password"
             />
             <button
@@ -150,7 +150,7 @@ export default function ChangePassword() {
             <input
               type={showConfirm ? "text" : "password"}
               {...register("confirmNewPassword", { required: "Required" })}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 pr-10 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 pr-10 focus:ring-2 -500 focus:outline-none"
               placeholder="Confirm your new password"
             />
             <button
@@ -172,7 +172,7 @@ export default function ChangePassword() {
         <button
           type="submit"
           disabled={changePasswordMutation.isPending}
-          className="w-full flex justify-center items-center gap-2 bg-indigo-600 text-white py-2.5 rounded-lg hover:bg-indigo-700 transition disabled:opacity-70 disabled:cursor-not-allowed"
+          className="w-full flex justify-center items-center gap-2 bg-slate-600 text-white py-2.5 rounded-lg hover:bg-slate-700 cursor-pointer transition disabled:opacity-70 disabled:cursor-not-allowed"
         >
           {changePasswordMutation.isPending ? (
             <>

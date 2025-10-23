@@ -1,11 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
 import {
   type PaginatedProductsResponse,
   type ProductQueryParams,
   fetchProductsForUseQuery,
 } from "../../api/products";
-import ProductCardSkeleton from "./ProductCardSkeleton";
 import ProductComponent from "./Product";
 
 // Swiper imports
@@ -18,11 +16,25 @@ import "swiper/css/navigation";
 // @ts-ignore
 import "swiper/css/pagination";
 import type { ProductDto } from "../../types/product.types";
+import ProductGridSkeleton from "../sceletons/ProductGridSceleton";
 
-function FeaturedProducts() {
+interface CustomProducts {
+  categoryId?: number | null;
+  productId?: number | null;
+  featured?: boolean | null;
+  title: string;
+}
+
+function CustomProducts({
+  categoryId,
+  productId,
+  title,
+  featured = true,
+}: CustomProducts) {
   const queryParams: ProductQueryParams = {
-    featured: true,
     pageSize: 5,
+    featured,
+    categoryId,
   };
 
   const { data, isLoading, isError, error } = useQuery<
@@ -47,16 +59,13 @@ function FeaturedProducts() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex flex-col mb-10">
-          <h4 className="text-md sm:text-xl lg:text-2xl font-normal mb-3 sm:mb-4 sm:px-0 text-slate-500">
-            <span>Best Seller Bags</span>
+          <h4 className="text-md sm:text-xl lg:text-2xl font-normal mb-3 sm:mb-4 sm:px-0 text-slate-600">
+            <span>{title}</span>
           </h4>
-          <p className="text-sm sm:text-base md:text-lg text-slate-500 leading-relaxed">
-            Discover our carefully curated selection of premium tech products
-          </p>
         </div>
 
         {/* Loading */}
-        {isLoading && <ProductCardSkeleton length={4} />}
+        {isLoading && <ProductGridSkeleton />}
         {/* Error */}
         {isError && (
           <div className="text-center text-red-600">
@@ -78,54 +87,42 @@ function FeaturedProducts() {
               1280: { slidesPerView: 4 },
             }}
           >
-            {products.map((product: ProductDto) => (
-              <SwiperSlide key={product.Id}>
-                <ProductComponent product={product} />
-              </SwiperSlide>
-            ))}
+            {products.map((product: ProductDto) => {
+              return (
+                product.Id !== productId && (
+                  <SwiperSlide key={product.Id}>
+                    <ProductComponent product={product} />
+                  </SwiperSlide>
+                )
+              );
+            })}
+
             <style>{`
+              .swiper-pagination-bullet {
+                display: none;
+                width: 10px;
+                height: 10px;
+                margin: 0 6px;
+                background: rgb(148 163 184);
+                opacity: 0.5;
+                transition: all 0.3s ease;
+              }
+              .swiper-pagination-bullet-active {
+                width: 30px;
+                border-radius: 5px;
+                background: rgb(59 130 246);
+                opacity: 1;
+              }
               .swiper-button-next,
               .swiper-button-prev {
                 display: none; /* hide on all */
               }
-              @media (min-width: 640px) {
-                .swiper-button-next,
-                .swiper-button-prev {
-                  display: flex; /* show from sm and up */
-                }
-              }
             `}</style>
           </Swiper>
         )}
-        {/* CTA Button */}
-        <div
-          className="group mt-12 text-slate-500 flex flex-row-reverse items-center cursor-pointer 
-                justify-center sm:justify-start text-center sm:text-right"
-        >
-          <svg
-            className="w-5 h-5 sm:w-6 sm:h-6 ml-2 group-hover:translate-x-1 transition-transform duration-200 text-blue-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M17 8l4 4m0 0l-4 4m4-4H3"
-            />
-          </svg>
-
-          <Link
-            to="/bags"
-            className="inline-flex items-center text-md sm:text-xl font-normal text-slate-500"
-          >
-            See all
-          </Link>
-        </div>
       </div>
     </div>
   );
 }
 
-export default FeaturedProducts;
+export default CustomProducts;

@@ -30,9 +30,10 @@ import ForgotPassword from "./auth/ForgotPassword";
 import ResetPassword from "./auth/ResetPassword";
 import Profile from "./auth/Profile";
 import ProtectRoutes from "./auth/ProtectedRoutes";
-import ProductPopup from "./common/ProductPopup";
 import CartPopup from "./common/CartPopup";
 import { Announce } from "./products/Promotion";
+import ProductImagesPreview from "./common/ProductImagesPreview";
+import ProductDetails from "./products/ProductDetails";
 
 const Products = lazy(() => import("./products/Products"));
 
@@ -59,23 +60,16 @@ function AppRouter() {
     refetchOnMount: true,
   });
 
-  if (authLoading) {
-    return <Loading />;
-  }
-
-  if (isHealthLoading) {
-    return <Loading />;
-  }
-
-  if (!isApiHealthy) {
-    return <ApiDown />;
-  }
+  if (authLoading || isHealthLoading) return <Loading />;
+  if (!isApiHealthy) return <ApiDown />;
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen bg-white">
       <Announce />
       <Navbar />
-      <main className="flex-grow bg-white">
+
+      {/* main takes all remaining space */}
+      <main className="flex-grow">
         <Routes>
           <Route path="/" element={<HomeLayout />} />
           <Route
@@ -87,6 +81,7 @@ function AppRouter() {
             }
           />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/bag/:id" element={<ProductDetails />} />
           <Route
             path="/checkout"
             element={
@@ -120,8 +115,9 @@ function AppRouter() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
+
       <Footer />
-      <ProductPopup />
+      <ProductImagesPreview />
       <CartPopup />
     </div>
   );

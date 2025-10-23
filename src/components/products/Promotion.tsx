@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 export function Announce() {
   return (
     <div className=" bg-slate-700">
-      <div className="container mx-auto text-center">
-        <p className="text-white py-1">
+      <div className="container mx-auto text-center px-2">
+        <p className="text-white py-1 text-md sm:text-l">
           48-hour sale, Buy now and get free shipping on any items ♡
         </p>
       </div>
@@ -14,14 +14,11 @@ export function Announce() {
 
 export function Promotion() {
   return (
-    <div className="backdrop-blur p-3 my-4 rounded-xl text-slate-700 mx-auto">
+    <div className="backdrop-blur px-0 py-2 my-4 rounded-xl text-slate-700 mx-auto">
       <div className="flex items-center justify-between gap-4">
         {/* Text Content */}
         <div className="flex-1">
-          <p className="font-semibold text-slate-800">
-            Find Your Perfect Bag Match
-          </p>
-          <span className="font-xs text-slate-500">
+          <span className="font-xs text-slate-500 px-1">
             Stylish Designs, Crafted for Every Occasion
           </span>
         </div>
@@ -32,7 +29,7 @@ export function Promotion() {
 
 export function PromotionalBanner() {
   return (
-    <div className="p-3 px-8 py-8 bg-gradient-to-r from-slate-100 via-slate-100 to-blue-100 rounded-xl  mb-6 mx-auto">
+    <div className="p-3 px-8 py-8 bg-slate-50 rounded-xl  mb-6 mx-auto">
       <div className="mx-auto flex items-center justify-between gap-6 flex-col md:flex-row">
         {/* Text Content */}
         <div className="flex-1 space-y-3 p-2 md:p-0 text-center md:text-left">

@@ -1,5 +1,5 @@
 import type { Category, CategoryDto } from "./category.types";
-import type { Image, ImageDto } from "./image.types";
+import type { Image } from "./image.types";
 
 export interface Product {
   Id: number;
@@ -19,7 +19,7 @@ export interface Product {
   CreatedAt: string;
   CategoryId?: number;
   Category?: Category;
-  Images?: Image[];
+  ProductImages?: ProductImageDto[];
 }
 
 export interface CreateProductDto {

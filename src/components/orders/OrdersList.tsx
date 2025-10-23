@@ -15,7 +15,7 @@ export default function OrdersList({ orders }: { orders: Order[] }) {
 
   return (
     <div className="rounded-1xl  overflow-hidden">
-      <div className="p-0 space-y-2 rounded-2xl">
+      <div className="space-y-2 rounded-2xl">
         {orders.map((order: Order, index: number) => {
           const paymentStatus = getPaymentStatusString(order.PaymentStatus);
           const isPaid = paymentStatus === "Completed";
@@ -24,30 +24,30 @@ export default function OrdersList({ orders }: { orders: Order[] }) {
           return (
             <div
               key={`${order.Id ?? "no-id"}-${index}`}
-              className="bg-white border border-gray-200 rounded-2xl overflow-hidden transition-all duration-300 transform"
+              className="rounded-2xl overflow-hidden transition-all duration-300 transform"
             >
               <button
                 onClick={() => toggleAccordion(order.Id)}
-                className="w-full flex justify-between items-center px-3 py-3 sm:px-4 sm:py-4 cursor-pointer transition-all duration-300"
+                className="w-full flex justify-between items-center py-3  sm:py-4 cursor-pointer transition-all duration-300"
               >
                 <div className="flex items-center space-x-3 sm:space-x-4">
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg text-sm sm:text-base">
+                  <div className=" flex items-center justify-center text-slate-800 font-bold text-sm sm:text-base">
                     #{order.OrderNumber?.slice(-2)}
                   </div>
                   <div className="text-left">
-                    <span className="block font-bold text-gray-900 text-base sm:text-lg md:text-xl">
+                    <span className="block font-semibold text-slate-800 ">
                       #{order.OrderNumber}
                     </span>
-                    <span className="block text-xs sm:text-sm text-gray-600 font-medium">
+                    <span className="block text-xs sm:text-sm text-slate-800 font-medium">
                       {formatOrderDate(order.CreatedAt)}
                     </span>
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-3 sm:space-x-4">
+                <div className="flex items-center space-x-3 sm:space-x-4 ml-0 pl-0">
                   <div className="flex items-center space-x-2">
                     {isPaid ? (
-                      <div className="flex items-center space-x-1 sm:space-x-2 bg-gradient-to-r from-green-100 to-emerald-100 px-2 sm:px-4 py-1.5 sm:py-2 rounded-full border border-green-200">
+                      <div className="flex items-center space-x-1 sm:space-x-2 bg- from-green-100 to-emerald-100 px-2 sm:px-4 py-1.5 sm:py-2 rounded-full">
                         <svg
                           className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-600"
                           fill="currentColor"
@@ -64,9 +64,9 @@ export default function OrdersList({ orders }: { orders: Order[] }) {
                         </span>
                       </div>
                     ) : (
-                      <div className="flex items-center space-x-1 sm:space-x-2 bg-gradient-to-r from-orange-100 to-yellow-100 px-2 sm:px-4 py-1.5 sm:py-2 rounded-full border border-orange-200">
+                      <div className="flex items-center space-x-1 sm:space-x-2 bg- from-slate-100 to-yellow-100 px-2 sm:px-4 py-1.5 sm:py-2 rounded-full  ">
                         <svg
-                          className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-600"
+                          className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-600"
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -76,16 +76,16 @@ export default function OrdersList({ orders }: { orders: Order[] }) {
                             clipRule="evenodd"
                           />
                         </svg>
-                        <span className="text-orange-800 font-bold text-xs sm:text-sm">
+                        <span className="text-slate-800 font-bold text-xs sm:text-sm">
                           {paymentStatus}
                         </span>
                       </div>
                     )}
                   </div>
 
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 bg- from-slate-100 to-pink-100 rounded-full flex items-center justify-center">
                     <svg
-                      className={`w-4 h-4 sm:w-5 sm:h-5 text-purple-600 transition-transform duration-300 ${
+                      className={`w-4 h-4 sm:w-5 sm:h-5 text-slate-600 transition-transform duration-300 ${
                         isExpanded ? "rotate-180" : ""
                       }`}
                       fill="none"
@@ -105,7 +105,7 @@ export default function OrdersList({ orders }: { orders: Order[] }) {
               </button>
 
               {isExpanded && (
-                <div className="px-4 sm:px-6 py-4 sm:py-6">
+                <div className="py-4 sm:py-6">
                   <OrderDetails order={order} />
                 </div>
               )}

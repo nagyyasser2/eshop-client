@@ -23,11 +23,21 @@ export default function CartPopup() {
     navigate("/checkout");
   };
 
+  // Close cart when clicking on overlay (outside the cart box)
+  const handleOverlayClick = (e: any) => {
+    if (e.target === e.currentTarget) {
+      setIsCartPopupOpen(false);
+    }
+  };
+
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex justify-end">
-      <div className="w-full sm:w-96 bg-white  shadow-xl p-4 flex flex-col">
+    <div
+      className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex justify-end"
+      onClick={handleOverlayClick}
+    >
+      <div className="w-full sm:w-96 bg-white shadow-xl p-4 flex flex-col animate-slide-in-right">
         {/* Header */}
-        <div className="flex items-center justify-between  pb-3 mb-4">
+        <div className="flex items-center justify-between pb-3 mb-4">
           <h2 className="text-lg font-semibold text-slate-700">My Cart</h2>
           <button
             onClick={() => setIsCartPopupOpen(false)}

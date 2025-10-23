@@ -5,7 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { login } from "../../api/auth";
 import { useAuth } from "../../context/AuthContext";
 import GoogleSignIn from "./GoogleSignIn";
-import type { AuthResponse, LoginFormData } from "../../types/auth.types";
+import { type ApiResponse, type LoginFormData } from "../../types/auth.types";
 import { Link } from "react-router-dom";
 
 function LoginForm() {
@@ -27,7 +27,7 @@ function LoginForm() {
     mutationFn: async (data: LoginFormData) => {
       return await login(data.email, data.password);
     },
-    onSuccess: (response: AuthResponse) => {
+    onSuccess: (response: ApiResponse) => {
       if (response.Success && response.Data) {
         setCredentials({
           user: response.Data.User,
@@ -69,16 +69,9 @@ function LoginForm() {
   const isLoading = loginMutation.isPending;
 
   return (
-    <div className="space-y-4">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-        {/* Email Field */}
+    <div className="space-y-2">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
         <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-slate-700 mb-2"
-          >
-            Email Address
-          </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <FaEnvelope className="h-4 w-4 text-gray-400" />
@@ -93,7 +86,7 @@ function LoginForm() {
                   message: "Invalid email address",
                 },
               })}
-              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 ${
+              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-all duration-200 ${
                 errors.email
                   ? "border-red-300 bg-red-50"
                   : "border-gray-300 bg-white hover:border-gray-400"
@@ -103,18 +96,12 @@ function LoginForm() {
             />
           </div>
           {errors.email && (
-            <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+            <p className="mt-1 text-sm text-red-600 text-left">
+              {errors.email.message}
+            </p>
           )}
         </div>
-
-        {/* Password Field */}
         <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-slate-700 mb-2"
-          >
-            Password
-          </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <FaLock className="h-4 w-4 text-gray-400" />
@@ -129,7 +116,7 @@ function LoginForm() {
                   message: "Password must be at least 6 characters",
                 },
               })}
-              className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 ${
+              className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-all duration-200 ${
                 errors.password
                   ? "border-red-300 bg-red-50"
                   : "border-gray-300 bg-white hover:border-gray-400"
@@ -151,20 +138,16 @@ function LoginForm() {
             </button>
           </div>
           {errors.password && (
-            <p className="mt-1 text-sm text-red-600">
+            <p className="mt-1 text-sm text-red-600 text-left">
               {errors.password.message}
             </p>
           )}
         </div>
-
-        {/* Global Error */}
         {errors.root && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-3">
             <p className="text-sm text-red-600">{errors.root.message}</p>
           </div>
         )}
-
-        {/* Forgot Password Link */}
         <div className="text-right">
           <Link
             to="/forgot-password"
@@ -173,15 +156,13 @@ function LoginForm() {
             Forgot your password?
           </Link>
         </div>
-
-        {/* Submit Button */}
         <button
           type="submit"
           disabled={isLoading}
           className={`w-full py-3 px-4 rounded-lg font-medium text-white transition-all duration-200 ${
             isLoading
               ? "bg-gray-400 cursor-not-allowed"
-              : "bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 hover:shadow-lg transform hover:-translate-y-0.5"
+              : "bg-slate-500 cursor-pointer transform"
           }`}
         >
           {loginMutation.isPending ? (

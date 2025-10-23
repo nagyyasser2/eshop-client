@@ -61,9 +61,9 @@ export interface PaginatedProductsResponse {
 
 export interface ProductQueryParams {
   pageSize: number;
-  featured?: boolean;
+  featured?: boolean | null;
   active?: boolean;
-  categoryId?: number;
+  categoryId?: number | null;
   daysBack?: number;
   sortBy?: string;
   searchQuery?: string;

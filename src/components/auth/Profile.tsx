@@ -16,7 +16,7 @@ export default function Profile() {
 
   const handleEdit = () => {
     setIsEditing(true);
-    setOpenAccordion("contact"); // keep Contact & Address open
+    setOpenAccordion("contact");
   };
 
   const handleCancel = () => setIsEditing(false);
@@ -27,15 +27,15 @@ export default function Profile() {
   };
 
   return (
-    <div className=" py-4 md:py-8 px-3 md:px-4">
-      <div className="container mx-auto px-0 sm:px-4">
+    <div className="min-h-125 py-4 md:py-8 px-0">
+      <div className="container mx-auto px-2 sm:px-4">
         {/* Header */}
         <ProfileHeader user={user} isEditing={isEditing} onEdit={handleEdit} />
 
         {/* Personal Information Accordion */}
         <AccordionSection
           title="Personal Information"
-          icon={<User className="w-5 h-5 text-purple-600" />}
+          icon={<User className="w-5 h-5 text-blue-600" />}
           isOpen={openAccordion === "personal"}
           onToggle={() => handleAccordionToggle("personal")}
         >
@@ -45,7 +45,7 @@ export default function Profile() {
         {/* Contact & Address Accordion */}
         <AccordionSection
           title="Contact & Address"
-          icon={<MapPin className="w-5 h-5 text-purple-600" />}
+          icon={<MapPin className="w-5 h-5 text-blue-600" />}
           isOpen={openAccordion === "contact"}
           onToggle={() => handleAccordionToggle("contact")}
         >
@@ -60,19 +60,19 @@ export default function Profile() {
         {/* Account Settings Accordion */}
         <AccordionSection
           title="Account Settings"
-          icon={<Shield className="w-5 h-5 text-purple-600" />}
+          icon={<Shield className="w-5 h-5 text-blue-600" />}
           isOpen={openAccordion === "settings"}
           onToggle={() => handleAccordionToggle("settings")}
         >
           <div className="flex flex-col gap-2">
             <Link
               to="/change-password"
-              className="flex items-center justify-center gap-2 md:gap-3 px-1 py-2 md:px-6 md:py-2 w-fit text-sm md:text-base"
+              className="flex items-center justify-start gap-2 md:gap-3 py-2  md:py-2 w-fit text-sm md:text-base"
             >
               <Lock className="w-4 h-4 md:w-5 md:h-5" />
               Change Password
             </Link>
-            <button className="flex items-center justify-center gap-2 md:gap-3 px-1 py-2 md:px-6 md:py-2 w-fit text-sm md:text-base cursor-pointer">
+            <button className="flex items-center justify-start gap-2 md:gap-3 py-2  md:py-2 w-fit text-sm md:text-base cursor-pointer">
               <Trash2 className="w-4 h-4 md:w-5 md:h-5" />
               Delete Account
             </button>

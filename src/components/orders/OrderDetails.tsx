@@ -18,7 +18,7 @@ function getPaymentStatusStyle(status: number) {
     case 0:
       return "bg-yellow-100 text-yellow-800";
     case 1:
-      return "bg-green-100 text-green-800";
+      return "bg-blue-100 text-blue-800";
     case 2:
       return "bg-red-100 text-red-800";
     default:
@@ -91,7 +91,7 @@ export default function OrderDetails({ order }: OrderDetailsProps) {
       {order.PaymentStatus === 0 && (
         <button
           onClick={() => startCheckout(order.Id)}
-          className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 cursor-pointer"
+          className="px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"
         >
           Pay Now
         </button>

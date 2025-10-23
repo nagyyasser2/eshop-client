@@ -227,14 +227,14 @@ export default function Checkout() {
                 isComplete={false}
               >
                 <div className="space-y-4">
-                  <p className="text-gray-600">
+                  <p className="text-slate-600">
                     Please review your order details and click "Place Order" to
                     complete your purchase.
                   </p>
                   <button
                     type="submit"
                     disabled={isProcessing}
-                    className="w-full py-4 bg-gradient-to-r from-slate-600 to-slate-300 text-white rounded-lg font-bold text-lg hover:from-slate-700 hover:to-slate-400 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full py-2 bg-gradient-to-r bg-slate-600 cursor-pointer text-white rounded-lg font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {isProcessing || startingCheckOutSession ? (
                       <>
@@ -252,7 +252,7 @@ export default function Checkout() {
                     )}
                   </button>
 
-                  <p className="text-center text-sm text-gray-500">
+                  <p className="text-center text-sm text-slate-500">
                     By placing your order, you agree to our terms and conditions
                   </p>
                 </div>

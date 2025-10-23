@@ -2,18 +2,18 @@ import { Link } from "react-router-dom";
 
 const TermsOfService = () => {
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-8">
-      <div className="container mx-auto bg-white rounded-lg shadow-lg p-8 md:p-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">
+    <div className="my-4">
+      <div className="container mx-auto bg-white rounded-lg">
+        <h3 className="text-xl font-bold text-slate-600 mb-2">
           Terms of Service
-        </h1>
+        </h3>
         <p className="text-gray-600 mb-8">Last updated: October 5, 2025</p>
 
         <div className="space-y-8 text-gray-700">
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+            <h4 className="text-2xl font-semibold text-gray-900 mb-4">
               1. Acceptance of Terms
-            </h2>
+            </h4>
             <p className="mb-4">
               By accessing and using this e-commerce platform, you accept and
               agree to be bound by the terms and provision of this agreement. If
@@ -23,9 +23,9 @@ const TermsOfService = () => {
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+            <h4 className="text-2xl font-semibold text-gray-900 mb-4">
               2. Use License
-            </h2>
+            </h4>
             <p className="mb-4">
               Permission is granted to temporarily access the materials on our
               platform for personal, non-commercial transitory viewing only.
@@ -52,9 +52,9 @@ const TermsOfService = () => {
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+            <h4 className="text-2xl font-semibold text-gray-900 mb-4">
               3. Account Registration
-            </h2>
+            </h4>
             <p className="mb-4">
               To access certain features of our platform, you may be required to
               create an account. You agree to provide accurate, current, and
@@ -66,9 +66,9 @@ const TermsOfService = () => {
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+            <h4 className="text-2xl font-semibold text-gray-900 mb-4">
               4. Product Information and Pricing
-            </h2>
+            </h4>
             <p className="mb-4">
               We strive to provide accurate product descriptions and pricing
               information. However, we do not warrant that product descriptions,
@@ -80,9 +80,9 @@ const TermsOfService = () => {
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+            <h4 className="text-2xl font-semibold text-gray-900 mb-4">
               5. Orders and Payment
-            </h2>
+            </h4>
             <p className="mb-4">
               By placing an order, you represent that the products ordered will
               be used only in a lawful manner. We reserve the right to refuse or
@@ -94,9 +94,9 @@ const TermsOfService = () => {
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+            <h4 className="text-2xl font-semibold text-gray-900 mb-4">
               6. Shipping and Delivery
-            </h2>
+            </h4>
             <p className="mb-4">
               We will make every effort to deliver products within the estimated
               timeframes. However, we are not responsible for delays outside of
@@ -106,9 +106,9 @@ const TermsOfService = () => {
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+            <h4 className="text-2xl font-semibold text-gray-900 mb-4">
               7. Returns and Refunds
-            </h2>
+            </h4>
             <p className="mb-4">
               Our return and refund policy allows you to return products within
               30 days of receipt for a full refund, provided they are in
@@ -120,9 +120,9 @@ const TermsOfService = () => {
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+            <h4 className="text-2xl font-semibold text-gray-900 mb-4">
               8. Limitation of Liability
-            </h2>
+            </h4>
             <p className="mb-4">
               In no event shall our company or its suppliers be liable for any
               damages (including, without limitation, damages for loss of data
@@ -134,9 +134,9 @@ const TermsOfService = () => {
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+            <h4 className="text-2xl font-semibold text-gray-900 mb-4">
               9. User Conduct
-            </h2>
+            </h4>
             <p className="mb-4">You agree not to use the platform to:</p>
             <ul className="list-disc list-inside space-y-2 ml-4">
               <li>Violate any applicable laws or regulations</li>
@@ -148,9 +148,9 @@ const TermsOfService = () => {
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+            <h4 className="text-2xl font-semibold text-gray-900 mb-4">
               10. Intellectual Property
-            </h2>
+            </h4>
             <p className="mb-4">
               All content on this platform, including but not limited to text,
               graphics, logos, images, and software, is the property of our
@@ -161,9 +161,9 @@ const TermsOfService = () => {
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+            <h4 className="text-2xl font-semibold text-gray-900 mb-4">
               11. Modifications to Terms
-            </h2>
+            </h4>
             <p className="mb-4">
               We reserve the right to revise these terms of service at any time
               without notice. By using this platform, you agree to be bound by
@@ -172,9 +172,9 @@ const TermsOfService = () => {
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+            <h4 className="text-2xl font-semibold text-gray-900 mb-4">
               12. Contact Information
-            </h2>
+            </h4>
             <p className="mb-4">
               If you have any questions about these Terms of Service, please
               contact us at support@yourcompany.com

@@ -58,20 +58,15 @@ export default function ResetPassword() {
   // Check if userId and token are present
   if (!userId || !token) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
-          <div className="mx-auto w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
-            <Lock className="w-8 h-8 text-red-600" />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Invalid Reset Link
-          </h2>
+      <div className="min-h-125 flex items-center justify-center px-4 text-slate-600">
+        <div className="max-w-md w-full bg-white rounded-2xl  p-8 text-center">
+          <h2 className="text-2xl font-bold  mb-2">Invalid Reset Link</h2>
           <p className="text-gray-600 mb-6">
             This password reset link is invalid or has expired.
           </p>
           <button
             onClick={() => navigate("/forgot-password")}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200"
+            className="bg-slate-600 hover:bg-slate-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200"
           >
             Request New Link
           </button>
@@ -82,8 +77,8 @@ export default function ResetPassword() {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+      <div className="min-h-125 flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white rounded-2xl  p-8">
           <div className="text-center">
             <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
               <CheckCircle className="w-10 h-10 text-green-600" />
@@ -110,8 +105,8 @@ export default function ResetPassword() {
   const password = watch("newPassword");
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+    <div className="min-h-125 flex items-center justify-center px-4">
+      <div className="max-w-md w-full bg-white rounded-2xl  p-8">
         <div className="text-center mb-8">
           <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
             <Lock className="w-8 h-8 text-blue-600" />

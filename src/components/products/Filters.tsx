@@ -38,7 +38,6 @@ const Filters: React.FC<FiltersProps> = ({
   isFiltersOpen,
   toggleFilters,
   initialCategoryId,
-  initialCategoryName,
 }) => {
   const queryClient = useQueryClient();
 
@@ -51,15 +50,12 @@ const Filters: React.FC<FiltersProps> = ({
   );
   const [selectedDateRange, setSelectedDateRange] = useState("");
 
-  // Dropdown states for desktop
-  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] =
-    useState<boolean>(false);
+  // Dropdown states for desktop (only for price and date now)
   const [isPriceDropdownOpen, setIsPriceDropdownOpen] =
     useState<boolean>(false);
   const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false);
 
   // Refs for click outside detection
-  const categoryRef = useRef<HTMLDivElement>(null);
   const priceRef = useRef<HTMLDivElement>(null);
   const dateRef = useRef<HTMLDivElement>(null);
 
@@ -96,12 +92,6 @@ const Filters: React.FC<FiltersProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        categoryRef.current &&
-        !categoryRef.current.contains(event.target as Node)
-      ) {
-        setIsCategoryDropdownOpen(false);
-      }
       if (
         priceRef.current &&
         !priceRef.current.contains(event.target as Node)
@@ -150,13 +140,6 @@ const Filters: React.FC<FiltersProps> = ({
     };
   }, [isFiltersOpen]);
 
-  const selectedCategoryName =
-    categoryId.toString() === "All"
-      ? "All Categories"
-      : categories.find((c) => c.Id?.toString() === categoryId.toString())
-          ?.Name ||
-        (initialCategoryId ? `${initialCategoryName}` : "All Categories");
-
   return (
     <>
       {/* Mobile backdrop */}
@@ -167,198 +150,166 @@ const Filters: React.FC<FiltersProps> = ({
         ></div>
       )}
 
-      {/* Desktop: Horizontal Flex Layout */}
-      <div className="hidden lg:flex gap-1 items-center mb-6 flex-wrap">
-        {/* Header */}
+      {/* Desktop: Filters Layout */}
+      <div className="hidden lg:block mb-6 lg:flex items-start justify-between gap-10">
+        {/* Categories - Horizontal scrollable */}
+        <div className="mb-4">
+          {loading ? (
+            <div className="flex gap-2">
+              <CategorySkeleton layout="horizontal" />
+            </div>
+          ) : error ? (
+            <div className="text-red-500">{error}</div>
+          ) : (
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+              <button
+                onClick={() => setCategoryId("All")}
+                className={`px-4 py-2 rounded-lg whitespace-nowrap transition-all duration-200 ${
+                  categoryId === "All"
+                    ? "bg-slate-600 text-white font-semibold shadow-md"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                All
+              </button>
+              {categories.map((categoryItem) => (
+                <button
+                  key={categoryItem.Id}
+                  onClick={() => setCategoryId(categoryItem.Id?.toString())}
+                  className={`px-4 py-2 rounded-lg whitespace-nowrap transition-all duration-200 ${
+                    categoryId === categoryItem.Id?.toString()
+                      ? "bg-slate-600 text-white font-semibold shadow-md"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  {categoryItem.Name}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
 
-        {/* Category Dropdown */}
-        <div className="relative" ref={categoryRef}>
-          <button
-            onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}
-            className="px-2 py-2.5 rounded-lg  focus:outline-none transition-all duration-200 flex items-center gap-2 justify-between"
-          >
-            <span className="font-medium text-slate-500">
-              {selectedCategoryName}
-            </span>
-            <svg
-              className={`w-4 h-4 transition-transform duration-200 ${
-                isCategoryDropdownOpen ? "rotate-180" : ""
-              }`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+        {/* Price and Date Dropdowns */}
+        <div className="flex gap-2 items-center flex-wrap">
+          {/* Price Dropdown */}
+          <div className="relative" ref={priceRef}>
+            <button
+              onClick={() => setIsPriceDropdownOpen(!isPriceDropdownOpen)}
+              className="px-4 py-2 rounded-lg bg-gray-100  focus:outline-none hover:bg-gray-200 transition-all duration-200 flex items-center gap-2"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </button>
-          {isCategoryDropdownOpen && (
-            <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto">
-              {loading ? (
-                <div className="p-4">
-                  <CategorySkeleton />
+              <span className="font-normal text-gray-700">
+                {selectedPriceRange || "Any Price"}
+              </span>
+              <svg
+                className={`w-4 h-4 transition-transform duration-200 ${
+                  isPriceDropdownOpen ? "rotate-180" : ""
+                }`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+            {isPriceDropdownOpen && (
+              <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg  z-50 max-h-80 overflow-y-auto">
+                <div
+                  className={`py-2 px-4 cursor-pointer hover:bg-blue-50 transition-colors ${
+                    selectedPriceRange === ""
+                      ? "bg-blue-50 text-blue-600 font-semibold"
+                      : "text-gray-700"
+                  }`}
+                  onClick={() => {
+                    setSelectedPriceRange("");
+                    setIsPriceDropdownOpen(false);
+                  }}
+                >
+                  Any Price
                 </div>
-              ) : error ? (
-                <div className="p-4 text-red-500">{error}</div>
-              ) : (
-                <>
+                {priceRanges.map((range) => (
                   <div
+                    key={range.label}
                     className={`py-2 px-4 cursor-pointer hover:bg-blue-50 transition-colors ${
-                      categoryId === "All"
+                      selectedPriceRange === range.label
                         ? "bg-blue-50 text-blue-600 font-semibold"
                         : "text-gray-700"
                     }`}
                     onClick={() => {
-                      setCategoryId("All");
-                      setIsCategoryDropdownOpen(false);
+                      setSelectedPriceRange(range.label);
+                      setIsPriceDropdownOpen(false);
                     }}
                   >
-                    All Categories
+                    {range.label}
                   </div>
-                  {categories.map((categoryItem) => (
-                    <div
-                      key={categoryItem.Id}
-                      className={`py-2 px-4 cursor-pointer hover:bg-blue-50 transition-colors ${
-                        categoryId === categoryItem.Id?.toString()
-                          ? "bg-blue-50 text-blue-600 font-semibold"
-                          : "text-gray-700"
-                      }`}
-                      onClick={() => {
-                        setCategoryId(categoryItem.Id?.toString());
-                        setIsCategoryDropdownOpen(false);
-                      }}
-                    >
-                      {categoryItem.Name}
-                    </div>
-                  ))}
-                </>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Price Dropdown */}
-        <div className="relative" ref={priceRef}>
-          <button
-            onClick={() => setIsPriceDropdownOpen(!isPriceDropdownOpen)}
-            className="px-2 py-2.5 rounded-lg  focus:outline-none   focus:border-transparent transition-all duration-200 flex items-center gap-2"
-          >
-            <span className="font-medium text-slate-500">
-              {selectedPriceRange || "Any Price"}
-            </span>
-            <svg
-              className={`w-4 h-4 transition-transform duration-200 ${
-                isPriceDropdownOpen ? "rotate-180" : ""
-              }`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </button>
-          {isPriceDropdownOpen && (
-            <div className="absolute top-full left-0 mt-2 w-56 bg-white  rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto">
-              <div
-                className={`py-2 px-4 cursor-pointer hover:bg-blue-50 transition-colors ${
-                  selectedPriceRange === ""
-                    ? "bg-blue-50 text-blue-600 font-semibold"
-                    : "text-gray-700"
-                }`}
-                onClick={() => {
-                  setSelectedPriceRange("");
-                  setIsPriceDropdownOpen(false);
-                }}
-              >
-                Any Price
+                ))}
               </div>
-              {priceRanges.map((range) => (
+            )}
+          </div>
+
+          {/* Date Published Dropdown */}
+          <div className="relative" ref={dateRef}>
+            <button
+              onClick={() => setIsDateDropdownOpen(!isDateDropdownOpen)}
+              className="px-4 py-2 rounded-lg bg-gray-100 focus:outline-none hover:border-gray-200 transition-all duration-200 flex items-center gap-2"
+            >
+              <span className="font-normal text-gray-700">
+                {selectedDateRange || "Any Time"}
+              </span>
+              <svg
+                className={`w-4 h-4 transition-transform duration-200 ${
+                  isDateDropdownOpen ? "rotate-180" : ""
+                }`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+            {isDateDropdownOpen && (
+              <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg  z-50 max-h-80 overflow-y-auto">
                 <div
-                  key={range.label}
                   className={`py-2 px-4 cursor-pointer hover:bg-blue-50 transition-colors ${
-                    selectedPriceRange === range.label
+                    selectedDateRange === ""
                       ? "bg-blue-50 text-blue-600 font-semibold"
                       : "text-gray-700"
                   }`}
                   onClick={() => {
-                    setSelectedPriceRange(range.label);
-                    setIsPriceDropdownOpen(false);
-                  }}
-                >
-                  {range.label}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Date Published Dropdown */}
-        <div className="relative" ref={dateRef}>
-          <button
-            onClick={() => setIsDateDropdownOpen(!isDateDropdownOpen)}
-            className="px-2 py-2.5  rounded-lg  focus:outline-none  focus:border-transparent transition-all duration-200 flex items-center gap-2"
-          >
-            <span className="font-medium text-slate-500">
-              {selectedDateRange || "Any Time"}
-            </span>
-            <svg
-              className={`w-4 h-4 transition-transform duration-200 ${
-                isDateDropdownOpen ? "rotate-180" : ""
-              }`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </button>
-          {isDateDropdownOpen && (
-            <div className="absolute top-full left-0 mt-2 w-56 bg-white  rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto">
-              <div
-                className={`py-2 px-4 cursor-pointer hover:bg-blue-50 transition-colors ${
-                  selectedDateRange === ""
-                    ? "bg-blue-50 text-blue-600 font-semibold"
-                    : "text-gray-700"
-                }`}
-                onClick={() => {
-                  setSelectedDateRange("");
-                  setIsDateDropdownOpen(false);
-                }}
-              >
-                Any Time
-              </div>
-              {dateRanges.map((range) => (
-                <div
-                  key={range.label}
-                  className={`py-2 px-4 cursor-pointer hover:bg-blue-50 transition-colors ${
-                    selectedDateRange === range.label
-                      ? "bg-blue-50 text-blue-600 font-semibold"
-                      : "text-gray-700"
-                  }`}
-                  onClick={() => {
-                    setSelectedDateRange(range.label);
+                    setSelectedDateRange("");
                     setIsDateDropdownOpen(false);
                   }}
                 >
-                  {range.label}
+                  Any Time
                 </div>
-              ))}
-            </div>
-          )}
+                {dateRanges.map((range) => (
+                  <div
+                    key={range.label}
+                    className={`py-2 px-4 cursor-pointer hover:bg-blue-50 transition-colors ${
+                      selectedDateRange === range.label
+                        ? "bg-blue-50 text-blue-600 font-semibold"
+                        : "text-gray-700"
+                    }`}
+                    onClick={() => {
+                      setSelectedDateRange(range.label);
+                      setIsDateDropdownOpen(false);
+                    }}
+                  >
+                    {range.label}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -395,7 +346,7 @@ const Filters: React.FC<FiltersProps> = ({
               Category
             </label>
             {loading ? (
-              <CategorySkeleton />
+              <CategorySkeleton layout="vertical" />
             ) : error ? (
               <div className="text-red-500">{error}</div>
             ) : (

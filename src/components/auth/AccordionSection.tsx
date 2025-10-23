@@ -32,20 +32,20 @@ export default function AccordionSection({
   };
 
   return (
-    <div className="rounded-2xl p-4 mb-3 border border-purple-100 bg-white transition-all duration-200">
+    <div className="rounded-2xl py-2 mb-3  transition-all duration-200">
       <button
         onClick={handleToggle}
         className="flex items-center justify-between w-full text-left"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center">
             {icon}
           </div>
-          <h4 className="text-lg md:text-xl font-semibold text-gray-900">
+          <h4 className="text-lg md:text-xl font-semibold text-slate-800">
             {title}
           </h4>
         </div>
-        <div className="text-purple-500">
+        <div className="text-blue-500">
           {isOpen ? (
             <ChevronUp className="w-5 h-5" />
           ) : (

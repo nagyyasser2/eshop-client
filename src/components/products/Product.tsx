@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { ShoppingCart, Check, Eye } from "lucide-react";
 import { SERVER_URL } from "../../api/api";
 import { useCart } from "../../context/CartContext";
 import type { CartItem } from "../../types/cart.types";
 import type { ProductDto } from "../../types/product.types";
 import productPlaceHolder from "../../assets/productPlaceHolder.svg";
 import { useProductContext } from "../../context/ProductContext";
+import { useNavigate } from "react-router-dom";
 
 interface ProductProps {
   product: ProductDto;
@@ -14,11 +14,10 @@ interface ProductProps {
 function Product({ product }: ProductProps) {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [addedSuccess, setAddedSuccess] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isTouched, setIsTouched] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const { addToCart } = useCart();
   const { setProduct, setIsProductPopupOpen } = useProductContext();
+  const navigate = useNavigate();
 
   const getImageUrl = (imagePath?: string): string => {
     if (imagePath) {
@@ -28,6 +27,7 @@ function Product({ product }: ProductProps) {
     }
     return productPlaceHolder;
   };
+
   const primaryImage = getImageUrl(product.ProductImages?.[0]?.Path);
 
   const handleAddToCart = async (quantity: number) => {
@@ -53,149 +53,85 @@ function Product({ product }: ProductProps) {
     }, 2000);
   };
 
-  // Handle touch events for mobile
-  const handleTouchStart = () => {
-    setIsTouched(true);
+  const handleImageClick = () => {
+    setProduct(product);
+    setIsProductPopupOpen(true);
   };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    setTimeout(() => setIsTouched(false), 2000);
+  const handleBagClick = () => {
+    navigate(`/bag/${product.Id}`);
   };
-
-  // Check if we're on a touch device
-  const isTouchDevice = () => {
-    return "ontouchstart" in window || navigator.maxTouchPoints > 0;
-  };
-
-  // Determine if overlay should be visible
-  const shouldShowOverlay =
-    isExpanded || isTouched || (isHovered && !isTouchDevice());
 
   return (
-    <div
-      className={`group relative w-full aspect-square overflow-hidden rounded-3xl bg-gradient-to-br from-slate-100 to-slate-200  transition-all duration-500 ${
-        isExpanded ? "ring-2 ring-blue-500" : ""
-      }`}
-      onClick={(e) => {
-        if (e.target === e.currentTarget && !isTouchDevice()) {
-          setIsExpanded(!isExpanded);
-        }
-      }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-    >
-      {/* Primary Product Image */}
-      <img
-        src={primaryImage}
-        alt={product.Name}
-        className={`w-full h-full object-cover transition-opacity duration-300 ${
-          isExpanded || isTouched ? "opacity-0" : "group-hover:opacity-0"
-        }`}
-        loading="lazy"
-      />
-
-      {/* Fallback scaling for primary when no secondary image */}
-
-      <img
-        src={primaryImage}
-        alt={product.Name}
-        className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ${
-          isExpanded || isTouched
-            ? "scale-110"
-            : "group-hover:scale-110 scale-100"
-        }`}
-        loading="lazy"
-      />
-
-      {/* Overlay on Hover/Touch */}
+    <div className="group relative w-full flex flex-col">
+      {/* Image Container */}
       <div
-        className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent transition-opacity duration-300 ${
-          shouldShowOverlay ? "opacity-100" : "opacity-0"
-        }`}
-      />
-
-      {/* Category Badge - Top Right (always visible) */}
-      <div className="absolute top-4 right-4 z-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-400 text-white text-sm  rounded-full shadow-md backdrop-blur-sm">
-          {product.Category?.Name || "Premium"}
-        </div>
-      </div>
-
-      {/* Actions Overlay - Appears on Hover/Touch */}
-      <div
-        className={`absolute inset-0 z-3 flex flex-col items-center justify-center gap-4 transition-all duration-300 transform ${
-          shouldShowOverlay
-            ? "opacity-100 scale-100 pointer-events-auto"
-            : "opacity-0 scale-95 pointer-events-none"
-        }`}
+        className="relative w-full aspect-square overflow-hidden rounded-3xl bg-gradient-to-br from-slate-100 to-slate-200 cursor-pointer"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Product Info */}
+        {/* Product Image */}
+        <img
+          src={primaryImage}
+          alt={product.Name}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          loading="lazy"
+        />
+
+        {/* Hover Overlay */}
         <div
-          className={`text-center text-white mb-2 transition-transform duration-500 ${
-            shouldShowOverlay ? "translate-y-0" : "translate-y-4"
+          onClick={handleImageClick}
+          className={`absolute inset-0 cursor-zoom-in bg-gradient-to-t from-black/60 via-black/30 to-transparent transition-opacity duration-300 ${
+            isHovered ? "opacity-100" : "opacity-0"
+          }`}
+        />
+
+        {/* Add to Cart Button - Appears on Hover at Bottom */}
+        <div
+          className={`absolute bottom-0 left-0 right-0 p-4 transition-all duration-300 transform ${
+            isHovered
+              ? "opacity-100 translate-y-0 pointer-events-auto"
+              : "opacity-0 translate-y-4 pointer-events-none"
           }`}
         >
-          <h3 className="text-xl sm:text-2xl font-bold mb-1 line-clamp-2">
-            {product.Name}
-          </h3>
-          <p className="text-sm sm:text-base text-gray-200 mb-3 line-clamp-2">
-            {product.Description}
-          </p>
-          <span className="text-2xl sm:text-3xl f text-blue-500">
-            ${product.Price?.toLocaleString()}
-          </span>
-        </div>
-
-        {/* Action Buttons */}
-        <div
-          className={`flex gap-3 transition-transform duration-500 delay-100 ${
-            shouldShowOverlay ? "translate-y-0" : "translate-y-4"
-          }`}
-        >
-          {/* View Button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setProduct(product);
-              setIsProductPopupOpen(true);
-            }}
-            title="View Details"
-            className="p-3 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 text-white shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300"
-          >
-            <Eye className="w-5 h-5" />
-          </button>
-
-          {/* Add to Cart Button */}
           <button
             onClick={(e) => {
               e.stopPropagation();
               handleAddToCart(1);
             }}
             disabled={isAddingToCart}
-            className={`px-5 sm:px-7 py-3 rounded-full font-bold text-white shadow-lg hover:shadow-xl transform transition-all duration-300 flex items-center gap-2 ${
-              addedSuccess ? "bg-blue-500" : "bg-blue-400"
-            } ${isAddingToCart ? "opacity-75 scale-95" : ""}`}
-            title={addedSuccess ? "Added to cart!" : "Add to cart"}
+            className={`w-full px-6 py-3 rounded-full font-normal text-slate-600  flex items-center justify-center gap-2 ${
+              addedSuccess
+                ? "bg-slate-600 text-white"
+                : "text-slate-600 bg-white"
+            } ${isAddingToCart && "opacity-75 scale-95"}`}
           >
             {addedSuccess ? (
               <>
-                <Check className="w-5 h-5" />
-                <span className="hidden sm:inline text-sm">Added!</span>
+                <span className="text-sm sm:text-base">Added.</span>
               </>
             ) : isAddingToCart ? (
               <>
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                <span className="hidden sm:inline text-sm">Adding...</span>
+                <span className="text-sm sm:text-base">Adding...</span>
               </>
             ) : (
               <>
-                <ShoppingCart className="w-5 h-5" />
+                <span className="text-sm sm:text-base">Add to Cart</span>
               </>
             )}
           </button>
         </div>
+      </div>
+
+      {/* Product Details - Always Visible Below Image */}
+      <div className="mt-4 text-center cursor-pointer" onClick={handleBagClick}>
+        <h3 className="text-lg sm:text-xl font-semibold text-slate-600 mb-2 line-clamp-2">
+          {product.Name}
+        </h3>
+        <p className="text-xl sm:text-2xl font-semibold text-slate-600">
+          ${product.Price?.toLocaleString()}
+        </p>
       </div>
     </div>
   );

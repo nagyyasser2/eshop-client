@@ -37,10 +37,10 @@ export default function ForgotPassword() {
   if (isSuccess) {
     return (
       <div className="flex items-center justify-center my-8 px-4">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+        <div className="max-w-md w-full bg-white rounded-2xl  p-8">
           <div className="text-center">
-            <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-              <CheckCircle className="w-10 h-10 text-green-600" />
+            <div className="mx-auto w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+              <CheckCircle className="w-10 h-10 text-blue-600" />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
               Check Your Email
@@ -70,15 +70,10 @@ export default function ForgotPassword() {
   }
 
   return (
-    <div className=" flex items-center justify-center my-8 px-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+    <div className="flex items-center justify-center my-8 px-4 text-slate-600">
+      <div className="max-w-md w-full bg-white rounded-2xl  p-8">
         <div className="text-center mb-8">
-          <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-            <Mail className="w-8 h-8 text-blue-600" />
-          </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Forgot Password?
-          </h1>
+          <h1 className="text-2xl font-semibold  mb-2">Forgot Password?</h1>
           <p className="text-gray-600">
             No worries, we'll send you reset instructions
           </p>
@@ -135,7 +130,7 @@ export default function ForgotPassword() {
           <button
             type="submit"
             disabled={mutation.isPending}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-slate-600 hover:bg-slate-700 text-white font-semibold py-3 rounded-lg transition duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {mutation.isPending ? (
               <>

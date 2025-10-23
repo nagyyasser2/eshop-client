@@ -43,7 +43,7 @@ function PaymentSuccess({
   }
 
   return (
-    <div className="py-5 bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center px-4">
+    <div className="min-h-100 py-5 bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         {/* Success Icon */}
         <div className="text-center mb-8">

@@ -129,7 +129,7 @@ function Navbar() {
                   </button>
 
                   <div
-                    className={`absolute right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-gray-200 py-0 z-50 transition-all duration-200 ${
+                    className={`absolute right-0 mt-2 w-40 bg-white  rounded-md border border-gray-200 py-0 z-50 transition-all duration-200 ${
                       isUserDropdownOpen
                         ? "opacity-100 visible transform translate-y-0"
                         : "opacity-0 invisible transform -translate-y-2"
@@ -138,7 +138,7 @@ function Navbar() {
                     <div className="">
                       <Link
                         to="/profile"
-                        className="flex items-center space-x-3 px-4 py-3 text-slate-700 rounded-t-2xl hover:bg-slate-50 hover:text-slate-700 transition-colors duration-200"
+                        className="flex items-center space-x-3 px-4 py-3 text-slate-700 rounded-t-2xl hover:text-slate-700 transition-colors duration-200"
                         onClick={() => setIsUserDropdownOpen(false)}
                       >
                         <User className="h-4 w-4" />
@@ -148,7 +148,7 @@ function Navbar() {
 
                       <button
                         onClick={handleLogout}
-                        className="flex items-center space-x-3 w-full cursor-pointer  rounded-b-2xl px-4 py-3 text-slate-700 hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
+                        className="flex items-center space-x-3 w-full cursor-pointer  rounded-b-2xl px-4 py-3 text-slate-700 hover:text-slate-700 transition-colors duration-200"
                       >
                         <FaSignOutAlt className="h-4 w-4" />
                         <span>Sign Out</span>
@@ -175,7 +175,7 @@ function Navbar() {
         {/* Mobile Menu - Dropdown */}
         <div
           ref={mobileMenuRef}
-          className={`md:hidden mt-2 bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden transition-all duration-300 ease-in-out ${
+          className={`md:hidden mt-2 bg-white rounded-xl border border-gray-200  overflow-hidden transition-all duration-300 ease-in-out ${
             isMobileMenuOpen
               ? "opacity-100 max-h-96 visible"
               : "opacity-0 max-h-0 invisible"

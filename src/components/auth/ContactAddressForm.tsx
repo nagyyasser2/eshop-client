@@ -156,7 +156,7 @@ export default function ContactAddressForm({
         <button
           type="submit"
           disabled={mutation.isPending}
-          className="flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm md:text-base"
+          className="flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 bg-gradient-to-r bg-blue-500 text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm md:text-base"
         >
           {mutation.isPending ? (
             <>
@@ -203,7 +203,7 @@ function FormField({
       <input
         type={type}
         {...register(name, validation)}
-        className="w-full px-3 py-2 md:px-4 md:py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 text-sm md:text-base"
+        className="w-full px-3 py-2 md:px-4 md:py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-sm md:text-base"
         placeholder={placeholder}
       />
       {error && (
