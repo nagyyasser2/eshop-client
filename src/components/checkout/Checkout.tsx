@@ -1,4 +1,4 @@
-import { Check, CreditCard, MapPin, ShoppingBag } from "lucide-react";
+import { Check, CreditCard, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import AccordionSection from "./AccordionSection";
@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Checkout() {
   const [isProcessing, setIsProcessing] = useState(false);
-  const { cart, clearCart, createOrder } = useCart();
+  const { cart, createOrder } = useCart();
   const navigate = useNavigate();
 
   const formMethods = useForm<CheckoutData>({
@@ -47,7 +47,6 @@ export default function Checkout() {
     saveCompletedSections,
     getActiveSection,
     getCompletedSections,
-    clearCheckoutData,
     hasSavedData,
   } = useCheckoutPersistence(formMethods);
 
@@ -169,22 +168,19 @@ export default function Checkout() {
   const totals = calculateTotals();
 
   return (
-    <div className="bg-gradient-to-br from-purple-50 via-pink-50 to-white py-4 px-0 ">
+    <div className=" py-4 px-0 ">
       <div className="container mx-auto p-4">
         <div className="flex items-center gap-3 mb-8">
-          <ShoppingBag className="w-8 h-8 text-purple-600" />
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-            Checkout
-          </h1>
+          <h3 className="text-xl font-semibold text-slate-600">Checkout</h3>
           {hasSavedData() && (
-            <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">
+            <span className="text-xs bg-slate-100 text-slate-500 px-2 py-1 rounded-full">
               Auto-saved
             </span>
           )}
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             <div className="lg:col-span-2 space-y-4">
               {/* Shipping Address Accordion */}
               <AccordionSection
@@ -198,7 +194,7 @@ export default function Checkout() {
                 <button
                   type="button"
                   onClick={() => handleSectionToggle("payment")}
-                  className="mt-4 px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-400 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition font-medium"
+                  className="mt-4 px-6 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg transition-colors cursor-pointer font-medium"
                 >
                   Continue to Payment
                 </button>
@@ -216,7 +212,7 @@ export default function Checkout() {
                 <button
                   type="button"
                   onClick={() => handleSectionToggle("review")}
-                  className="mt-4 px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-400 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition font-medium"
+                  className="mt-4 px-6 py-2 bg-slate-600 hover:bg-slate-700 text-white  rounded-lg transition-colors cursor-pointer font-medium"
                 >
                   Continue to Review
                 </button>
@@ -238,7 +234,7 @@ export default function Checkout() {
                   <button
                     type="submit"
                     disabled={isProcessing}
-                    className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-300 text-white rounded-lg font-bold text-lg hover:from-purple-700 hover:to-pink-400 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full py-4 bg-gradient-to-r from-slate-600 to-slate-300 text-white rounded-lg font-bold text-lg hover:from-slate-700 hover:to-slate-400 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {isProcessing || startingCheckOutSession ? (
                       <>

@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { FaPlus, FaMinus } from "react-icons/fa";
 
 interface FAQItem {
   id: number;
@@ -49,16 +48,14 @@ function FAQSection() {
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-white py-12 ">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="bg-white">
+      <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-blue-300 via-purple-400 to-pink-300 bg-clip-text text-transparent">
-              Frequently Asked Questions
-            </span>
-          </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+        <div className="text-left mb-12">
+          <h4 className="text-md sm:text-xl lg:text-2xl font-normal mb-3 sm:mb-4 sm:px-0 text-slate-500">
+            <span>Frequently Asked Questions</span>
+          </h4>
+          <p className="text-sm sm:text-base md:text-lg text-slate-500 leading-relaxed max-w-2xl">
             Find quick answers to common questions about our products, shipping,
             returns, and more. Can't find what you're looking for? Contact our
             support team.
@@ -66,23 +63,23 @@ function FAQSection() {
         </div>
 
         {/* FAQ Items */}
-        <div className=" mx-auto">
+        <div className="mx-auto">
           {faqs.map((faq, index) => (
             <div
               key={faq.id}
               className="border-b border-gray-200 last:border-b-0"
             >
               <button
-                className="flex justify-between items-center w-full py-5 text-left font-medium text-gray-900 hover:text-blue-600 transition-colors duration-200"
+                className="flex justify-between items-center w-full py-5 text-left font-semibold text-slate-500 hover:text-blue-500 transition-colors duration-200"
                 onClick={() => toggleFAQ(index)}
                 aria-expanded={activeIndex === index}
                 aria-controls={`faq-answer-${faq.id}`}
               >
                 <span>{faq.question}</span>
                 {activeIndex === index ? (
-                  <FaChevronUp className="text-blue-600 flex-shrink-0 ml-4" />
+                  <FaMinus className="text-blue-500 flex-shrink-0 ml-4" />
                 ) : (
-                  <FaChevronDown className="text-gray-500 flex-shrink-0 ml-4" />
+                  <FaPlus className="text-gray-500 flex-shrink-0 ml-4" />
                 )}
               </button>
               <div

@@ -1,15 +1,15 @@
-<svg viewBox="15 5 170 45" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg">
   <!-- Brand Name -->
   <text x="20" y="40"
         font-family="Poppins, sans-serif"
         font-weight="500"
         font-size="40"
-        fill="#5b6678ff">
+        fill="#333942ff">
     Ovelle
   </text>
 
-  <!-- Accent line only under the right side -->
-  <path d="M110 42 Q140 25, 180 42"
+  <!-- Balanced accent line under the right side -->
+  <path d="M120 48 Q145 33, 180 48"
         stroke="#2d68bbff"
         stroke-width="4"
         fill="none"

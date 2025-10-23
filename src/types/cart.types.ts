@@ -7,7 +7,7 @@ export interface CartItem {
   ProductName: string;
   ProductSku: string;
   ProductId: number;
-  ImageUrl?: string;
+  ImagePath: string;
   CategoryName?: string;
   CreatedAt?: string | Date;
   UpdatedAt?: string | Date;
@@ -84,6 +84,8 @@ export interface CartContextType {
   updateQuantity: (id: number, quantity: number) => void;
   clearCart: () => void;
   isLoading: boolean;
+  isCartPopupOpen: boolean;
+  setIsCartPopupOpen: (isOpen: boolean) => void;
 
   // New methods for checkout
   calculateTotals: (

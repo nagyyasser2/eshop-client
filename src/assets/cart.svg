@@ -1,0 +1,16 @@
+<!-- Save as Cart.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" aria-labelledby="cartTitle" role="img">
+  <title id="cartTitle">Shopping cart</title>
+  <!-- Cart basket -->
+  <path d="M3 3h2.4l1.6 8.6A2 2 0 0 0 9 14h9.5a1 1 0 0 0 .96-.73L21.9 7H6"
+        fill="none"
+        stroke="#5796FA"
+        stroke-width="1.6"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+  <!-- Handle / top -->
+  <path d="M7 3l1 0" fill="none" stroke="#5796FA" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- Wheels -->
+  <circle cx="10.5" cy="18.5" r="1.25" fill="#5796FA"/>
+  <circle cx="18.5" cy="18.5" r="1.25" fill="#5796FA"/>
+</svg>

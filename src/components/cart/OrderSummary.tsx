@@ -29,13 +29,13 @@ const OrderSummary = ({
   return (
     <div className="lg:col-span-1">
       <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 sticky top-25">
-        <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-6">
-          Order Summary
+        <h2 className="text-xl font-bold bg-gradient-to-r from-slate-600 to-pink-400 bg-clip-text text-transparent mb-6">
+          Cart Summary
         </h2>
 
         {/* Items Info */}
         <div className="flex items-center text-gray-600 mb-4">
-          <Package className="w-5 h-5 text-purple-500 mr-2" />
+          <Package className="w-5 h-5 text-slate-600 mr-2" />
           <span>
             {itemCount} {itemCount === 1 ? "item" : "items"} in cart
           </span>
@@ -43,11 +43,11 @@ const OrderSummary = ({
 
         {/* Breakdown */}
         <div className="space-y-3 mb-6 pb-6 border-b border-gray-200 text-sm">
-          <div className="flex justify-between text-gray-600">
+          <div className="flex justify-between text-slate-600">
             <span>Subtotal</span>
             <span>{formatCurrency(subtotal)}</span>
           </div>
-          <div className="flex justify-between text-gray-600">
+          <div className="flex justify-between text-slate-600">
             <span>Shipping</span>
             <span>{shipping > 0 ? formatCurrency(shipping) : "Free"}</span>
           </div>
@@ -58,7 +58,7 @@ const OrderSummary = ({
             </div>
           )}
           {tax > 0 && (
-            <div className="flex justify-between text-gray-600">
+            <div className="flex justify-between text-slate-600">
               <span>Tax</span>
               <span>{formatCurrency(tax)}</span>
             </div>
@@ -67,25 +67,23 @@ const OrderSummary = ({
 
         {/* Total */}
         <div className="flex justify-between items-center text-xl font-bold mb-6">
-          <span className="text-gray-800">Total</span>
-          <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-            {formatCurrency(total)}
-          </span>
+          <span className="text-slate-700">Total</span>
+          <span className="text-slate-600">{formatCurrency(total)}</span>
         </div>
 
         {/* Payment Method */}
-        <div className="flex items-center p-4 bg-purple-50 rounded-lg border border-purple-200 mb-4">
-          <CreditCard size={18} className="text-purple-600 mr-2" />
-          <p className="text-sm text-purple-800">
+        <div className="flex items-center p-4 bg-slate-50 rounded-lg border border-slate-200 mb-4">
+          <CreditCard size={18} className="text-slate-600 mr-2" />
+          <p className="text-sm text-slate-800">
             Payment Method: <strong>{paymentMethod}</strong>
           </p>
         </div>
 
         {/* Info Boxes */}
-        <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+        <div className="mb-4 p-4 bg-slate-50 rounded-lg border border-blue-200">
           <div className="flex items-start space-x-2">
-            <Truck size={20} className="text-blue-600 mt-0.5 flex-shrink-0" />
-            <p className="text-sm text-blue-800">
+            <Truck size={20} className="text-slate-600 mt-0.5 flex-shrink-0" />
+            <p className="text-sm text-slate-800">
               💡 <strong>Place Order First</strong> — Your order will be
               confirmed immediately. You can pay online later in{" "}
               <em>My Orders</em> or on delivery.

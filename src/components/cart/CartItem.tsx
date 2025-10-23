@@ -1,3 +1,4 @@
+import { SERVER_URL } from "../../api/api";
 import type { CartItem } from "../../types/cart.types";
 import { formatCurrency } from "../../utils/formatCurrency";
 import QuantityControls from "./QuantityControls";
@@ -17,7 +18,7 @@ const CartItemComponent = ({
 }: CartItemProp) => {
   return (
     <div
-      className={`p-4 sm:p-6 transition-all duration-300 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50
+      className={`transition-all duration-300  mb-2
         ${
           removingItems.has(item.ProductId)
             ? "opacity-50 scale-95"
@@ -29,10 +30,7 @@ const CartItemComponent = ({
         {/* Product Image */}
         <div className="flex-shrink-0 self-center sm:self-auto">
           <img
-            src={
-              item.ImageUrl ||
-              `https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=150&h=150&fit=crop`
-            }
+            src={`${SERVER_URL + item.ImagePath}`}
             alt={item.ProductName}
             className="w-24 h-24 sm:w-20 sm:h-20 rounded-xl object-cover shadow-sm border border-gray-100"
           />

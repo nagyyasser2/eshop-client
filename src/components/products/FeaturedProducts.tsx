@@ -43,54 +43,47 @@ function FeaturedProducts() {
   const products = data?.data ?? [];
 
   return (
-    <div className="container mx-auto px-4">
-      {/* Header */}
-      <div className="flex items-center justify-center mb-10">
-        <div className="text-center">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-2">
-            <span className="bg-gradient-to-r from-blue-300 via-purple-400 to-pink-300 bg-clip-text text-transparent">
-              <Link to={"/products"} className="hover:underline">
-                Featured Products
-              </Link>
-            </span>
-          </h1>
-          <p className="text-gray-600">
+    <div className="bg-white  ">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="flex flex-col mb-10">
+          <h4 className="text-md sm:text-xl lg:text-2xl font-normal mb-3 sm:mb-4 sm:px-0 text-slate-500">
+            <span>Best Seller Bags</span>
+          </h4>
+          <p className="text-sm sm:text-base md:text-lg text-slate-500 leading-relaxed">
             Discover our carefully curated selection of premium tech products
           </p>
         </div>
-      </div>
 
-      {/* Loading */}
-      {isLoading && <ProductCardSkeleton length={6} />}
-
-      {/* Error */}
-      {isError && (
-        <div className="text-center text-red-600">
-          Error: {error?.message || "Failed to load products"}
-        </div>
-      )}
-
-      {/* Swiper Products Carousel */}
-      {!isLoading && !isError && products.length > 0 && (
-        <Swiper
-          modules={[Navigation, Pagination, Autoplay]}
-          pagination={{ clickable: true }}
-          loop={true}
-          autoplay={{ delay: 4000, disableOnInteraction: false }}
-          spaceBetween={24}
-          breakpoints={{
-            320: { slidesPerView: 1 },
-            640: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
-            1280: { slidesPerView: 4 },
-          }}
-        >
-          {products.map((product: ProductDto) => (
-            <SwiperSlide key={product.Id}>
-              <ProductComponent product={product} />
-            </SwiperSlide>
-          ))}
-          <style>{`
+        {/* Loading */}
+        {isLoading && <ProductCardSkeleton length={4} />}
+        {/* Error */}
+        {isError && (
+          <div className="text-center text-red-600">
+            Error: {error?.message || "Failed to load products"}
+          </div>
+        )}
+        {/* Swiper Products Carousel */}
+        {!isLoading && !isError && products.length > 0 && (
+          <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            pagination={{ clickable: true }}
+            loop={true}
+            autoplay={{ delay: 4000, disableOnInteraction: false }}
+            spaceBetween={24}
+            breakpoints={{
+              320: { slidesPerView: 1 },
+              640: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+              1280: { slidesPerView: 4 },
+            }}
+          >
+            {products.map((product: ProductDto) => (
+              <SwiperSlide key={product.Id}>
+                <ProductComponent product={product} />
+              </SwiperSlide>
+            ))}
+            <style>{`
               .swiper-button-next,
               .swiper-button-prev {
                 display: none; /* hide on all */
@@ -102,17 +95,34 @@ function FeaturedProducts() {
                 }
               }
             `}</style>
-        </Swiper>
-      )}
-
-      {/* CTA Button */}
-      <div className="text-center mt-12">
-        <Link
-          to={"/products"}
-          className="inline-block bg-purple-400 hover:bg-purple-500 text-white font-semibold px-8 py-3 rounded-full transition-colors duration-300"
+          </Swiper>
+        )}
+        {/* CTA Button */}
+        <div
+          className="group mt-12 text-slate-500 flex flex-row-reverse items-center cursor-pointer 
+                justify-center sm:justify-start text-center sm:text-right"
         >
-          Explore Our Products
-        </Link>
+          <svg
+            className="w-5 h-5 sm:w-6 sm:h-6 ml-2 group-hover:translate-x-1 transition-transform duration-200 text-blue-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M17 8l4 4m0 0l-4 4m4-4H3"
+            />
+          </svg>
+
+          <Link
+            to="/bags"
+            className="inline-flex items-center text-md sm:text-xl font-normal text-slate-500"
+          >
+            See all
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -19,18 +19,16 @@ export default function AccordionSection({
   children,
 }: AccordionSectionProp) {
   return (
-    <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300">
+    <div className="bg-white rounded-xl  overflow-hidden transition-all duration-300">
       <button
         type="button"
         onClick={onToggle}
-        className="w-full p-4 flex items-center justify-between hover:bg-gray-50 transition"
+        className="w-full py-4 flex items-center justify-between"
       >
         <div className="flex items-center gap-3">
           <div
             className={`w-10 h-10 rounded-full flex items-center justify-center ${
-              isComplete
-                ? "bg-gradient-to-br from-green-500 to-green-600"
-                : "bg-gradient-to-br from-purple-400 to-pink-300"
+              isComplete ? "bg-blue-400" : "bg-blue-100"
             }`}
           >
             {isComplete ? (
@@ -39,9 +37,9 @@ export default function AccordionSection({
               <Icon className="w-4 h-4 text-white" />
             )}
           </div>
-          <h2 className="text-lg font-bold text-gray-800">{title}</h2>
+          <h2 className="text-lg font-semibold text-slate-600">{title}</h2>
         </div>
-        <div className="text-purple-600">
+        <div className="text-blue-500">
           {isOpen ? (
             <ChevronUp className="w-6 h-6" />
           ) : (
@@ -50,7 +48,7 @@ export default function AccordionSection({
         </div>
       </button>
 
-      {isOpen && <div className="p-4 sm:px-8">{children}</div>}
+      {isOpen && <div>{children}</div>}
     </div>
   );
 }

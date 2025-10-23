@@ -14,101 +14,107 @@ function TestimonialsSection() {
   const testimonials: TestimonialType[] = [
     {
       id: 1,
-      name: "Sarah Johnson",
+      name: "Morsy",
       role: "Product Manager",
       company: "Tech Innovations Inc.",
       content:
         "The products I purchased from this store have completely transformed my workflow. The quality is exceptional and the customer service was outstanding. I'll definitely be shopping here again!",
       rating: 5,
       image:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1287&q=80",
+        "https://media.licdn.com/dms/image/v2/D4D03AQE5mMQhpYpSuQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1724866382343?e=1762387200&v=beta&t=5ehrrKJljZy-ZQC3Dx87I4Ruu294l9I2gSIBV9nL6Ao",
     },
     {
       id: 2,
-      name: "Michael Chen",
+      name: "Ahmed Nabil",
       role: "Software Engineer",
       company: "Data Systems Co.",
       content:
         "I'm thoroughly impressed with the performance of the tech gear I bought. The delivery was fast, the packaging was secure, and everything works exactly as described. A truly seamless shopping experience.",
       rating: 4,
       image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1287&q=80",
+        "https://media.licdn.com/dms/image/v2/C4D03AQHy7vIhpRwoMQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1659956448032?e=1762387200&v=beta&t=Vw1TRaIH26em9RJpF_baMb4O3_f4M6F_aw3LcvZEDBY",
     },
     {
       id: 3,
-      name: "Emily Rodriguez",
+      name: "Omar Fathy",
       role: "Creative Director",
       company: "Design Studio LLC",
       content:
         "As a professional designer, I need reliable equipment that can keep up with my demanding workflow. The products I found here not only meet but exceed my expectations. Highly recommended!",
       rating: 5,
       image:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=1170&q=80",
+        "https://media.licdn.com/dms/image/v2/D4D03AQHwL4P29xk3ew/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1692551649114?e=1762387200&v=beta&t=dwFmMg400hYe3UTWiX6pgJyBymqbqW9NYLeYlwKe4kE",
     },
     {
       id: 4,
-      name: "David Wilson",
+      name: "Hussien",
       role: "IT Director",
       company: "Global Solutions Ltd.",
       content:
         "We've been sourcing our tech equipment from this store for our entire department, and the consistency in quality is remarkable. Their products are reliable and their team is always helpful.",
       rating: 4,
       image:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=1170&q=80",
+        "https://media.licdn.com/dms/image/v2/D4D03AQEUEyWUs8wt5Q/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1730051934610?e=1762387200&v=beta&t=xkArf1kkHkOSIgw0BXb46iSyFp7vgxjcJUpvUYbN_es",
     },
   ];
 
   return (
-    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 py-16">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-blue-300 via-purple-400 to-pink-300 bg-clip-text text-transparent">
-              What Our Customers Say
-            </span>
-          </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Don't just take our word for it. Hear from some of our satisfied
-            customers about their experience with our products and service.
-          </p>
-        </div>
-
-        {/* Swiper Carousel */}
-        <Swiper
-          modules={[Navigation, Pagination, Autoplay]}
-          pagination={{ clickable: true }}
-          autoplay={{ delay: 5000, disableOnInteraction: false }}
-          loop={true}
-          spaceBetween={24}
-          slidesPerView={1}
-          className="max-w-4xl mx-auto pb-12"
-        >
-          {testimonials.map((testimonial) => (
-            <SwiperSlide key={testimonial.id}>
-              <Testimonial testimonial={testimonial} />
-            </SwiperSlide>
-          ))}
-          <style>{`
-            .swiper-pagination-bullet {
-            display: none;
-                width: 10px;
-                height: 10px;
-                margin: 10px 6px;
-              }
-              .swiper-button-next,
-              .swiper-button-prev {
-                display: none; /* hide on all */
-              }
-              @media (min-width: 640px) {
-                .swiper-button-next,
-                .swiper-button-prev {
-                  display: flex; /* show from sm and up */
-                }
-              }
-            `}</style>
-        </Swiper>
+    <div className="container mx-auto px-4 py-16">
+      {/* Header */}
+      <div className="text-left mb-12">
+        <h4 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-3 sm:mb-4 sm:px-0 text-slate-500">
+          <span>What Our Customers Say</span>
+        </h4>
+        <p className="text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed">
+          Hear directly from our happy customers about their experience with our{" "}
+          <br className="hidden sm:block" />
+          products and services.
+        </p>
       </div>
+
+      {/* Swiper Carousel */}
+      <Swiper
+        modules={[Navigation, Pagination, Autoplay]}
+        pagination={{ clickable: true }}
+        autoplay={{ delay: 5000, disableOnInteraction: false }}
+        loop={true}
+        spaceBetween={24}
+        breakpoints={{
+          320: { slidesPerView: 1 },
+          640: { slidesPerView: 1 },
+          1024: { slidesPerView: 2 },
+          1280: { slidesPerView: 2 },
+        }}
+        className="pb-12"
+      >
+        {testimonials.map((testimonial) => (
+          <SwiperSlide key={testimonial.id}>
+            <Testimonial testimonial={testimonial} />
+          </SwiperSlide>
+        ))}
+
+        <style>{`
+          .swiper-pagination-bullet {
+            width: 10px;
+            height: 10px;
+            margin: 10px 6px;
+            background-color: rgba(99, 102, 241, 0.4);
+          }
+          .swiper-pagination-bullet-active {
+            background-color: rgba(168, 85, 247, 0.8);
+          }
+          .swiper-button-next,
+          .swiper-button-prev {
+            display: none; /* hide on all */
+          }
+          @media (min-width: 640px) {
+            .swiper-button-next,
+            .swiper-button-prev {
+              display: flex; /* show from sm and up */
+            }
+          }
+        `}</style>
+      </Swiper>
     </div>
   );
 }

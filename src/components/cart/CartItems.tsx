@@ -16,15 +16,8 @@ const CartItems = ({
   removingItems,
 }: CartItemsProps) => {
   return (
-    <div className="lg:col-span-2">
-      <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-        {/* Header */}
-        <div className="px-3 py-2 sm:px-6 sm:py-4 border-b border-gray-100">
-          <h2 className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-            Cart Items
-          </h2>
-        </div>
-
+    <div className="lg:col-span-2 pt-2">
+      <div className="rounded-xl  overflow-hidden">
         {/* Cart List */}
         <div className="divide-y divide-gray-100">
           {cart.length > 0 ? (

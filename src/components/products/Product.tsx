@@ -5,7 +5,7 @@ import { useCart } from "../../context/CartContext";
 import type { CartItem } from "../../types/cart.types";
 import type { ProductDto } from "../../types/product.types";
 import productPlaceHolder from "../../assets/productPlaceHolder.svg";
-import { Link } from "react-router-dom";
+import { useProductContext } from "../../context/ProductContext";
 
 interface ProductProps {
   product: ProductDto;
@@ -18,6 +18,7 @@ function Product({ product }: ProductProps) {
   const [isTouched, setIsTouched] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const { addToCart } = useCart();
+  const { setProduct, setIsProductPopupOpen } = useProductContext();
 
   const getImageUrl = (imagePath?: string): string => {
     if (imagePath) {
@@ -27,11 +28,7 @@ function Product({ product }: ProductProps) {
     }
     return productPlaceHolder;
   };
-
   const primaryImage = getImageUrl(product.ProductImages?.[0]?.Path);
-  const secondaryImage = product.ProductImages?.[1]?.Path
-    ? getImageUrl(product.ProductImages[1].Path)
-    : null;
 
   const handleAddToCart = async (quantity: number) => {
     setIsAddingToCart(true);
@@ -41,6 +38,7 @@ function Product({ product }: ProductProps) {
       UnitPrice: product.Price,
       TotalPrice: quantity * product.Price,
       ProductName: product.Name,
+      ImagePath: product.ProductImages[0].Path,
       ProductSku: product.Sku,
       ProductId: product.Id,
     };
@@ -75,7 +73,7 @@ function Product({ product }: ProductProps) {
 
   return (
     <div
-      className={`group relative w-full aspect-square overflow-hidden rounded-3xl bg-gradient-to-br from-slate-100 to-slate-200  hover:shadow-2xl transition-all duration-500 ${
+      className={`group relative w-full aspect-square overflow-hidden rounded-3xl bg-gradient-to-br from-slate-100 to-slate-200  transition-all duration-500 ${
         isExpanded ? "ring-2 ring-blue-500" : ""
       }`}
       onClick={(e) => {
@@ -98,33 +96,18 @@ function Product({ product }: ProductProps) {
         loading="lazy"
       />
 
-      {/* Secondary Product Image - Shows on Hover/Touch */}
-      {secondaryImage && (
-        <img
-          src={secondaryImage}
-          alt={`${product.Name} - alternate view`}
-          className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 transform ${
-            isExpanded || isTouched
-              ? "opacity-100 scale-110"
-              : "group-hover:opacity-100 group-hover:scale-110 opacity-0"
-          }`}
-          loading="lazy"
-        />
-      )}
-
       {/* Fallback scaling for primary when no secondary image */}
-      {!secondaryImage && (
-        <img
-          src={primaryImage}
-          alt={product.Name}
-          className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ${
-            isExpanded || isTouched
-              ? "scale-110"
-              : "group-hover:scale-110 scale-100"
-          }`}
-          loading="lazy"
-        />
-      )}
+
+      <img
+        src={primaryImage}
+        alt={product.Name}
+        className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ${
+          isExpanded || isTouched
+            ? "scale-110"
+            : "group-hover:scale-110 scale-100"
+        }`}
+        loading="lazy"
+      />
 
       {/* Overlay on Hover/Touch */}
       <div
@@ -135,7 +118,7 @@ function Product({ product }: ProductProps) {
 
       {/* Category Badge - Top Right (always visible) */}
       <div className="absolute top-4 right-4 z-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-semibold rounded-full shadow-md backdrop-blur-sm">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-400 text-white text-sm  rounded-full shadow-md backdrop-blur-sm">
           {product.Category?.Name || "Premium"}
         </div>
       </div>
@@ -160,7 +143,7 @@ function Product({ product }: ProductProps) {
           <p className="text-sm sm:text-base text-gray-200 mb-3 line-clamp-2">
             {product.Description}
           </p>
-          <span className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          <span className="text-2xl sm:text-3xl f text-blue-500">
             ${product.Price?.toLocaleString()}
           </span>
         </div>
@@ -172,14 +155,17 @@ function Product({ product }: ProductProps) {
           }`}
         >
           {/* View Button */}
-          <Link
-            to={`/product/${product.Id}`}
-            onClick={(e) => e.stopPropagation()}
-            className="p-3 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 text-white shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300"
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setProduct(product);
+              setIsProductPopupOpen(true);
+            }}
             title="View Details"
+            className="p-3 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 text-white shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300"
           >
             <Eye className="w-5 h-5" />
-          </Link>
+          </button>
 
           {/* Add to Cart Button */}
           <button
@@ -189,9 +175,7 @@ function Product({ product }: ProductProps) {
             }}
             disabled={isAddingToCart}
             className={`px-5 sm:px-7 py-3 rounded-full font-bold text-white shadow-lg hover:shadow-xl transform transition-all duration-300 flex items-center gap-2 ${
-              addedSuccess
-                ? "bg-gradient-to-r from-green-500 to-emerald-500"
-                : "bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:scale-110"
+              addedSuccess ? "bg-blue-500" : "bg-blue-400"
             } ${isAddingToCart ? "opacity-75 scale-95" : ""}`}
             title={addedSuccess ? "Added to cart!" : "Add to cart"}
           >
@@ -208,7 +192,6 @@ function Product({ product }: ProductProps) {
             ) : (
               <>
                 <ShoppingCart className="w-5 h-5" />
-                <span className="hidden sm:inline text-sm">Add</span>
               </>
             )}
           </button>

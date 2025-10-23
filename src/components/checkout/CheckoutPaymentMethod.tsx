@@ -17,8 +17,8 @@ export default function CheckoutPaymentMethod({
             key={method}
             className={`px-4 py-3 rounded-lg border-2 transition font-medium text-center cursor-pointer ${
               paymentMethod === method
-                ? "border-purple-600 bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700"
-                : "border-gray-200 hover:border-purple-300 text-gray-700"
+                ? "border-blue-500 bg-slate-50 text-blue-600"
+                : "border-gray-200 hover:border-blue-300 text-gray-700"
             }`}
           >
             <input
@@ -41,7 +41,7 @@ export default function CheckoutPaymentMethod({
           type="number"
           step="0.01"
           {...register("ShippingAmount", { valueAsNumber: true })}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
           placeholder="0.00"
         />
       </div>
@@ -52,7 +52,7 @@ export default function CheckoutPaymentMethod({
         <textarea
           {...register("Notes")}
           rows={3}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition resize-none"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none"
           placeholder="Any special instructions..."
         />
       </div>

@@ -17,7 +17,6 @@ import { useApiStatus } from "../context/ApiStatusContext";
 import ApiDown from "./layout/ApiDown";
 import { useAuth } from "../context/AuthContext";
 import Orders from "./orders/Orders";
-import ProductDetails from "./products/ProductDetails";
 import Checkout from "./checkout/Checkout";
 import ProtectCheckout from "./checkout/ProtectCheckout";
 import CheckoutSuccess from "./checkout/CheckoutSuccess";
@@ -31,6 +30,9 @@ import ForgotPassword from "./auth/ForgotPassword";
 import ResetPassword from "./auth/ResetPassword";
 import Profile from "./auth/Profile";
 import ProtectRoutes from "./auth/ProtectedRoutes";
+import ProductPopup from "./common/ProductPopup";
+import CartPopup from "./common/CartPopup";
+import { Announce } from "./products/Promotion";
 
 const Products = lazy(() => import("./products/Products"));
 
@@ -52,7 +54,7 @@ function AppRouter() {
     },
     retry: 1,
     staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
     refetchOnReconnect: true,
     refetchOnMount: true,
   });
@@ -70,20 +72,20 @@ function AppRouter() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen ">
+    <div>
+      <Announce />
       <Navbar />
-      <main className="flex-grow bg-gradient-to-br from-indigo-50 to-purple-50">
+      <main className="flex-grow bg-white">
         <Routes>
           <Route path="/" element={<HomeLayout />} />
           <Route
-            path="/products"
+            path="/bags"
             element={
               <Suspense fallback={<LoadingProductsPage />}>
                 <Products />
               </Suspense>
             }
           />
-          <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route
             path="/checkout"
@@ -119,6 +121,8 @@ function AppRouter() {
         </Routes>
       </main>
       <Footer />
+      <ProductPopup />
+      <CartPopup />
     </div>
   );
 }

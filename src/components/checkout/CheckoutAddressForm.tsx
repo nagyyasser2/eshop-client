@@ -11,7 +11,7 @@ export default function CheckoutAddressForm({ register, errors }) {
           })}
           className={`w-full px-4 py-2 border ${
             errors.ShippingFirstName ? "border-red-500" : "border-gray-300"
-          } rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition`}
+          } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
           placeholder="John"
         />
         {errors.ShippingFirstName && (
@@ -31,7 +31,7 @@ export default function CheckoutAddressForm({ register, errors }) {
           })}
           className={`w-full px-4 py-2 border ${
             errors.ShippingLastName ? "border-red-500" : "border-gray-300"
-          } rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition`}
+          } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
           placeholder="Doe"
         />
         {errors.ShippingLastName && (
@@ -49,7 +49,7 @@ export default function CheckoutAddressForm({ register, errors }) {
           {...register("ShippingAddress", { required: "Address is required" })}
           className={`w-full px-4 py-2 border ${
             errors.ShippingAddress ? "border-red-500" : "border-gray-300"
-          } rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition`}
+          } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
           placeholder="123 Main Street"
         />
         {errors.ShippingAddress && (
@@ -67,7 +67,7 @@ export default function CheckoutAddressForm({ register, errors }) {
           {...register("ShippingCity", { required: "City is required" })}
           className={`w-full px-4 py-2 border ${
             errors.ShippingCity ? "border-red-500" : "border-gray-300"
-          } rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition`}
+          } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
           placeholder="New York"
         />
         {errors.ShippingCity && (
@@ -85,7 +85,7 @@ export default function CheckoutAddressForm({ register, errors }) {
           {...register("ShippingState", { required: "State is required" })}
           className={`w-full px-4 py-2 border ${
             errors.ShippingState ? "border-red-500" : "border-gray-300"
-          } rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition`}
+          } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
           placeholder="NY"
         />
         {errors.ShippingState && (
@@ -109,7 +109,7 @@ export default function CheckoutAddressForm({ register, errors }) {
           })}
           className={`w-full px-4 py-2 border ${
             errors.ShippingZipCode ? "border-red-500" : "border-gray-300"
-          } rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition`}
+          } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
           placeholder="10001"
         />
         {errors.ShippingZipCode && (
@@ -127,7 +127,7 @@ export default function CheckoutAddressForm({ register, errors }) {
           {...register("ShippingCountry", { required: "Country is required" })}
           className={`w-full px-4 py-2 border ${
             errors.ShippingCountry ? "border-red-500" : "border-gray-300"
-          } rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition`}
+          } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
           placeholder="USA"
         />
         {errors.ShippingCountry && (
@@ -152,7 +152,7 @@ export default function CheckoutAddressForm({ register, errors }) {
           })}
           className={`w-full px-4 py-2 border ${
             errors.ShippingPhone ? "border-red-500" : "border-gray-300"
-          } rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition`}
+          } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
           placeholder="+1 (555) 123-4567"
         />
         {errors.ShippingPhone && (

@@ -92,7 +92,6 @@ const Products: React.FC = () => {
     [data]
   );
 
-  // Set up intersection observer for infinite scroll
   useEffect(() => {
     if (!hasNextPage || isFetchingNextPage) return;
 

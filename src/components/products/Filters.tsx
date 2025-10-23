@@ -168,16 +168,16 @@ const Filters: React.FC<FiltersProps> = ({
       )}
 
       {/* Desktop: Horizontal Flex Layout */}
-      <div className="hidden lg:flex gap-4 items-center mb-6 flex-wrap">
+      <div className="hidden lg:flex gap-1 items-center mb-6 flex-wrap">
         {/* Header */}
 
         {/* Category Dropdown */}
         <div className="relative" ref={categoryRef}>
           <button
             onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}
-            className="px-4 py-2.5 bg-white border border-gray-300 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 flex items-center gap-2 min-w-[180px] justify-between"
+            className="px-2 py-2.5 rounded-lg  focus:outline-none transition-all duration-200 flex items-center gap-2 justify-between"
           >
-            <span className="font-medium text-gray-700">
+            <span className="font-medium text-slate-500">
               {selectedCategoryName}
             </span>
             <svg
@@ -245,9 +245,9 @@ const Filters: React.FC<FiltersProps> = ({
         <div className="relative" ref={priceRef}>
           <button
             onClick={() => setIsPriceDropdownOpen(!isPriceDropdownOpen)}
-            className="px-4 py-2.5 bg-white border border-gray-300 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 flex items-center gap-2 min-w-[180px] justify-between"
+            className="px-2 py-2.5 rounded-lg  focus:outline-none   focus:border-transparent transition-all duration-200 flex items-center gap-2"
           >
-            <span className="font-medium text-gray-700">
+            <span className="font-medium text-slate-500">
               {selectedPriceRange || "Any Price"}
             </span>
             <svg
@@ -267,7 +267,7 @@ const Filters: React.FC<FiltersProps> = ({
             </svg>
           </button>
           {isPriceDropdownOpen && (
-            <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto">
+            <div className="absolute top-full left-0 mt-2 w-56 bg-white  rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto">
               <div
                 className={`py-2 px-4 cursor-pointer hover:bg-blue-50 transition-colors ${
                   selectedPriceRange === ""
@@ -305,9 +305,9 @@ const Filters: React.FC<FiltersProps> = ({
         <div className="relative" ref={dateRef}>
           <button
             onClick={() => setIsDateDropdownOpen(!isDateDropdownOpen)}
-            className="px-4 py-2.5 bg-white border border-gray-300 rounded-lg hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 flex items-center gap-2 min-w-[180px] justify-between"
+            className="px-2 py-2.5  rounded-lg  focus:outline-none  focus:border-transparent transition-all duration-200 flex items-center gap-2"
           >
-            <span className="font-medium text-gray-700">
+            <span className="font-medium text-slate-500">
               {selectedDateRange || "Any Time"}
             </span>
             <svg
@@ -327,7 +327,7 @@ const Filters: React.FC<FiltersProps> = ({
             </svg>
           </button>
           {isDateDropdownOpen && (
-            <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto">
+            <div className="absolute top-full left-0 mt-2 w-56 bg-white  rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto">
               <div
                 className={`py-2 px-4 cursor-pointer hover:bg-blue-50 transition-colors ${
                   selectedDateRange === ""

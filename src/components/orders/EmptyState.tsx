@@ -14,7 +14,7 @@ export default function EmptyState() {
           here!
         </p>
         <Link
-          to="/products"
+          to="/bags"
           className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-8 py-3 rounded-2xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300"
         >
           <FaShoppingBag />

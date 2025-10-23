@@ -19,7 +19,6 @@ import {
   clearCartFromStorage,
 } from "../persist/cart.store.service";
 import { placeOrder } from "../api/orders";
-
 import type { CreateOrderItemDto } from "../types/order.types";
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -27,6 +26,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isCartPopupOpen, setIsCartPopupOpen] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -126,7 +126,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       Quantity: item.Quantity,
       UnitPrice: item.UnitPrice,
       ProductName: item.ProductName,
-      ProductSKU: item.ProductSKU,
+      ProductSKU: item.ProductSku,
     }));
 
     const orderRequest: any = {
@@ -142,6 +142,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       Notes: notes,
       DiscountAmount: totals.DiscountAmount,
       ShippingAmount: totals.ShippingAmount,
+      SubTotal: totals.SubTotal,
+      TaxAmount: totals.TaxAmount,
+      TotalAmount: totals.TotalAmount,
     };
 
     return await placeOrderMutation.mutateAsync(orderRequest);
@@ -156,6 +159,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         updateQuantity,
         clearCart,
         isLoading,
+        isCartPopupOpen,
+        setIsCartPopupOpen,
         calculateTotals,
         createOrder,
       }}

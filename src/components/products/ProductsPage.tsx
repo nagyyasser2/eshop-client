@@ -6,12 +6,12 @@ import ProductsGrid from "./ProductsGrid";
 import {
   fetchProductsForUseQuery,
   type PaginatedProductsResponse,
-  type ProductDTO,
   type ProductQueryParams,
 } from "../../api/products";
 import { useQuery } from "@tanstack/react-query";
+import type { ProductDto } from "../../types/product.types";
 
-type Product = ProductDTO;
+type Product = ProductDto;
 
 function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -73,7 +73,7 @@ function ProductsPage() {
     // Category filter
     const categoryMatch =
       selectedCategory === "all" ||
-      product.Category.Name.toLowerCase() === selectedCategory.toLowerCase();
+      product?.Category.Name.toLowerCase() === selectedCategory.toLowerCase();
 
     // Search filter
     const searchMatch =

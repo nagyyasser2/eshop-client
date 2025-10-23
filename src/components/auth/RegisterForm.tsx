@@ -11,7 +11,7 @@ import {
 } from "react-icons/fa";
 import { register as registerUser } from "../../api/auth";
 import { Link } from "react-router-dom";
-import type { AuthResponse, RegisterFormData } from "../../types/auth.types";
+import type { ApiResponse, RegisterFormData } from "../../types/auth.types";
 
 function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -48,8 +48,8 @@ function RegisterForm() {
 
       return response;
     },
-    onSuccess: (response: AuthResponse) => {
-      setSuccessMessage(response.Message);
+    onSuccess: (response: ApiResponse) => {
+      setSuccessMessage(response?.Message ?? "");
       reset();
     },
     onError: (error: any) => {
@@ -57,7 +57,7 @@ function RegisterForm() {
 
       // Handle Axios errors
       if (error.response?.data) {
-        const apiError: AuthResponse = error.response.data;
+        const apiError: ApiResponse = error.response.data;
         setError("root", {
           type: "manual",
           message: apiError.Message || "Something went wrong.",
@@ -457,16 +457,6 @@ function RegisterForm() {
           )}
         </button>
       </form>
-
-      {/* Divider */}
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-gray-300" />
-        </div>
-        <div className="relative flex justify-center text-sm">
-          <span className="px-2 bg-white text-gray-500">Or continue with</span>
-        </div>
-      </div>
 
       {/* Footer */}
       <div className="text-center mt-6">

@@ -26,17 +26,16 @@ function Home() {
   });
 
   const handleShopNow = (category: any) => {
-    navigate(`/products`, {
+    navigate(`/bags`, {
       state: { categoryId: category.Id, categoryName: category.Name },
     });
   };
 
   return (
     <div className="bg-white pb-1">
-      <div className="container mx-auto mb-8 sm:mb-12 lg:mb-16 py-2 px-2 sm:px-4">
+      <div className="container mx-auto mb-2 sm:mb-3 lg:mb-4 py-0 px-2 sm:px-4">
         {isLoading ? (
-          // Skeleton Loader
-          <div className="rounded-xl sm:rounded-2xl bg-gradient-to-r from-indigo-50 to-purple-50 shadow-lg sm:shadow-xl p-6 sm:p-8 md:p-12 lg:p-16 animate-pulse">
+          <div className="rounded-xl sm:rounded-2xl bg-gradient-to-r from-slate-50 to-slate-50  p-6 sm:p-8 md:p-12 lg:p-16 animate-pulse">
             <div className="flex flex-col lg:flex-row items-center gap-6 sm:gap-8 lg:gap-12">
               {/* Image Skeleton */}
               <div className="flex-1 flex justify-center w-full">
@@ -57,7 +56,7 @@ function Home() {
             pagination={{ clickable: true }}
             loop={true}
             autoplay={{ delay: 5000, disableOnInteraction: false }}
-            className="rounded-xl sm:rounded-2xl bg-gradient-to-r from-indigo-50 to-purple-50 shadow-lg sm:shadow-xl "
+            className="rounded-xl sm:rounded-4xl bg-gradient-to-r from-slate-100  to-slate-100"
           >
             {categories?.map((category) => (
               <SwiperSlide key={category.Id}>
@@ -66,7 +65,7 @@ function Home() {
                   <div className="flex-1 flex justify-center w-full">
                     <div className="relative group w-full max-w-sm sm:max-w-md lg:max-w-lg">
                       <div
-                        className={`absolute -inset-1 bg-gradient-to-r ${category.Gradient} rounded-2xl sm:rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-300`}
+                        className={`absolute -inset-1  rounded-2xl sm:rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-300`}
                       ></div>
                       <img
                         src={
@@ -75,29 +74,30 @@ function Home() {
                             : "/placeholder-image.jpg"
                         }
                         alt={category.Name}
-                        className="relative w-full h-48 sm:h-64 md:h-72 lg:h-80 object-cover rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl transform group-hover:scale-105 transition-all duration-300"
+                        onClick={() => handleShopNow(category)}
+                        className="relative w-full h-48 sm:h-64 md:h-72 lg:h-80 object-cover rounded-2xl sm:rounded-3xl  transform group-hover:scale-105 transition-all duration-300"
                       />
                     </div>
                   </div>
 
                   {/* Content Section */}
                   <div className="flex-1 text-center lg:text-left w-full px-2 sm:px-0">
-                    <h2
-                      className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 sm:mb-4 lg:mb-6 bg-gradient-to-r ${category.Gradient} bg-clip-text text-transparent`}
+                    <h4
+                      className={`text-xl sm:text-xl md:text-xl lg:text-2xl xl:text-2xl font-semibold mb-3 sm:mb-4 lg:mb-6 text-slate-500`}
                     >
                       {category.Name}
-                    </h2>
-                    <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed mb-4 sm:mb-6 lg:mb-8 max-w-xs sm:max-w-sm md:max-w-md mx-auto lg:mx-0 line-clamp-2 sm:line-clamp-none">
+                    </h4>
+                    <p className="text-xl sm:text-xs md:text-sm lg:text-md xl:text-xl font-normal mb-3 sm:mb-4 lg:mb-6 text-slate-500 max-w-xs sm:max-w-sm md:max-w-md mx-auto lg:mx-0 line-clamp-2 sm:line-clamp-none">
                       {category?.Description ?? ""}
                     </p>
 
                     <button
                       onClick={() => handleShopNow(category)}
-                      className={`inline-flex items-center px-5 py-2.5 sm:px-6 sm:py-3 lg:px-8 lg:py-4 bg-gradient-to-r ${category.Gradient} text-white text-sm sm:text-base font-semibold rounded-xl sm:rounded-2xl hover:shadow-lg transform hover:scale-105 transition-all duration-300 group`}
+                      className="hidden sm:inline-flex items-center border-2 border-slate-400 px-4 py-2 cursor-pointer text-md sm:text-xl md:text-1xl font-semibold text-slate-500 rounded-full transform transition-all duration-300 group"
                     >
-                      <span>Shop Now</span>
+                      <span>Shop</span>
                       <svg
-                        className="w-4 h-4 sm:w-5 sm:h-5 ml-1.5 sm:ml-2 group-hover:translate-x-1 transition-transform duration-200"
+                        className="w-5 h-5 sm:w-6 sm:h-6 ml-2 group-hover:translate-x-1 transition-transform duration-200 text-blue-500"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -115,11 +115,19 @@ function Home() {
               </SwiperSlide>
             ))}
             <style>{`
-            .swiper-pagination-bullet {
-            display: none;
+              .swiper-pagination-bullet {
                 width: 10px;
                 height: 10px;
-                margin: 10px 6px;
+                margin: 0 6px;
+                background: rgb(148 163 184);
+                opacity: 0.5;
+                transition: all 0.3s ease;
+              }
+              .swiper-pagination-bullet-active {
+                width: 30px;
+                border-radius: 5px;
+                background: rgb(59 130 246);
+                opacity: 1;
               }
               .swiper-button-next,
               .swiper-button-prev {
