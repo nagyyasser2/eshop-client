@@ -1,23 +1,20 @@
-import { FaShoppingBag } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 export default function EmptyState() {
   return (
     <>
       <div className=" rounded-2xl p-2 mb-10 text-center">
-        <div className="w-15 h-15 bg-gray-300 rounded-full flex items-center justify-center mx-auto mb-6">
-          <FaShoppingBag className="text-gray-400 text-4xl" />
-        </div>
-        <h3 className="text-2xl font-bold text-gray-900 mb-3">No orders yet</h3>
+        <h3 className="text-2xl font-bold text-slate-700 mb-3">
+          No orders yet
+        </h3>
         <p className="text-gray-600 mb-8 max-w-md mx-auto">
           You haven't placed any orders yet. Start shopping to see your orders
           here!
         </p>
         <Link
           to="/bags"
-          className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-8 py-3 rounded-2xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+          className="inline-flex items-center gap-2  bg-slate-600 text-white px-8 py-3 rounded-2xl font-semibold"
         >
-          <FaShoppingBag />
           Start Shopping
         </Link>
       </div>

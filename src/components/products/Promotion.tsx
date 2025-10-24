@@ -16,9 +16,8 @@ export function Promotion() {
   return (
     <div className="backdrop-blur px-0 py-2 my-4 rounded-xl text-slate-700 mx-auto">
       <div className="flex items-center justify-between gap-4">
-        {/* Text Content */}
         <div className="flex-1">
-          <span className="font-xs text-slate-500 px-1">
+          <span className="font-xs text-slate-700 px-1">
             Stylish Designs, Crafted for Every Occasion
           </span>
         </div>

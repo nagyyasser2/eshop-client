@@ -8,6 +8,7 @@ import productPlaceHolder from "../../assets/productPlaceHolder.svg";
 import { SERVER_URL } from "../../api/api";
 import { fetchProductById } from "../../api/products";
 import CustomProducts from "./CustomProducts";
+import { useProductContext } from "../../context/ProductContext";
 
 function ProductDetails() {
   const { id } = useParams<{ id: string }>();
@@ -17,6 +18,8 @@ function ProductDetails() {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [addedSuccess, setAddedSuccess] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const { setProduct, setIsProductSingleImagePreviewPopupOpen } =
+    useProductContext();
 
   const {
     data: product,
@@ -109,6 +112,13 @@ function ProductDetails() {
 
   const isOutOfStock = product.TrackQuantity && product.StockQuantity === 0;
 
+  const handleImageClick = (path: string) => {
+    setProduct({
+      ...product,
+      SelectedImage: path, // or any direct URL
+    });
+    setIsProductSingleImagePreviewPopupOpen(true);
+  };
   return (
     <div className="py-8 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto">
@@ -116,8 +126,9 @@ function ProductDetails() {
           <div className="grid lg:grid-cols-2 gap-8 px-0 py-2">
             {/* Image Section */}
             <div>
-              <div className="relative w-full aspect-square mb-4 bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl overflow-hidden">
+              <div className="relative w-full cursor-zoom-in aspect-square mb-4 bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl overflow-hidden">
                 <img
+                  onClick={() => handleImageClick(images[selectedImageIndex])}
                   src={images[selectedImageIndex]}
                   alt={`${product.Name} - Image ${selectedImageIndex + 1}`}
                   className="w-full h-full object-contain"
@@ -129,10 +140,10 @@ function ProductDetails() {
                 <div className="grid grid-cols-2">
                   {images.map((img, index) => (
                     <img
-                      onClick={() => setSelectedImageIndex(index)}
+                      onClick={() => handleImageClick(img)}
                       src={img}
                       alt={`Thumbnail ${index + 1}`}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover cursor-zoom-in"
                     />
                   ))}
                 </div>

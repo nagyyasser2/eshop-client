@@ -34,6 +34,7 @@ import CartPopup from "./common/CartPopup";
 import { Announce } from "./products/Promotion";
 import ProductImagesPreview from "./common/ProductImagesPreview";
 import ProductDetails from "./products/ProductDetails";
+import ProductSingleImagePreview from "./common/ProductSingleImagePreview";
 
 const Products = lazy(() => import("./products/Products"));
 
@@ -118,6 +119,7 @@ function AppRouter() {
 
       <Footer />
       <ProductImagesPreview />
+      <ProductSingleImagePreview />
       <CartPopup />
     </div>
   );

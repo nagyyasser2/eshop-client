@@ -1,6 +1,5 @@
-import type { PaymentStatus } from "../api/payment";
 import type { ApplicationUser } from "./auth.types";
-import type { Payment } from "./payment.types";
+import type { Payment, PaymentStatus } from "./payment.types";
 import type { Product } from "./product.types";
 
 export enum ShippingStatus {

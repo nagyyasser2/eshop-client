@@ -3,9 +3,11 @@ import type { ProductDto } from "../types/product.types";
 
 interface ProductContextType {
   isProductPopupOpen: boolean;
+  isProductSingleImagePreviewPopupOpen: boolean;
   product: ProductDto | null;
   setIsProductPopupOpen: (isOpen: boolean) => void;
   setProduct: (product: ProductDto | null) => void;
+  setIsProductSingleImagePreviewPopupOpen: (isOpen: boolean) => void;
 }
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
@@ -18,15 +20,23 @@ export const ProductContextProvider = ({
   children,
 }: ProductContextProviderProps) => {
   const [isProductPopupOpen, setIsProductPopupOpen] = useState(false);
+
+  const [
+    isProductSingleImagePreviewPopupOpen,
+    setIsProductSingleImagePreviewPopupOpen,
+  ] = useState(false);
+
   const [product, setProduct] = useState<ProductDto | null>(null);
 
   return (
     <ProductContext.Provider
       value={{
         isProductPopupOpen,
+        isProductSingleImagePreviewPopupOpen,
         product,
         setIsProductPopupOpen,
         setProduct,
+        setIsProductSingleImagePreviewPopupOpen,
       }}
     >
       {children}
