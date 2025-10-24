@@ -66,7 +66,7 @@ function Product({ product }: ProductProps) {
     <div className="group relative w-full flex flex-col">
       {/* Image Container */}
       <div
-        className="relative w-full aspect-square overflow-hidden rounded-3xl bg-gradient-to-br from-slate-100 to-slate-200 cursor-pointer"
+        className="relative w-full aspect-square overflow-hidden rounded-3xl bg-gradient-to-br from-slate-100 to-slate-200"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -80,8 +80,9 @@ function Product({ product }: ProductProps) {
 
         {/* Hover Overlay */}
         <div
-          onClick={handleImageClick}
-          className={`absolute inset-0 cursor-zoom-in bg-gradient-to-t from-black/60 via-black/30 to-transparent transition-opacity duration-300 ${
+          // onClick={handleImageClick}
+          onClick={handleBagClick}
+          className={`absolute inset-0  bg-gradient-to-t from-black/60 via-black/30 to-transparent transition-opacity duration-300 ${
             isHovered ? "opacity-100" : "opacity-0"
           }`}
         />
@@ -100,7 +101,7 @@ function Product({ product }: ProductProps) {
               handleAddToCart(1);
             }}
             disabled={isAddingToCart}
-            className={`w-full px-6 py-3 rounded-full font-normal text-slate-600  flex items-center justify-center gap-2 ${
+            className={`w-full px-6 py-3 cursor-pointer rounded-full font-normal text-slate-600  flex items-center justify-center gap-2 ${
               addedSuccess
                 ? "bg-slate-600 text-white"
                 : "text-slate-600 bg-white"

@@ -14,17 +14,9 @@ export default function ProfileHeader({
 }: ProfileHeaderProps) {
   return (
     <div className="rounded-2xl py-2 mb-3  bg-white">
+      <h4>Profile</h4>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-center gap-4">
-          {user.ProfilePictureUrl ? (
-            <img
-              src={user.ProfilePictureUrl}
-              alt="Profile"
-              className="w-13 h-13 md:w-15 md:h-15 rounded-full object-cover ring-4 ring-blue-100"
-            />
-          ) : (
-            <> </>
-          )}
           <div>
             <h3 className="text-xl md:text-xl font-semibold text-slate-800 mb-1 md:mb-2">
               {user.FirstName} {user.LastName}

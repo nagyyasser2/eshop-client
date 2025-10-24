@@ -1,84 +1,78 @@
-import { User, MapPin, Shield, Lock, Trash2 } from "lucide-react";
-import ContactAddressForm from "./ContactAddressForm";
+import { Mail, Lock, Trash2, LogOut } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { Link, Navigate } from "react-router-dom";
-import AccordionSection from "./AccordionSection";
-import ProfileHeader from "./ProfileHeader";
-import PersonalInfo from "./PersonalInfo";
+import { useCart } from "../../context/CartContext";
 import { useState } from "react";
+import ConfirmLogoutModal from "../common/ConfirmLogoutModal";
 
 export default function Profile() {
-  const { user } = useAuth();
-  const [isEditing, setIsEditing] = useState(false);
-  const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+  const { user, logout } = useAuth();
+  const { clearCart } = useCart();
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   if (!user) return <Navigate to="/" replace />;
 
-  const handleEdit = () => {
-    setIsEditing(true);
-    setOpenAccordion("contact");
-  };
-
-  const handleCancel = () => setIsEditing(false);
-  const handleSuccess = () => setIsEditing(false);
-
-  const handleAccordionToggle = (key: string) => {
-    setOpenAccordion((prev) => (prev === key ? null : key));
+  const handleConfirmLogout = () => {
+    logout();
+    clearCart();
+    setIsLogoutModalOpen(false);
   };
 
   return (
-    <div className="min-h-125 py-4 md:py-8 px-0">
-      <div className="container mx-auto px-2 sm:px-4">
-        {/* Header */}
-        <ProfileHeader user={user} isEditing={isEditing} onEdit={handleEdit} />
+    <div className="flex flex-col items-start justify-start px-4">
+      <div className="container mx-auto bg-white p-2 text-left">
+        <div className="flex items-center flex-wrap gap-2">
+          <h1 className="text-lg sm:text-xl font-semibold text-slate-600">
+            {user.FirstName} {user.LastName}
+          </h1>
+          {user.Roles?.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {user.Roles.map((role, index) => (
+                <span
+                  key={index}
+                  className="px-3 py-1 bg-blue-50 text-gray-600 text-sm font-medium rounded-full"
+                >
+                  {role}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
 
-        {/* Personal Information Accordion */}
-        <AccordionSection
-          title="Personal Information"
-          icon={<User className="w-5 h-5 text-blue-600" />}
-          isOpen={openAccordion === "personal"}
-          onToggle={() => handleAccordionToggle("personal")}
-        >
-          <PersonalInfo user={user} />
-        </AccordionSection>
+        <div className="flex items-center justify-start gap-2 mb-6 text-gray-700">
+          <Mail className="w-4 h-4 text-gray-400" />
+          <span>{user.Email || "Not provided"}</span>
+        </div>
 
-        {/* Contact & Address Accordion */}
-        <AccordionSection
-          title="Contact & Address"
-          icon={<MapPin className="w-5 h-5 text-blue-600" />}
-          isOpen={openAccordion === "contact"}
-          onToggle={() => handleAccordionToggle("contact")}
-        >
-          <ContactAddressForm
-            user={user}
-            isEditing={isEditing}
-            onCancel={handleCancel}
-            onSuccess={handleSuccess}
-          />
-        </AccordionSection>
+        <div className="flex flex-col gap-2 border-t border-slate-400 py-2">
+          <Link
+            to="/change-password"
+            className="flex items-center justify-start gap-2 py-1 text-gray-700"
+          >
+            <Lock className="w-4 h-4 text-gray-400" />
+            <span>Change Password</span>
+          </Link>
 
-        {/* Account Settings Accordion */}
-        <AccordionSection
-          title="Account Settings"
-          icon={<Shield className="w-5 h-5 text-blue-600" />}
-          isOpen={openAccordion === "settings"}
-          onToggle={() => handleAccordionToggle("settings")}
-        >
-          <div className="flex flex-col gap-2">
-            <Link
-              to="/change-password"
-              className="flex items-center justify-start gap-2 md:gap-3 py-2  md:py-2 w-fit text-sm md:text-base"
-            >
-              <Lock className="w-4 h-4 md:w-5 md:h-5" />
-              Change Password
-            </Link>
-            <button className="flex items-center justify-start gap-2 md:gap-3 py-2  md:py-2 w-fit text-sm md:text-base cursor-pointer">
-              <Trash2 className="w-4 h-4 md:w-5 md:h-5" />
-              Delete Account
-            </button>
-          </div>
-        </AccordionSection>
+          <button className="flex items-center justify-start gap-2 py-1 rounded-lg text-slate-700 cursor-pointer">
+            <Trash2 className="w-4 h-4 text-gray-400" />
+            <span>Delete Account</span>
+          </button>
+
+          <button
+            onClick={() => setIsLogoutModalOpen(true)}
+            className="flex items-center justify-start gap-2 py-1 rounded-lg text-slate-700 cursor-pointer"
+          >
+            <LogOut className="w-4 h-4 text-gray-400" />
+            <span>Log Out</span>
+          </button>
+        </div>
       </div>
+
+      <ConfirmLogoutModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={handleConfirmLogout}
+      />
     </div>
   );
 }

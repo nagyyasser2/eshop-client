@@ -52,7 +52,7 @@ function FAQSection() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-left mb-12">
-          <h4 className="text-md sm:text-xl lg:text-2xl font-normal mb-3 sm:mb-4 sm:px-0 text-slate-500">
+          <h4 className="text-md sm:text-xl lg:text-xl font-semibold mb-3 sm:mb-4 sm:px-0 text-slate-700">
             <span>Frequently Asked Questions</span>
           </h4>
           <p className="text-sm sm:text-base md:text-lg text-slate-500 leading-relaxed max-w-2xl">

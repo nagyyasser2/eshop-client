@@ -55,11 +55,11 @@ function CustomProducts({
   const products = data?.data ?? [];
 
   return (
-    <div className="bg-white  ">
-      <div className="container mx-auto px-4 py-8">
+    <div className="bg-white container mx-auto px-4 sm:px-auto py-8">
+      <div className="">
         {/* Header */}
         <div className="flex flex-col mb-10">
-          <h4 className="text-md sm:text-xl lg:text-2xl font-normal mb-3 sm:mb-4 sm:px-0 text-slate-600">
+          <h4 className="text-md sm:text-xl lg:text-xl font-semibold mb-3 sm:mb-4 sm:px-0 text-slate-700">
             <span>{title}</span>
           </h4>
         </div>

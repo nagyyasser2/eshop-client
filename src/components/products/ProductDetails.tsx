@@ -120,8 +120,8 @@ function ProductDetails() {
     setIsProductSingleImagePreviewPopupOpen(true);
   };
   return (
-    <div className="py-8 px-4 sm:px-6 lg:px-8">
-      <div className="container mx-auto">
+    <div className="py-8 px-2 sm:px-6 lg:px-8">
+      <div className="container mx-auto px-4 sm:px-auto">
         <div className="overflow-hidden">
           <div className="grid lg:grid-cols-2 gap-8 px-0 py-2">
             {/* Image Section */}
@@ -286,7 +286,7 @@ function ProductDetails() {
               {/* Description */}
               {product.Description && (
                 <div className="mb-6 pb-6 border-b border-slate-200">
-                  <h3 className="text-lg font-bold text-slate-800 mb-3">
+                  <h3 className="text-lg font-semibold text-slate-700 mb-3">
                     Description
                   </h3>
                   <p className="text-slate-600 text-sm sm:text-base leading-relaxed whitespace-pre-line">
@@ -297,7 +297,7 @@ function ProductDetails() {
 
               {/* Additional Details */}
               <div className="space-y-3">
-                <h3 className="text-lg font-bold text-slate-800 mb-2">
+                <h3 className="text-lg font-semibold text-slate-700 mb-2">
                   Product Details
                 </h3>
 

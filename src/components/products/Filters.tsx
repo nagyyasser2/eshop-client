@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import getCategories from "../../api/catalog";
 import CategorySkeleton from "../sceletons/CategorySkeleton";
 import type { Category } from "../../types/category.types";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 type FiltersProps = {
   onFilterChange: (filters: {
@@ -41,55 +41,46 @@ const Filters: React.FC<FiltersProps> = ({
 }) => {
   const queryClient = useQueryClient();
 
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedPriceRange, setSelectedPriceRange] = useState<string>("");
+  // ✅ Get cached categories if available
+  const cachedCategories = queryClient.getQueryData<Category[]>(["categories"]);
+
+  // ✅ Use React Query to fetch ONLY if not cached
+  const {
+    data: fetchedCategories,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["categories"],
+    queryFn: getCategories,
+    enabled: !cachedCategories, // 🔥 Only fetch if not already cached
+    staleTime: 1000 * 60 * 30, // optional: 30 min cache
+  });
+
+  // ✅ Merge cache + fetched data
+  const categories = cachedCategories || fetchedCategories || [];
+
+  // States
   const [categoryId, setCategoryId] = useState<string>(
     initialCategoryId?.toString() || "All"
   );
+  const [selectedPriceRange, setSelectedPriceRange] = useState<string>("");
   const [selectedDateRange, setSelectedDateRange] = useState("");
 
-  // Dropdown states for desktop (only for price and date now)
-  const [isPriceDropdownOpen, setIsPriceDropdownOpen] =
-    useState<boolean>(false);
+  // Dropdowns
+  const [isPriceDropdownOpen, setIsPriceDropdownOpen] = useState(false);
   const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false);
 
-  // Refs for click outside detection
   const priceRef = useRef<HTMLDivElement>(null);
   const dateRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const cachedCategories = queryClient.getQueryData<Category[]>([
-      "categories",
-    ]);
-
-    if (cachedCategories) {
-      setCategories(cachedCategories);
-      setLoading(false);
-    } else {
-      const fetchCategories = async () => {
-        try {
-          setLoading(true);
-          const categoriesData = await getCategories();
-          setCategories(categoriesData);
-        } catch (err) {
-          setError("Failed to load categories");
-          console.error("Error fetching categories:", err);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchCategories();
-    }
-  }, [queryClient]);
-
+  // ✅ Sync category with initialCategoryId
   useEffect(() => {
     if (initialCategoryId) {
       setCategoryId(initialCategoryId.toString());
     }
   }, [initialCategoryId]);
 
+  // ✅ Handle outside clicks for dropdowns
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -107,6 +98,7 @@ const Filters: React.FC<FiltersProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // ✅ Notify parent when filters change
   useEffect(() => {
     const selectedRange = priceRanges.find(
       (range) => range.label === selectedPriceRange
@@ -114,15 +106,18 @@ const Filters: React.FC<FiltersProps> = ({
     const selectedDate = dateRanges.find(
       (range) => range.label === selectedDateRange
     );
+
     const filters = {
-      minPrice: selectedRange ? selectedRange.min : undefined,
-      maxPrice: selectedRange ? selectedRange.max : undefined,
-      daysBack: selectedDate ? selectedDate.value : undefined,
+      minPrice: selectedRange?.min,
+      maxPrice: selectedRange?.max,
+      daysBack: selectedDate?.value,
       categoryId: categoryId !== "All" ? categoryId : undefined,
     };
-    onFilterChange(filters);
-  }, [selectedPriceRange, categoryId, selectedDateRange, onFilterChange]);
 
+    onFilterChange(filters);
+  }, [selectedPriceRange, selectedDateRange, categoryId, onFilterChange]);
+
+  // ✅ Disable background scroll when filters open
   useEffect(() => {
     if (isFiltersOpen) {
       const scrollBarWidth =
@@ -154,39 +149,37 @@ const Filters: React.FC<FiltersProps> = ({
       <div className="hidden lg:block mb-6 lg:flex items-start justify-between gap-10">
         {/* Categories - Horizontal scrollable */}
         <div className="mb-4">
-          {loading ? (
+          {isLoading && (
             <div className="flex gap-2">
               <CategorySkeleton layout="horizontal" />
             </div>
-          ) : error ? (
-            <div className="text-red-500">{error}</div>
-          ) : (
-            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+          )}
+
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+            <button
+              onClick={() => setCategoryId("All")}
+              className={`px-4 py-2 rounded-lg whitespace-nowrap transition-all duration-200 ${
+                categoryId === "All"
+                  ? "bg-slate-600 text-white font-semibold shadow-md"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              All
+            </button>
+            {categories.map((categoryItem) => (
               <button
-                onClick={() => setCategoryId("All")}
+                key={categoryItem.Id}
+                onClick={() => setCategoryId(categoryItem.Id?.toString())}
                 className={`px-4 py-2 rounded-lg whitespace-nowrap transition-all duration-200 ${
-                  categoryId === "All"
+                  categoryId === categoryItem.Id?.toString()
                     ? "bg-slate-600 text-white font-semibold shadow-md"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
               >
-                All
+                {categoryItem.Name}
               </button>
-              {categories.map((categoryItem) => (
-                <button
-                  key={categoryItem.Id}
-                  onClick={() => setCategoryId(categoryItem.Id?.toString())}
-                  className={`px-4 py-2 rounded-lg whitespace-nowrap transition-all duration-200 ${
-                    categoryId === categoryItem.Id?.toString()
-                      ? "bg-slate-600 text-white font-semibold shadow-md"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  {categoryItem.Name}
-                </button>
-              ))}
-            </div>
-          )}
+            ))}
+          </div>
         </div>
 
         {/* Price and Date Dropdowns */}
@@ -345,43 +338,40 @@ const Filters: React.FC<FiltersProps> = ({
             <label className="block mb-3 font-semibold text-gray-800 text-lg">
               Category
             </label>
-            {loading ? (
-              <CategorySkeleton layout="vertical" />
-            ) : error ? (
-              <div className="text-red-500">{error}</div>
-            ) : (
-              <div className="space-y-1">
+
+            {isLoading && <CategorySkeleton layout="vertical" />}
+
+            <div className="space-y-1">
+              <div
+                className={`py-2 px-3 cursor-pointer rounded-lg transition-colors duration-200 ${
+                  categoryId === "All"
+                    ? "text-blue-600 font-semibold bg-blue-50"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                }`}
+                onClick={() => {
+                  setCategoryId("All");
+                  if (window.innerWidth < 1024) toggleFilters();
+                }}
+              >
+                All Categories
+              </div>
+              {categories.map((categoryItem, index) => (
                 <div
+                  key={categoryItem.Id ?? `category-${index}`}
                   className={`py-2 px-3 cursor-pointer rounded-lg transition-colors duration-200 ${
-                    categoryId === "All"
+                    categoryId === categoryItem.Id?.toString()
                       ? "text-blue-600 font-semibold bg-blue-50"
                       : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                   }`}
                   onClick={() => {
-                    setCategoryId("All");
+                    setCategoryId(categoryItem.Id?.toString());
                     if (window.innerWidth < 1024) toggleFilters();
                   }}
                 >
-                  All Categories
+                  {categoryItem.Name}
                 </div>
-                {categories.map((categoryItem, index) => (
-                  <div
-                    key={categoryItem.Id ?? `category-${index}`}
-                    className={`py-2 px-3 cursor-pointer rounded-lg transition-colors duration-200 ${
-                      categoryId === categoryItem.Id?.toString()
-                        ? "text-blue-600 font-semibold bg-blue-50"
-                        : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-                    }`}
-                    onClick={() => {
-                      setCategoryId(categoryItem.Id?.toString());
-                      if (window.innerWidth < 1024) toggleFilters();
-                    }}
-                  >
-                    {categoryItem.Name}
-                  </div>
-                ))}
-              </div>
-            )}
+              ))}
+            </div>
           </div>
 
           {/* Price Filters */}

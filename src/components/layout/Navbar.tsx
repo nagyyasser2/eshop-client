@@ -1,17 +1,14 @@
 import { useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FaSignOutAlt, FaChevronDown, FaBars, FaTimes } from "react-icons/fa";
-import { useCart } from "../../context/CartContext";
+import { FaBars, FaTimes } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
-import { User } from "lucide-react";
 import logoSvg from "../../assets/logo.svg";
 import NavbarCartButton from "./NavbarCartButton";
 
 function Navbar() {
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { user, logout } = useAuth();
-  const { clearCart } = useCart();
+  const { user } = useAuth();
   const location = useLocation();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
@@ -26,12 +23,6 @@ function Navbar() {
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
-  };
-
-  const handleLogout = () => {
-    logout();
-    clearCart();
-    setIsUserDropdownOpen(false);
   };
 
   const isActivePath = (path: string) => {
@@ -100,8 +91,8 @@ function Navbar() {
             <div className="flex items-center">
               {user ? (
                 <div className="relative" ref={dropdownRef}>
-                  <button
-                    onClick={toggleUserDropdown}
+                  <Link
+                    to={"/profile"}
                     className="flex items-center space-x-0 px-4 py-2 pl-2 hover:from-slate-100 hover:to-slate-100 rounded-xl hover:border-slate-300 transition-all duration-200 group"
                   >
                     <div className="flex items-center space-x-2">
@@ -111,9 +102,9 @@ function Navbar() {
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                           className="w-8"
                         >
                           <circle cx="12" cy="8" r="4" />
@@ -121,40 +112,7 @@ function Navbar() {
                         </svg>
                       </div>
                     </div>
-                    <FaChevronDown
-                      className={`h-3 w-3 text-slate-400 transition-transform duration-200 ${
-                        isUserDropdownOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-
-                  <div
-                    className={`absolute right-0 mt-2 w-40 bg-white  rounded-md border border-gray-200 py-0 z-50 transition-all duration-200 ${
-                      isUserDropdownOpen
-                        ? "opacity-100 visible transform translate-y-0"
-                        : "opacity-0 invisible transform -translate-y-2"
-                    }`}
-                  >
-                    <div className="">
-                      <Link
-                        to="/profile"
-                        className="flex items-center space-x-3 px-4 py-3 text-slate-700 rounded-t-2xl hover:text-slate-700 transition-colors duration-200"
-                        onClick={() => setIsUserDropdownOpen(false)}
-                      >
-                        <User className="h-4 w-4" />
-                        <span>Profile</span>
-                      </Link>
-                      <div className="border-t border-gray-100 "></div>
-
-                      <button
-                        onClick={handleLogout}
-                        className="flex items-center space-x-3 w-full cursor-pointer  rounded-b-2xl px-4 py-3 text-slate-700 hover:text-slate-700 transition-colors duration-200"
-                      >
-                        <FaSignOutAlt className="h-4 w-4" />
-                        <span>Sign Out</span>
-                      </button>
-                    </div>
-                  </div>
+                  </Link>
                 </div>
               ) : (
                 <div className="relative" ref={dropdownRef}>

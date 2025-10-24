@@ -67,7 +67,7 @@ function ProductSingleImagePreview() {
         <img
           src={image}
           alt={product.Name || "Product image"}
-          className="w-full h-full object-contain rounded-2xl"
+          className="w-full h-full object-contain"
         />
       </div>
     </div>
