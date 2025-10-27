@@ -41,7 +41,7 @@ export function PromotionalBanner() {
             any occasion.
           </p>
 
-          <button className="bg-slate-600 hover:bg-slate-700 text-white text-sm font-medium px-6 py-2 rounded-full transition-all duration-300 shadow-md hover:shadow-lg mt-3">
+          <button className="bg-slate-700 hover:bg-slate-700 text-white text-sm sm:text-lg font-medium px-6 py-3 rounded-full transition-all duration-300 shadow-md hover:shadow-lg mt-3">
             <Link to={"/support"}>Contact Us</Link>
           </button>
         </div>

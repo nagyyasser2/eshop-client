@@ -11,7 +11,7 @@ const orderStatus = [
 
 interface OrdersFiltersProps {
   filterKey: string;
-  setFilterKey: Dispatch<React.SetStateAction<string>>;
+  setFilterKey: any;
 }
 
 export default function OrdersFilters({

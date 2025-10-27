@@ -1,12 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import {
-  MailIcon,
-  PhoneIcon,
-  ShoppingCartIcon,
-  HomeIcon,
-  MessageCircleIcon,
-} from "lucide-react";
+import { ShoppingCartIcon, HomeIcon } from "lucide-react";
+import CustomProducts from "../products/CustomProducts";
 
 interface SupportProps {
   orderNumber?: string;
@@ -42,10 +37,10 @@ function Support({ orderNumber: propOrderNumber }: SupportProps) {
   };
 
   return (
-    <div className="py-4 sm:py-6 md:py-8 lg:py-10 px-4 sm:px-6 md:px-8 lg:px-10 flex items-center justify-center">
-      <div className="w-full max-w-2xl lg:max-w-4xl">
+    <div className="py-4 sm:py-6 md:py-8 lg:py-10 px-4 sm:px-6 md:px-8 lg:px-10 flex-col items-center justify-center">
+      <div className="w-full max-w-2xl lg:max-w-4xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-6 sm:mb-8 md:mb-10">
+        <div className="text-center mb-4 sm:mb-6 md:mb-8">
           <h1 className="text-xl sm:text-2xl md:text-2xl font-semibold text-slate-700 mb-2">
             Customer Support
           </h1>
@@ -77,11 +72,7 @@ function Support({ orderNumber: propOrderNumber }: SupportProps) {
         )}
 
         {/* Query Form */}
-        <div className="bg-white rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8">
-          <h2 className="text-xl sm:text-2xl md:text-2xl font-normal text-slate-700 mb-4 sm:mb-6">
-            Submit Your Query
-          </h2>
-
+        <div className="bg-white rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 text-center">
           <div className="space-y-4 sm:space-y-6">
             {orderNumber && (
               <div>
@@ -95,12 +86,6 @@ function Support({ orderNumber: propOrderNumber }: SupportProps) {
             )}
 
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm sm:text-base text-gray-700 mb-2"
-              >
-                Your Email
-              </label>
               <input
                 id="email"
                 type="email"
@@ -112,12 +97,6 @@ function Support({ orderNumber: propOrderNumber }: SupportProps) {
             </div>
 
             <div>
-              <label
-                htmlFor="query"
-                className="block text-sm sm:text-base text-gray-700 mb-2"
-              >
-                Your Query
-              </label>
               <textarea
                 id="query"
                 value={query}
@@ -132,34 +111,29 @@ function Support({ orderNumber: propOrderNumber }: SupportProps) {
               type="button"
               onClick={handleQuerySubmit}
               disabled={!email || !query}
-              className="w-full bg-slate-700
-              text-white font-semibold py-3 sm:py-4 px-6 rounded-lg focus:outline-none 
-              focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed
-              text-base sm:text-lg"
+              className="
+                          w-full sm:w-auto
+                          bg-slate-700 hover:bg-slate-800
+                          text-white font-semibold
+                          py-2 sm:py-2.5 px-6 sm:px-8
+                          rounded-lg
+                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+                          disabled:opacity-70 disabled:cursor-not-allowed
+                          text-base sm:text-base
+                          transition-all duration-200
+                        "
             >
               Submit Query
             </button>
           </div>
         </div>
-
-        {/* Navigation Links */}
-        <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-6 sm:mt-8">
-          <Link
-            to="/"
-            className="inline-flex items-center text-sm sm:text-base text-gray-600 "
-          >
-            <HomeIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-            Back to Home
-          </Link>
-          <Link
-            to="/orders"
-            className="inline-flex items-center text-sm sm:text-base text-gray-600 "
-          >
-            <ShoppingCartIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-            View Orders
-          </Link>
-        </div>
       </div>
+      <CustomProducts
+        title="Discover our latest items"
+        categoryId={null}
+        productId={null}
+        featured={true}
+      />
     </div>
   );
 }

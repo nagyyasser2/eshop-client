@@ -1,8 +1,9 @@
 import axios from "axios";
 import { apiStoreService } from "../persist/api.store.service";
+import type { ApiResponse } from "../types/auth.types";
 
-export const API_URL = "https://10.10.0.68:7000/api";
-export const SERVER_URL = "https://10.10.0.68:7000/";
+export const API_URL = "http://172.22.0.4:7000/api";
+export const SERVER_URL = "http://172.22.0.4:7000/";
 
 // Updated tokenManager with fixed expiration logic
 export const tokenManager = {
@@ -227,8 +228,8 @@ api.interceptors.response.use(
 
 // Auth API methods
 export const authAPI = {
-  login: async (email: string, password: string): Promise<AuthResponse> => {
-    const response = await api.post<AuthResponse>("/auth/login", {
+  login: async (email: string, password: string): Promise<ApiResponse> => {
+    const response = await api.post<ApiResponse>("/auth/login", {
       Email: email,
       Password: password,
     });
@@ -242,12 +243,12 @@ export const authAPI = {
   },
 
   register: async (userData: any) => {
-    const response = await api.post<AuthResponse>("/auth/register", userData);
+    const response = await api.post<ApiResponse>("/auth/register", userData);
     return response.data;
   },
 
-  googleLogin: async (credential: string): Promise<AuthResponse> => {
-    const response = await api.post<AuthResponse>("/auth/google-jwt", {
+  googleLogin: async (credential: string): Promise<ApiResponse> => {
+    const response = await api.post<ApiResponse>("/auth/google-jwt", {
       credential,
     });
 

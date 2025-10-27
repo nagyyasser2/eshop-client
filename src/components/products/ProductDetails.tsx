@@ -126,7 +126,7 @@ function ProductDetails() {
           <div className="grid lg:grid-cols-2 gap-8 px-0 py-2">
             {/* Image Section */}
             <div>
-              <div className="relative w-full cursor-zoom-in aspect-square mb-4 bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl overflow-hidden">
+              <div className="relative w-full cursor-zoom-in aspect-square mb-4 rounded-2xl overflow-hidden">
                 <img
                   onClick={() => handleImageClick(images[selectedImageIndex])}
                   src={images[selectedImageIndex]}
@@ -164,7 +164,6 @@ function ProductDetails() {
                   </p>
                 )}
               </div>
-
               {/* Price */}
               <div>
                 <div className="flex items-baseline gap-3 flex-wrap">
@@ -187,15 +186,13 @@ function ProductDetails() {
                     )}
                 </div>
               </div>
-
               {/* Short Description */}
               {product.ShortDescription && (
                 <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
                   {product.ShortDescription}
                 </p>
               )}
-
-              {/* Stock Status */}
+              {/* Stock Status
               {product.TrackQuantity && (
                 <div className="p-3 bg-slate-50 rounded-lg">
                   <div className="flex items-center gap-2">
@@ -216,8 +213,7 @@ function ProductDetails() {
                     </span>
                   </div>
                 </div>
-              )}
-
+              )} */}
               {/* Quantity Selector */}
               {!isOutOfStock && (
                 <div>
@@ -256,7 +252,6 @@ function ProductDetails() {
                   </div>
                 </div>
               )}
-
               {/* Add to Cart Button */}
               <button
                 onClick={handleAddToCart}
@@ -282,7 +277,6 @@ function ProductDetails() {
                   <>Add to Cart</>
                 )}
               </button>
-
               {/* Description */}
               {product.Description && (
                 <div className="mb-6 pb-6 border-b border-slate-200">
@@ -294,7 +288,6 @@ function ProductDetails() {
                   </p>
                 </div>
               )}
-
               {/* Additional Details */}
               <div className="space-y-3">
                 <h3 className="text-lg font-semibold text-slate-700 mb-2">

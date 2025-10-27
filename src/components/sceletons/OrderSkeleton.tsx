@@ -5,7 +5,7 @@ const OrderSkeleton: FC = () => {
     <div className="rounded-2xl overflow-hidden">
       <div className="p-2 sm:p-2 md:p-2 px-0 space-y-3 sm:space-y-4">
         {/* Render multiple skeleton items to mimic a list of orders */}
-        {[...Array(3)].map((_, index) => (
+        {[...Array(1)].map((_, index) => (
           <div
             key={index}
             className="bg-white rounded-2xl overflow-hidden transition-all duration-300 transform"

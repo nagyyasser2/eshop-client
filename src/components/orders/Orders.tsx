@@ -5,27 +5,23 @@ import OrderNotRegistered from "./OrderNotRegisterd";
 import OrdersList from "./OrdersList";
 import EmptyState from "./EmptyState";
 import OrderSkeleton from "../sceletons/OrderSkeleton";
-import type { Order, ShippingStatus } from "../../types/order.types";
+import type { Order } from "../../types/order.types";
 import CustomProducts from "../products/CustomProducts";
 import OrdersFilters from "./OrdersFilters";
 import { useEffect, useState } from "react";
 
 function Orders() {
   const { user } = useAuth();
-
-  if (!user) {
-    return <OrderNotRegistered />;
-  }
+  const [filterKey, setFilterKey] = useState("All");
+  const [orders, setOrders] = useState<Order[]>([]);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["userOrders", user?.Id],
     queryFn: getMyOrders,
     refetchOnWindowFocus: true,
     refetchOnMount: true,
+    enabled: !!user, // Only run query if user exists
   });
-
-  const [filterKey, setFilterKey] = useState("All");
-  const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
     if (!data) return;
@@ -51,20 +47,29 @@ function Orders() {
   return (
     <div className="py-4 pb-0 ">
       <div className="container mx-auto py-2 flex flex-col gap-5">
-        <OrdersFilters filterKey={filterKey} setFilterKey={setFilterKey} />
+        {!user && <OrderNotRegistered />}
 
-        {isLoading && <OrderSkeleton />}
-        {error && <OrderNotRegistered />}
-        {!isLoading && data?.length === 0 && <EmptyState />}
+        {user && isLoading && <OrderSkeleton />}
 
-        {orders.length > 0 && <OrdersList orders={orders} />}
+        {user && error && <OrderNotRegistered />}
 
-        <CustomProducts
-          title="Discover our latest items"
-          categoryId={null}
-          productId={null}
-          featured={true}
-        />
+        {user && (data?.length ?? 0) > 0 && (
+          <OrdersFilters filterKey={filterKey} setFilterKey={setFilterKey} />
+        )}
+
+        {user && !isLoading && (data?.length ?? 0) === 0 && <EmptyState />}
+
+        {user && orders.length > 0 && <OrdersList orders={orders} />}
+
+        {/* Only renders when user is logged in */}
+        {user && (
+          <CustomProducts
+            title="Discover our latest items"
+            categoryId={null}
+            productId={null}
+            featured={true}
+          />
+        )}
       </div>
     </div>
   );

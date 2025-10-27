@@ -35,17 +35,21 @@ function Navbar() {
           <div className="flex items-center">
             <button
               onClick={toggleMobileMenu}
-              className="md:hidden p-2 text-slate-700"
+              className="md:hidden p-2 rounded-lg text-slate-700 hover:bg-slate-100 transition-colors duration-200"
             >
               {isMobileMenuOpen ? (
-                <FaTimes className="h-7 w-7" />
+                <FaTimes className="h-6 w-6 sm:h-7 sm:w-7" />
               ) : (
-                <FaBars className="h-7 w-7" />
+                <FaBars className="h-6 w-6 sm:h-7 sm:w-7" />
               )}
             </button>
 
-            <Link to="/">
-              <img src={logoSvg} alt="Logo" width={130} />
+            <Link to="/" className="translate-y-[5px]">
+              <img
+                src={logoSvg}
+                alt="Logo"
+                className="w-24 sm:w-28 md:w-32 lg:w-30 xl:w-36 h-auto"
+              />
             </Link>
           </div>
           {/* Center Navigation Links - hidden on mobile */}
@@ -133,7 +137,7 @@ function Navbar() {
         {/* Mobile Menu - Dropdown */}
         <div
           ref={mobileMenuRef}
-          className={`md:hidden mt-2 bg-white rounded-xl border border-gray-200  overflow-hidden transition-all duration-300 ease-in-out ${
+          className={`md:hidden mt-2 bg-white rounded-xl mx-4 overflow-hidden transition-all duration-300 ease-in-out ${
             isMobileMenuOpen
               ? "opacity-100 max-h-96 visible"
               : "opacity-0 max-h-0 invisible"

@@ -10,8 +10,8 @@ import {
   FaCalendarAlt,
 } from "react-icons/fa";
 import { register as registerUser } from "../../api/auth";
-import { Link } from "react-router-dom";
-import type { ApiResponse, RegisterFormData } from "../../types/auth.types";
+import type { RegisterFormData } from "../../types/auth.types";
+import { useApiFormError } from "../../hooks/useApiFormError";
 
 function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -30,6 +30,8 @@ function RegisterForm() {
 
   const watchPassword = watch("password");
 
+  const handleError = useApiFormError<RegisterFormData>(setError);
+
   const registerMutation = useMutation({
     mutationFn: async (data: RegisterFormData) => {
       const response = await registerUser(
@@ -40,20 +42,14 @@ function RegisterForm() {
         data.confirmPassword,
         data.dateOfBirth
       );
-      if (!response.Success) throw new Error(response.Message);
+
       return response;
     },
-    onSuccess: (response: ApiResponse) => {
-      setSuccessMessage(response?.Message ?? "");
+    onSuccess: (response) => {
+      setSuccessMessage(response.Message ?? "Registered successfully!");
       reset();
     },
-    onError: (error: any) => {
-      const apiMessage =
-        error?.response?.data?.Message ||
-        error.message ||
-        "Something went wrong.";
-      setError("root", { type: "manual", message: apiMessage });
-    },
+    onError: handleError,
   });
 
   const onSubmit = async (data: RegisterFormData) => {
@@ -120,7 +116,7 @@ function RegisterForm() {
                   },
                 })}
                 className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-all duration-200 ${
-                  errors[id]
+                  errors[id as keyof RegisterFormData]
                     ? "border-red-300 bg-red-50"
                     : "border-gray-300 bg-white hover:border-gray-400"
                 }`}
@@ -128,9 +124,10 @@ function RegisterForm() {
                 disabled={isLoading}
               />
             </div>
-            {errors[id] && (
+            {errors[id as keyof RegisterFormData] && (
               <p className="mt-1 text-sm text-red-600">
-                {(errors[id]?.message as string) || ""}
+                {(errors[id as keyof RegisterFormData]?.message as string) ||
+                  ""}
               </p>
             )}
           </div>
@@ -221,7 +218,7 @@ function RegisterForm() {
                   required: `${label} is required`,
                 })}
                 className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent transition-all duration-200 ${
-                  errors[id]
+                  errors[id as keyof RegisterFormData]
                     ? "border-red-300 bg-red-50"
                     : "border-gray-300 bg-white hover:border-gray-400"
                 }`}
@@ -241,20 +238,26 @@ function RegisterForm() {
                 )}
               </button>
             </div>
-            {errors[id] && (
+            {errors[id as keyof RegisterFormData] && (
               <p className="mt-1 text-sm text-red-600">
-                {(errors[id]?.message as string) || ""}
+                {(errors[id as keyof RegisterFormData]?.message as string) ||
+                  ""}
               </p>
             )}
           </div>
         ))}
 
         {/* Errors / Success */}
-        {errors.root && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-            <p className="text-sm text-red-600">{errors.root.message}</p>
+        {errors.root && errors.root.message && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3 space-y-1">
+            {errors.root.message.split("\n").map((msg, i) => (
+              <p key={i} className="text-sm text-red-600">
+                {msg}
+              </p>
+            ))}
           </div>
         )}
+
         {successMessage && (
           <div className="bg-green-50 border border-green-200 rounded-lg p-3">
             <p className="text-sm text-green-600">{successMessage}</p>
@@ -268,7 +271,7 @@ function RegisterForm() {
           className={`w-full py-3 px-4 rounded-lg font-medium text-white transition-all duration-200 ${
             isLoading
               ? "bg-gray-400 cursor-not-allowed"
-              : "bg-slate-500 cursor-pointer transform hover:scale-[1.01] hover:shadow-md"
+              : "bg-slate-700 cursor-pointer transform hover:scale-[1.01] hover:shadow-md"
           }`}
         >
           {registerMutation.isPending ? (

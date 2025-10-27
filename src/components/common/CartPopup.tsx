@@ -2,6 +2,7 @@ import { X } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import { SERVER_URL } from "../../api/api";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 export default function CartPopup() {
   const {
@@ -13,6 +14,8 @@ export default function CartPopup() {
     setIsCartPopupOpen,
   } = useCart();
   const navigate = useNavigate();
+
+  const { user } = useAuth();
 
   if (!isCartPopupOpen) return null;
 
@@ -35,7 +38,7 @@ export default function CartPopup() {
       className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex justify-end"
       onClick={handleOverlayClick}
     >
-      <div className="w-full sm:w-96 bg-white shadow-xl p-4 flex flex-col animate-slide-in-right">
+      <div className="w-full max-w-sm sm:w-96 bg-white shadow-xl p-4 flex flex-col animate-slide-in-right">
         {/* Header */}
         <div className="flex items-center justify-between pb-3 mb-4">
           <h2 className="text-lg font-semibold text-slate-700">My Cart</h2>
@@ -123,12 +126,26 @@ export default function CartPopup() {
               <span>${totals.TotalAmount.toFixed(2)}</span>
             </div>
 
-            <button
-              className="w-full mt-4 bg-slate-600 hover:bg-slate-700 text-white py-2 rounded-lg transition-colors cursor-pointer"
-              onClick={handleCheckout}
-            >
-              Checkout
-            </button>
+            {user ? (
+              <button
+                className="w-full mt-4 bg-slate-700 hover:bg-slate-800 text-white py-2 sm:py-2 text-md sm:text-lg rounded-lg transition-colors cursor-pointer"
+                onClick={handleCheckout}
+              >
+                Checkout
+              </button>
+            ) : (
+              <>
+                <button
+                  className="w-full mt-2 bg-slate-700 text-white py-3  rounded-lg transition-colors cursor-pointer"
+                  onClick={() => {
+                    setIsCartPopupOpen(false);
+                    navigate("/login");
+                  }}
+                >
+                  Login to Checkout
+                </button>
+              </>
+            )}
           </div>
         )}
       </div>

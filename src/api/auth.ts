@@ -39,6 +39,7 @@ export const register = async (
     confirmPassword,
     dateOfBirth,
   });
+
   return response;
 };
 

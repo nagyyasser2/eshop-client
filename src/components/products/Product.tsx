@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { SERVER_URL } from "../../api/api";
 import { useCart } from "../../context/CartContext";
 import type { CartItem } from "../../types/cart.types";
 import type { ProductDto } from "../../types/product.types";
 import productPlaceHolder from "../../assets/productPlaceHolder.svg";
-import { useProductContext } from "../../context/ProductContext";
 import { useNavigate } from "react-router-dom";
+import { SERVER_URL } from "../../api/api";
 
 interface ProductProps {
   product: ProductDto;
@@ -14,9 +13,7 @@ interface ProductProps {
 function Product({ product }: ProductProps) {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [addedSuccess, setAddedSuccess] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
   const { addToCart } = useCart();
-  const { setProduct, setIsProductPopupOpen } = useProductContext();
   const navigate = useNavigate();
 
   const getImageUrl = (imagePath?: string): string => {
@@ -53,86 +50,123 @@ function Product({ product }: ProductProps) {
     }, 2000);
   };
 
-  const handleImageClick = () => {
-    setProduct(product);
-    setIsProductPopupOpen(true);
-  };
-
   const handleBagClick = () => {
     navigate(`/bag/${product.Id}`);
   };
 
   return (
-    <div className="group relative w-full flex flex-col">
+    <div className="group relative w-full flex flex-col bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
       {/* Image Container */}
       <div
-        className="relative w-full aspect-square overflow-hidden rounded-3xl bg-gradient-to-br from-slate-100 to-slate-200"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        className="relative w-full aspect-square overflow-hidden bg-gray-50 cursor-pointer"
+        onClick={handleBagClick}
       >
         {/* Product Image */}
         <img
           src={primaryImage}
           alt={product.Name}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           loading="lazy"
         />
+      </div>
 
-        {/* Hover Overlay */}
-        <div
-          // onClick={handleImageClick}
-          onClick={handleBagClick}
-          className={`absolute inset-0  bg-gradient-to-t from-black/60 via-black/30 to-transparent transition-opacity duration-300 ${
-            isHovered ? "opacity-100" : "opacity-0"
-          }`}
-        />
+      {/* Product Details */}
+      <div className="p-4 flex flex-col gap-3">
+        {/* Product Name */}
+        <div className="cursor-pointer" onClick={handleBagClick}>
+          <h3 className="text-sm font-medium text-gray-900 line-clamp-2 hover:text-gray-600 transition-colors">
+            {product.Name}
+          </h3>
+        </div>
 
-        {/* Add to Cart Button - Appears on Hover at Bottom */}
-        <div
-          className={`absolute bottom-0 left-0 right-0 p-4 transition-all duration-300 transform ${
-            isHovered
-              ? "opacity-100 translate-y-0 pointer-events-auto"
-              : "opacity-0 translate-y-4 pointer-events-none"
-          }`}
-        >
+        {/* Price and Add to Cart */}
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-lg font-bold text-slate-700">
+            ${product.Price?.toLocaleString()}
+          </p>
+
+          {/* Add to Cart Button */}
           <button
             onClick={(e) => {
               e.stopPropagation();
               handleAddToCart(1);
             }}
-            disabled={isAddingToCart}
-            className={`w-full px-6 py-3 cursor-pointer rounded-full font-normal text-slate-600  flex items-center justify-center gap-2 ${
-              addedSuccess
-                ? "bg-slate-600 text-white"
-                : "text-slate-600 bg-white"
-            } ${isAddingToCart && "opacity-75 scale-95"}`}
+            disabled={isAddingToCart || addedSuccess}
+            className={`
+              relative px-4 py-2.5 rounded-md text-sm font-medium
+              transition-all duration-200 ease-in-out
+              ${
+                addedSuccess
+                  ? "bg-blue-400 text-white"
+                  : "bg-slate-600 text-white hover:bg-slate-700 active:scale-95"
+              }
+              ${isAddingToCart && "opacity-70 cursor-wait"}
+              disabled:cursor-not-allowed
+              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-700
+            `}
           >
-            {addedSuccess ? (
-              <>
-                <span className="text-sm sm:text-base">Added.</span>
-              </>
-            ) : isAddingToCart ? (
-              <>
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                <span className="text-sm sm:text-base">Adding...</span>
-              </>
-            ) : (
-              <>
-                <span className="text-sm sm:text-base">Add to Cart</span>
-              </>
-            )}
+            <span className="flex items-center gap-2">
+              {addedSuccess ? (
+                <>
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2.5}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  <span>Added</span>
+                </>
+              ) : isAddingToCart ? (
+                <>
+                  <svg
+                    className="animate-spin w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                  </svg>
+                  <span>Adding</span>
+                </>
+              ) : (
+                <>
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                    />
+                  </svg>
+                  <span>Add to Cart</span>
+                </>
+              )}
+            </span>
           </button>
         </div>
-      </div>
-
-      {/* Product Details - Always Visible Below Image */}
-      <div className="mt-4 text-center cursor-pointer" onClick={handleBagClick}>
-        <h3 className="text-lg sm:text-xl font-semibold text-slate-600 mb-2 line-clamp-2">
-          {product.Name}
-        </h3>
-        <p className="text-xl sm:text-2xl font-semibold text-slate-600">
-          ${product.Price?.toLocaleString()}
-        </p>
       </div>
     </div>
   );

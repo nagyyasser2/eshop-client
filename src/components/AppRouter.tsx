@@ -11,7 +11,7 @@ import Loading from "./common/Loading";
 import HomeLayout from "./layout/HomeLayout";
 import PaymentFailed from "./payment/PaymentFailed";
 import PaymentSuccess from "./payment/PaymentSuccess";
-import Support from "./pages/Support";
+// import Support from "./pages/Support";
 import api from "../api/api";
 import { useApiStatus } from "../context/ApiStatusContext";
 import ApiDown from "./layout/ApiDown";
@@ -33,8 +33,8 @@ import ProtectRoutes from "./auth/ProtectedRoutes";
 import CartPopup from "./common/CartPopup";
 import { Announce } from "./products/Promotion";
 import ProductImagesPreview from "./common/ProductImagesPreview";
-import ProductDetails from "./products/ProductDetails";
 import ProductSingleImagePreview from "./common/ProductSingleImagePreview";
+import ProductDetails from "./products/ProductDetails";
 
 const Products = lazy(() => import("./products/Products"));
 
@@ -109,7 +109,7 @@ function AppRouter() {
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/payment-failed" element={<PaymentFailed />} />
-          <Route path="/support" element={<Support />} />
+          {/* <Route path="/support" element={<Support />} /> */}
           <Route path="/profile" element={<Profile />} />
           <Route path="/termsOfService" element={<TermsOfService />} />
           <Route path="/privacyPolicy" element={<PrivacyPolicy />} />

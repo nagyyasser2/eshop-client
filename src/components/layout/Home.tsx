@@ -32,10 +32,10 @@ function Home() {
   };
 
   return (
-    <div className="bg-white pb-1">
-      <div className="container mx-auto mb-2 sm:mb-3 lg:mb-4 py-0 px-2 sm:px-4">
+    <div className="bg-white py-1 sm:py-2 lg:py-8">
+      <div className="container mx-auto px-2 sm:px-4">
         {isLoading ? (
-          <div className="rounded-xl sm:rounded-2xl bg-gradient-to-r from-slate-50 to-slate-50  p-6 sm:p-8 md:p-12 lg:p-16 animate-pulse">
+          <div className="rounded-xl sm:rounded-2xl bg-gradient-to-r from-slate-50 to-slate-50 p-6 sm:p-8 md:p-12 lg:p-16 animate-pulse">
             <div className="flex flex-col lg:flex-row items-center gap-6 sm:gap-8 lg:gap-12">
               {/* Image Skeleton */}
               <div className="flex-1 flex justify-center w-full">
@@ -56,7 +56,7 @@ function Home() {
             pagination={{ clickable: true }}
             loop={true}
             autoplay={{ delay: 4000, disableOnInteraction: false }}
-            className="rounded-xl sm:rounded-4xl bg-gradient-to-r from-slate-100  to-slate-100"
+            className="rounded-xl sm:rounded-4xl shadow-sm py-6 sm:py-8 lg:py-10"
           >
             {categories?.map((category) => (
               <SwiperSlide key={category.Id}>
@@ -65,7 +65,7 @@ function Home() {
                   <div className="flex-1 flex justify-center w-full">
                     <div className="relative group w-full max-w-sm sm:max-w-md lg:max-w-lg">
                       <div
-                        className={`absolute -inset-1  rounded-2xl sm:rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-300`}
+                        className={`absolute -inset-1 rounded-2xl sm:rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-300`}
                       ></div>
                       <img
                         src={
@@ -86,17 +86,17 @@ function Home() {
                   {/* Content Section */}
                   <div className="flex-1 text-center lg:text-left w-full px-2 sm:px-0">
                     <h4
-                      className={`text-xl sm:text-xl md:text-xl lg:text-2xl xl:text-2xl font-semibold mb-3 sm:mb-4 lg:mb-6 text-slate-500`}
+                      className={`text-xl sm:text-xl md:text-xl lg:text-2xl xl:text-2xl font-semibold mb-3 sm:mb-4 lg:mb-6 text-slate-700`}
                     >
                       {category.Name}
                     </h4>
-                    <p className="text-xl sm:text-xs md:text-sm lg:text-md xl:text-xl font-normal mb-3 sm:mb-4 lg:mb-6 text-slate-500 max-w-xs sm:max-w-sm md:max-w-md mx-auto lg:mx-0 line-clamp-2 sm:line-clamp-none">
+                    <p className="text-xl sm:text-xs md:text-sm lg:text-md xl:text-xl font-normal mb-3 sm:mb-4 lg:mb-6 text-slate-700 max-w-xs sm:max-w-sm md:max-w-md mx-auto lg:mx-0 line-clamp-2 sm:line-clamp-none">
                       {category?.Description ?? ""}
                     </p>
 
                     <button
                       onClick={() => handleShopNow(category)}
-                      className="hidden sm:inline-flex items-center border-2 border-slate-400 px-4 py-2 cursor-pointer text-md sm:text-xl md:text-1xl font-semibold text-slate-500 rounded-full transform transition-all duration-300 group"
+                      className="hidden sm:inline-flex items-center border-2 border-slate-400 px-4 py-2 cursor-pointer text-md sm:text-xl md:text-1xl font-semibold text-slate-700 rounded-full transform transition-all duration-300 group"
                     >
                       <span>Shop Now</span>
                       <svg
@@ -118,6 +118,9 @@ function Home() {
               </SwiperSlide>
             ))}
             <style>{`
+              .swiper-wrapper {
+                padding: 20px 0px;
+              }
               .swiper-pagination-bullet {
                 width: 10px;
                 height: 10px;

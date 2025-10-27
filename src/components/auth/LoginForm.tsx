@@ -7,6 +7,7 @@ import { useAuth } from "../../context/AuthContext";
 import GoogleSignIn from "./GoogleSignIn";
 import { type ApiResponse, type LoginFormData } from "../../types/auth.types";
 import { Link } from "react-router-dom";
+import { useApiFormError } from "../../hooks/useApiFormError";
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,6 +20,8 @@ function LoginForm() {
   } = useForm<LoginFormData>();
 
   const { setCredentials } = useAuth();
+
+  const handleError = useApiFormError<LoginFormData>(setError);
 
   const loginMutation = useMutation({
     onMutate: () => {
@@ -41,18 +44,7 @@ function LoginForm() {
         });
       }
     },
-    onError: (error: any) => {
-      const apiMessage =
-        error?.response?.data?.Message ||
-        error?.message ||
-        "Invalid email or password. Please try again.";
-
-      setError("root", {
-        type: "manual",
-        message: apiMessage,
-      });
-    },
-
+    onError: handleError,
     gcTime: 0,
     retry: false,
   });
@@ -162,7 +154,7 @@ function LoginForm() {
           className={`w-full py-3 px-4 rounded-lg font-medium text-white transition-all duration-200 ${
             isLoading
               ? "bg-gray-400 cursor-not-allowed"
-              : "bg-slate-500 cursor-pointer transform"
+              : "bg-slate-700 cursor-pointer transform"
           }`}
         >
           {loginMutation.isPending ? (
