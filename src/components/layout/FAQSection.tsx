@@ -51,8 +51,8 @@ function FAQSection() {
     <div className="bg-white">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="text-left mb-12">
-          <h4 className="text-md sm:text-xl lg:text-xl font-semibold mb-3 sm:mb-4 sm:px-0 text-slate-700">
+        <div className="text-left mb-4 sm:mb-8 space-y-2">
+          <h4 className="text-lg sm:text-2xl font-semibold text-slate-700">
             <span>Frequently Asked Questions</span>
           </h4>
           <p className="text-sm sm:text-base md:text-lg text-slate-500 leading-relaxed max-w-2xl">

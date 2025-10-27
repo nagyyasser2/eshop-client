@@ -55,7 +55,7 @@ function Product({ product }: ProductProps) {
   };
 
   return (
-    <div className="group relative w-full flex flex-col bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
+    <div className="group relative w-full flex flex-col bg-white rounded-lg overflow-hidden transition-shadow duration-300 border border-slate-200">
       {/* Image Container */}
       <div
         className="relative w-full aspect-square overflow-hidden bg-gray-50 cursor-pointer"
@@ -74,7 +74,7 @@ function Product({ product }: ProductProps) {
       <div className="p-4 flex flex-col gap-3">
         {/* Product Name */}
         <div className="cursor-pointer" onClick={handleBagClick}>
-          <h3 className="text-sm font-medium text-gray-900 line-clamp-2 hover:text-gray-600 transition-colors">
+          <h3 className="text-sm font-medium text-gray-900 line-clamp-2 hover:text-gray-600 hover:underline transition-colors">
             {product.Name}
           </h3>
         </div>

@@ -56,48 +56,50 @@ function CustomProducts({
 
   return (
     <div className="bg-white container mx-auto px-4 sm:px-auto py-8">
-      <div className="">
-        {/* Header */}
-        <div className="flex flex-col mb-10">
-          <h4 className="text-md sm:text-xl lg:text-xl font-semibold mb-3 sm:mb-4 sm:px-0 text-slate-700">
-            <span>{title}</span>
-          </h4>
+      {/* Header */}
+      <div className="flex flex-col mb-4 sm:mb-6">
+        <h4 className="text-lg sm:text-2xl font-semibold text-slate-700">
+          {title}
+        </h4>
+      </div>
+
+      {/* Loading */}
+      {isLoading && <ProductGridSkeleton />}
+      {/* Error */}
+      {isError && (
+        <div className="text-center text-red-600">
+          Error: {error?.message || "Failed to load products"}
         </div>
+      )}
+      {/* Swiper Products Carousel */}
+      {!isLoading && !isError && products.length > 0 && (
+        <Swiper
+          modules={[Navigation, Pagination, Autoplay]}
+          pagination={{ clickable: true }}
+          loop={true}
+          autoplay={{ delay: 4000, disableOnInteraction: false }}
+          spaceBetween={24}
+          breakpoints={{
+            320: { slidesPerView: 1 },
+            640: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+            1280: { slidesPerView: 4 },
+          }}
+        >
+          {products.map((product: ProductDto) => {
+            return (
+              product.Id !== productId && (
+                <SwiperSlide key={product.Id}>
+                  <ProductComponent product={product} />
+                </SwiperSlide>
+              )
+            );
+          })}
 
-        {/* Loading */}
-        {isLoading && <ProductGridSkeleton />}
-        {/* Error */}
-        {isError && (
-          <div className="text-center text-red-600">
-            Error: {error?.message || "Failed to load products"}
-          </div>
-        )}
-        {/* Swiper Products Carousel */}
-        {!isLoading && !isError && products.length > 0 && (
-          <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
-            pagination={{ clickable: true }}
-            loop={true}
-            autoplay={{ delay: 4000, disableOnInteraction: false }}
-            spaceBetween={24}
-            breakpoints={{
-              320: { slidesPerView: 1 },
-              640: { slidesPerView: 2 },
-              1024: { slidesPerView: 3 },
-              1280: { slidesPerView: 4 },
-            }}
-          >
-            {products.map((product: ProductDto) => {
-              return (
-                product.Id !== productId && (
-                  <SwiperSlide key={product.Id}>
-                    <ProductComponent product={product} />
-                  </SwiperSlide>
-                )
-              );
-            })}
-
-            <style>{`
+          <style>{`
+              .swiper{
+                padding-bottom: 40px;
+                padding-top: 10px;}
               .swiper-pagination-bullet {
                 display: none;
                 width: 10px;
@@ -118,9 +120,8 @@ function CustomProducts({
                 display: none; /* hide on all */
               }
             `}</style>
-          </Swiper>
-        )}
-      </div>
+        </Swiper>
+      )}
     </div>
   );
 }

@@ -26,10 +26,10 @@ function NotFound() {
           </Link>
 
           <Link
-            to="/products"
+            to="/bags"
             className="group flex items-center justify-center underline font-semibold text-slate-500"
           >
-            Browse Products
+            Browse Bags
           </Link>
         </div>
       </div>

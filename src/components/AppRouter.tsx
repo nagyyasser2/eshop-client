@@ -69,7 +69,6 @@ function AppRouter() {
       <Announce />
       <Navbar />
 
-      {/* main takes all remaining space */}
       <main className="flex-grow">
         <Routes>
           <Route path="/" element={<HomeLayout />} />
