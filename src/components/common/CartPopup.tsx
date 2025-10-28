@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { X } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import { SERVER_URL } from "../../api/api";
@@ -14,8 +15,21 @@ export default function CartPopup() {
     setIsCartPopupOpen,
   } = useCart();
   const navigate = useNavigate();
-
   const { user } = useAuth();
+
+  // ✅ Prevent body scroll when popup is open
+  useEffect(() => {
+    if (isCartPopupOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    // Cleanup when unmounts or closes
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isCartPopupOpen]);
 
   if (!isCartPopupOpen) return null;
 
@@ -26,7 +40,6 @@ export default function CartPopup() {
     navigate("/checkout");
   };
 
-  // Close cart when clicking on overlay (outside the cart box)
   const handleOverlayClick = (e: any) => {
     if (e.target === e.currentTarget) {
       setIsCartPopupOpen(false);
@@ -51,8 +64,8 @@ export default function CartPopup() {
           </button>
         </div>
 
-        {/* Cart items */}
-        <div className="flex flex-col overflow-y-auto space-y-4">
+        {/* Cart Items */}
+        <div className="flex flex-col overflow-y-auto space-y-4 max-h-[60vh] scrollbar-hide">
           {cart.length === 0 ? (
             <p className="text-center text-slate-500 mt-10">Cart is empty.</p>
           ) : (
@@ -134,17 +147,15 @@ export default function CartPopup() {
                 Checkout
               </button>
             ) : (
-              <>
-                <button
-                  className="w-full mt-2 bg-slate-700 text-white py-3  rounded-lg transition-colors cursor-pointer"
-                  onClick={() => {
-                    setIsCartPopupOpen(false);
-                    navigate("/login");
-                  }}
-                >
-                  Login to Checkout
-                </button>
-              </>
+              <button
+                className="w-full mt-2 bg-slate-700 text-white py-3 rounded-lg transition-colors cursor-pointer"
+                onClick={() => {
+                  setIsCartPopupOpen(false);
+                  navigate("/login");
+                }}
+              >
+                Login to Checkout
+              </button>
             )}
           </div>
         )}
